@@ -469,21 +469,21 @@ public class Main {
 
     private void editMatchRecord() {
         MatchRecord record = dataManager.requireMatchRecord(input.readRequired("Match ID: "));
+        LocalDate date = record.getDate();
+        String teamAId = record.getTeamAId();
+        String teamBId = record.getTeamBId();
+        String winnerTeamId = record.getWinnerTeamId();
+        Map<String, String> heroPicks = new LinkedHashMap<>(record.getHeroPicks());
         if (input.confirm("Change date/teams/winner?")) {
-            record.setDate(readDate("Date yyyy-mm-dd: "));
-            record.setTeamAId(input.readRequired("Team A ID: "));
-            record.setTeamBId(input.readRequired("Team B ID: "));
-            record.setWinnerTeamId(input.readRequired("Winner team ID: "));
-            dataManager.requireTeam(record.getTeamAId());
-            dataManager.requireTeam(record.getTeamBId());
-            dataManager.requireTeam(record.getWinnerTeamId());
+            date = readDate("Date yyyy-mm-dd: ");
+            teamAId = input.readRequired("Team A ID: ");
+            teamBId = input.readRequired("Team B ID: ");
+            winnerTeamId = input.readRequired("Winner team ID: ");
         }
         if (input.confirm("Replace hero picks?")) {
-            record.clearHeroPicks();
-            for (Map.Entry<String, String> entry : readPicks().entrySet()) {
-                record.putHeroPick(entry.getKey(), entry.getValue());
-            }
+            heroPicks = readPicks();
         }
+        dataManager.updateMatchRecord(record.getId(), date, teamAId, teamBId, winnerTeamId, heroPicks);
         saveData();
         System.out.println("Match record updated.");
     }

@@ -7,13 +7,16 @@ import model.MatchRecord;
 import model.Player;
 import model.Team;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Comparator;
+import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
 
 public class GameDataManager {
     private final Map<String, Admin> admins = new LinkedHashMap<>();
@@ -72,13 +75,7 @@ public class GameDataManager {
 
     public void addMatchRecord(MatchRecord record) {
         requireUnique(matchRecords, record.getId(), "match record");
-        requireTeam(record.getTeamAId());
-        requireTeam(record.getTeamBId());
-        requireTeam(record.getWinnerTeamId());
-        for (Map.Entry<String, String> entry : record.getHeroPicks().entrySet()) {
-            requirePlayer(entry.getKey());
-            requireHero(entry.getValue());
-        }
+        validateMatchRecord(record.getTeamAId(), record.getTeamBId(), record.getWinnerTeamId(), record.getHeroPicks());
         matchRecords.put(record.getId(), record);
     }
 
@@ -166,6 +163,20 @@ public class GameDataManager {
         }
         player.setTeamId(newTeamId);
         newTeam.addPlayer(playerId);
+    }
+
+    public void updateMatchRecord(String matchId, LocalDate date, String teamAId, String teamBId,
+                                  String winnerTeamId, Map<String, String> heroPicks) {
+        MatchRecord record = requireMatchRecord(matchId);
+        validateMatchRecord(teamAId, teamBId, winnerTeamId, heroPicks);
+        record.setDate(date);
+        record.setTeamAId(teamAId);
+        record.setTeamBId(teamBId);
+        record.setWinnerTeamId(winnerTeamId);
+        record.clearHeroPicks();
+        for (Map.Entry<String, String> entry : heroPicks.entrySet()) {
+            record.putHeroPick(entry.getKey(), entry.getValue());
+        }
     }
 
     public Optional<Player> findPlayer(String query) {
@@ -282,6 +293,38 @@ public class GameDataManager {
     private static void requireUnique(Map<String, ?> records, String id, String label) {
         if (records.containsKey(id)) {
             throw new IllegalArgumentException("Duplicate " + label + " ID: " + id);
+        }
+    }
+
+    private void validateMatchRecord(String teamAId, String teamBId, String winnerTeamId, Map<String, String> heroPicks) {
+        Team teamA = requireTeam(teamAId);
+        Team teamB = requireTeam(teamBId);
+        if (teamAId.equals(teamBId)) {
+            throw new IllegalArgumentException("A match must use two different teams");
+        }
+        if (!winnerTeamId.equals(teamAId) && !winnerTeamId.equals(teamBId)) {
+            throw new IllegalArgumentException("Winner team must be one of the two participating teams");
+        }
+        requireTeam(winnerTeamId);
+
+        Set<String> participatingPlayerIds = new HashSet<>();
+        participatingPlayerIds.addAll(teamA.getPlayerIds());
+        participatingPlayerIds.addAll(teamB.getPlayerIds());
+
+        Set<String> pickedHeroIds = new HashSet<>();
+        for (Map.Entry<String, String> entry : heroPicks.entrySet()) {
+            Player player = requirePlayer(entry.getKey());
+            String heroId = entry.getValue();
+            requireHero(heroId);
+            if (!participatingPlayerIds.contains(player.getId())) {
+                throw new IllegalArgumentException("Player " + player.getId() + " is not in either participating team");
+            }
+            if (!player.ownsHero(heroId)) {
+                throw new IllegalArgumentException("Player " + player.getId() + " does not own hero " + heroId);
+            }
+            if (!pickedHeroIds.add(heroId)) {
+                throw new IllegalArgumentException("Duplicate hero pick in one match: " + heroId);
+            }
         }
     }
 }
