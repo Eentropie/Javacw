@@ -149,6 +149,25 @@ public class GameDataManager {
         return matchRecords.remove(matchId) != null;
     }
 
+    public MatchRecord requireMatchRecord(String matchId) {
+        MatchRecord record = matchRecords.get(matchId);
+        if (record == null) {
+            throw new IllegalArgumentException("Unknown match record ID: " + matchId);
+        }
+        return record;
+    }
+
+    public void movePlayerToTeam(String playerId, String newTeamId) {
+        Player player = requirePlayer(playerId);
+        Team newTeam = requireTeam(newTeamId);
+        Team oldTeam = teams.get(player.getTeamId());
+        if (oldTeam != null) {
+            oldTeam.removePlayer(playerId);
+        }
+        player.setTeamId(newTeamId);
+        newTeam.addPlayer(playerId);
+    }
+
     public Optional<Player> findPlayer(String query) {
         return players.values().stream().filter(player -> player.matches(query)).findFirst();
     }
