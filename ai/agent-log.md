@@ -16,32 +16,46 @@ Human decision:
 
 Related commits:
 
-- Pending.
+- `05d011d` create coursework plan and AI evidence skeleton
+- `ccee720` preserve CSV list delimiters during save
 
 ## Implementation Agent
 
 Main contribution:
 
-- Pending implementation of model classes, services, menus, and persistence.
+- Implemented model classes, enums, service classes, seed data, CSV persistence, console menus, and CSV data files.
 
 Human decision:
 
 - AI should implement selected bounded tasks, not a hidden one-shot project.
+- CSV was kept dependency-free even though Claude recommended Gson.
 
 Related commits:
 
-- Pending.
+- `b968786` add OOP model classes and enums
+- `dab6880` implement core data search and ranking services
+- `d13236d` add initial Honor of Kings dataset
+- `0b86ad2` implement CSV persistence service
+- `eb02042` implement console menus and role workflows
+- `a4c0510` add CSV data files for initial dataset
 
 ## Testing/Reviewer Agent
 
 Main contribution:
 
-- Pending review and test-case generation.
+- Codex ran scripted smoke tests and found a CSV delimiter bug.
+- Gemini suggested edge cases including delimiter handling, orphan references, division by zero, input skipping, and invalid enum parsing.
+- After the user requested Claude Opus only, Claude Opus reviewed the actual source files and found concrete match-record validation issues.
 
 Human decision:
 
 - Actual test outputs must come from running the program, not from AI guesses.
+- The CSV delimiter bug was fixed with a minimal change and recorded in the test document.
+- Gemini's references to `Repository<T>` and `getDisplayInfo` were rejected because they do not match the implemented design. Gemini was not used as primary review evidence after the user requested Claude Opus only.
+- Claude's match-record findings were accepted and fixed.
 
 Related commits:
 
-- Pending.
+- `ccee720` preserve CSV list delimiters during save
+- `12948b5` fix match record validation issues
+- Pending documentation commit for final test documentation.
