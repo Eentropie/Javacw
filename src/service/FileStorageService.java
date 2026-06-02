@@ -240,10 +240,7 @@ public class FileStorageService {
         if (value == null) {
             return "";
         }
-        return value.replace("|", " ")
-                .replace(";", ",")
-                .replace(":", "-")
-                .trim();
+        return value.replace("|", " ").trim();
     }
 
     private static String joinList(List<String> values) {
