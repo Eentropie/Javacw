@@ -73,6 +73,10 @@ public class MatchRecord implements Searchable {
         heroPicks.put(Person.requireText(playerId, "playerId"), Person.requireText(heroId, "heroId"));
     }
 
+    public boolean removeHeroPick(String playerId) {
+        return heroPicks.remove(playerId) != null;
+    }
+
     public boolean includesTeam(String teamId) {
         return teamAId.equals(teamId) || teamBId.equals(teamId);
     }
