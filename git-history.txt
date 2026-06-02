@@ -1,0 +1,14 @@
+* f009858 (HEAD -> main) [Docs] update AI evidence commit links
+* 6e4c439 [AI-Review] document Claude review and test evidence
+* 12948b5 [AI-Review] fix match record validation issues
+* 80739be [AI-Architect] document CSV data design
+* 5a6630d [AI-Architect] document service boundaries
+* ba63aa0 [AI-Architect] add requirement coverage and architecture decisions
+* a4c0510 [AI-Implementation] add CSV data files for initial dataset
+* ccee720 [Fix] preserve CSV list delimiters during save
+* eb02042 [AI-Implementation] implement console menus and role workflows
+* 0b86ad2 [AI-Implementation] implement CSV persistence service
+* d13236d [AI-Implementation] add initial Honor of Kings dataset
+* dab6880 [AI-Implementation] implement core data search and ranking services
+* b968786 [AI-Implementation] add OOP model classes and enums
+* 05d011d [Docs] create coursework plan and AI evidence skeleton
