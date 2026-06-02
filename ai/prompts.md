@@ -5,7 +5,7 @@
 Time: 2026-06-02 17:33 CST
 Tool/Model: Codex / GPT-5
 Agent Role: Requirement Analyst
-Related Commit: pending
+Related Commit: `05d011d`
 
 ### My Prompt
 
@@ -24,7 +24,7 @@ Accepted the staged plan, but added an integrity rule that AI must not create fa
 Time: 2026-06-02 17:33 CST
 Tool/Model: Antigravity / Claude Opus 4.6 Thinking
 Agent Role: Architect Agent
-Related Commit: pending
+Related Commit: `ba63aa0`, `5a6630d`, `80739be`
 
 ### My Prompt
 
@@ -81,7 +81,7 @@ Accepted the minimal fix. The CSV cleaner now only sanitizes the field separator
 Time: 2026-06-02 17:53 CST
 Tool/Model: Antigravity / Gemini 3.5 Flash High
 Agent Role: Testing/Reviewer Agent
-Related Commit: pending
+Related Commit: `6e4c439`
 
 ### My Prompt
 

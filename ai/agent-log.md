@@ -58,4 +58,4 @@ Related commits:
 
 - `ccee720` preserve CSV list delimiters during save
 - `12948b5` fix match record validation issues
-- Pending documentation commit for final test documentation.
+- `6e4c439` document Claude review and test evidence
