@@ -38,6 +38,26 @@ Owns ranking formulas:
 
 Tie handling is intentionally centralized here so all menus use the same ranking behavior.
 
+## `RecommendationService`
+
+Owns recommendation formulas:
+
+- recommends heroes for a player based on stats, owner win rate, team role gaps, difficulty fit, equipment support, and whether the player already owns the hero;
+- recommends equipment for a hero based on the existing equipment score, explicit hero recommendations, compatibility, and hero-type synergy.
+
+This keeps recommendation rules reusable by the console menu and automated tests.
+
+## `CombatSimulationService`
+
+Owns extra-credit combat simulation:
+
+- validates that each player owns the selected hero;
+- validates equipment compatibility;
+- auto-picks compatible equipment when the user leaves the equipment prompt blank;
+- runs a bounded turn loop with damage, critical hits, dodges, and a winner report.
+
+Randomness is injected through the constructor so automated tests can use a fixed seed.
+
 ## `FileStorageService`
 
 Owns CSV persistence:
@@ -58,3 +78,15 @@ Owns only console interaction:
 - simple error reporting.
 
 This division prevents the program from becoming one large procedural class.
+
+## `web.WebMain` and `web.WebServer`
+
+Own the optional browser frontend:
+
+- `WebMain` is a second entry point and does not replace `Main`;
+- `WebServer` serves static files from `web/`;
+- API handlers call existing services for login, lookup, leaderboard, recommendations, combat simulation, and saving;
+- responses are JSON so the static frontend can update the page without restarting the Java process;
+- leaderboard, equipment, and match-history handlers preserve text reports by default and add `format=json` structured rows for browser tables and CSV export.
+
+The web server uses a single-threaded executor for local-demo safety because the data manager stores mutable collections.

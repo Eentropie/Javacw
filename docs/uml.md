@@ -55,6 +55,31 @@ class MatchRecord implements Searchable
   - winnerTeamId: String
   - heroPicks: Map<String, String>
 
+class CombatReport
+  - title: String
+  - winnerName: String
+  - loserName: String
+  - turns: int
+  - turnLog: List<String>
+
+class RecommendationService
+  - dataManager: GameDataManager
+  - rankingService: RankingService
+
+class CombatSimulationService
+  - dataManager: GameDataManager
+  - rankingService: RankingService
+  - random: Random
+
+class WebMain
+  + main(args): void
+
+class WebServer
+  - dataManager: GameDataManager
+  - searchService: SearchService
+  - recommendationService: RecommendationService
+  - combatSimulationService: CombatSimulationService
+
 Person <|-- Player
 Person <|-- Admin
 Searchable <|.. Person
@@ -67,4 +92,17 @@ Hero --> Equipment
 MatchRecord --> Team
 MatchRecord --> Player
 MatchRecord --> Hero
+RecommendationService --> Player
+RecommendationService --> Hero
+RecommendationService --> Equipment
+CombatSimulationService --> Player
+CombatSimulationService --> Hero
+CombatSimulationService --> Equipment
+CombatSimulationService --> CombatReport
+WebMain --> WebServer
+WebServer --> AuthenticationService
+WebServer --> SearchService
+WebServer --> RecommendationService
+WebServer --> CombatSimulationService
+WebServer --> FileStorageService
 ```

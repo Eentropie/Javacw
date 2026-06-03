@@ -47,6 +47,9 @@
 | Equipment statistics | `RankingService.topEquipment`, `SearchService.equipmentStatistics`, and menu option 4. |
 | Match history | `SearchService.playerMatchHistory`, `SearchService.teamMatchHistory`, and menu option 5. |
 | Leaderboard | `RankingService.topPlayers`, `SearchService.leaderboard`, and menu option 6. |
+| Recommendation engine | `RecommendationService` and console recommendation options. |
+| Combat simulation | `CombatSimulationService`, `CombatReport`, and console combat simulation options. |
+| Optional web frontend | `web.WebMain`, `web.WebServer`, and static assets in `web/` provide browser access to core features. |
 | Data management | Admin data-management menu supports add/edit/delete for players, heroes, equipment, teams, and match records. |
 | Authentication | `AuthenticationService` supports Admin and Player login. |
 | Player permissions | Player menu excludes data management and allows only limited profile edits. |
@@ -60,13 +63,27 @@
 | `docs/design.md` | Present |
 | UML draft | `docs/uml.md` |
 | `docs/test-cases.md` | Present with actual results |
+| Automated tests | `src/test/TestRunner.java` runs 14 dependency-free automated service tests |
+| One-click web launcher | `Open-JavaCW-Web.command` starts the optional browser frontend on macOS |
 | `ai/prompts.md` | Present |
 | `ai/agent-log.md` | Present |
-| `ai/reflection.md` | Present, but final student personalization is still needed |
+| `ai/reflection.md` | Present, with complete draft answers |
+| Advanced AI comparison | `ai/model-comparison.md` |
+| Submission audit | `docs/submission-audit.md` |
 | `git-history.txt` | To be exported after final commit |
+
+## Extra Credit / Creativity Evidence
+
+| Feature | Evidence |
+|---|---|
+| Recommendation engine | Hero and equipment recommendation formulas in `RecommendationService` and `docs/design.md`. |
+| Combat simulation | Turn-based duel with compatible equipment, critical hits, dodges, bounded turns, and a `CombatReport`. |
+| Browser frontend | Dependency-free local web UI using JDK `HttpServer`, static HTML/CSS/JS, and a one-click launcher. |
+| Advanced AI reflection | `ai/model-comparison.md` compares Gemini and Claude Opus review quality. |
+| Automated tests | `src/test/TestRunner.java` covers recommendations, combat, authentication failure, missing lookups, CRUD cascade behavior, validation, leaderboard, win-rate edge cases, text-report compatibility, and CSV round trip. |
 
 ## Remaining Student Work Before Submission
 
 - Add at least four genuine human-authored planning/debugging/refactoring commits. Do not fake these.
-- Personalize `ai/reflection.md`, especially questions 7, 9, and 10.
 - Re-run tests on the final submitted machine if using a different Java version.
+- Re-export `git-history.txt` after the final commit.

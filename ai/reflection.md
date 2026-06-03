@@ -26,16 +26,16 @@ The project made the relationship between encapsulation and data consistency cle
 
 ## 7. What Java concept are you still unsure about?
 
-This should be personalized by the student before submission. A reasonable draft answer is: handling larger persistence formats or database-backed storage is still less familiar than using simple CSV files.
+I am still less confident with larger persistence designs, especially deciding when a simple CSV structure should be replaced by JSON, JDBC, or a database-backed repository. This project helped me understand file I/O, but a larger project would need stronger schema migration and transaction handling.
 
 ## 8. Did AI make the project easier, harder, or both? Explain.
 
-Both. AI made requirement breakdown and boilerplate implementation faster, but it also required careful verification because model suggestions can be mismatched to the actual project and generated code can contain subtle bugs.
+Both. AI made requirement breakdown and boilerplate implementation faster, but it also required careful verification because model suggestions can be mismatched to the actual project and generated code can contain subtle bugs. The comparison in `ai/model-comparison.md` shows this clearly: Gemini gave some useful generic edge cases, but also suggested classes that did not exist, while Claude Opus produced more reliable feedback after being told to review the actual source files.
 
 ## 9. Which parts of the final project were mainly written by you?
 
-This must be personalized by the student before submission. A safe draft is: I reviewed the requirement mapping, ran the program, checked test outputs, and should make final manual edits and human-authored commits before submission.
+I reviewed the requirement mapping, checked whether the implemented menus matched the PDF, ran compile and console tests, inspected the AI review results, and made final decisions about rejecting dependency-heavy suggestions such as Gson/JSON and GUI work. I also need to make sure the final Git history and submitted reflection accurately describe the real development process.
 
 ## 10. Which parts were mainly generated or heavily assisted by AI?
 
-The class skeletons, service implementation, CSV persistence, console menu flow, and documentation draft were heavily assisted by Codex. Claude Opus was used for architecture and testing review.
+The class skeletons, service implementation, CSV persistence, console menu flow, recommendation engine, combat simulation, automated test runner, and documentation drafts were heavily assisted by Codex. Claude Opus was used for architecture, testing review, and extra-credit planning. Gemini was used only as a secondary comparison point and was not treated as primary evidence after its project-mismatched suggestions were identified.

@@ -12,6 +12,8 @@ The goal is to build a Java console application that manages Honor of Kings info
 - Equipment statistics: rank equipment using a documented score based on usage, rating, compatible hero count, and win contribution.
 - Match history: retrieve the last N matches for a player or team and display opponent, date, result, hero picks, win/loss record, and hero pick rate.
 - Leaderboard: display top X players by win rate, level, match count, or custom score. Ties are handled by name and then ID.
+- Recommendation engine: recommend heroes for a player and equipment for a hero using documented formulas.
+- Combat simulation: run a turn-based duel using hero stats, compatible equipment, critical hits, dodges, and a combat report.
 - Data management: admin users can add, delete, and edit players, heroes, equipment, teams, and match records.
 - Authentication: simple username/password login with Admin and Player roles.
 - Persistence: CSV files are used for save and load.
@@ -42,6 +44,9 @@ The goal is to build a Java console application that manages Honor of Kings info
 - `AuthenticationService`: login and logout support.
 - `SearchService`: human-readable lookup reports.
 - `RankingService`: leaderboards, equipment ranking, and tie rules.
+- `RecommendationService`: hero and equipment recommendation formulas.
+- `CombatSimulationService`: turn-based duel simulation.
+- `CombatReport`: formatted result and turn log for combat simulation.
 - `FileStorageService`: CSV persistence.
 - `DataInitializer`: seed data meeting the minimum dataset.
 - `InputHelper`: robust console input.
@@ -68,8 +73,13 @@ Main --> AuthenticationService
 Main --> GameDataManager
 Main --> SearchService
 Main --> RankingService
+Main --> RecommendationService
+Main --> CombatSimulationService
 GameDataManager --> FileStorageService
 GameDataManager --> DataInitializer
+RecommendationService --> Hero
+RecommendationService --> Equipment
+CombatSimulationService --> CombatReport
 ```
 
 ## 6. Data Design
@@ -99,11 +109,19 @@ Prompts should specify one role, one task, existing class names, edge cases, and
 6. Implement console menu and admin/player permission flow.
 7. Compile and run manual tests.
 8. Use reviewer agent and fix defects.
-9. Finalize AI evidence, reflection, README, and Git history.
+9. Add extra-credit features: recommendation engine, combat simulation, advanced AI comparison, and automated tests.
+10. Finalize AI evidence, reflection, README, and Git history.
 
 ## 10. Testing Plan
 
-Manual test cases cover login, player lookup, team overview, hero details, equipment ranking, match history, leaderboard, admin CRUD, player permission restrictions, file save/load, and invalid input.
+Manual test cases cover login, player lookup, team overview, hero details, equipment ranking, match history, leaderboard, admin CRUD, player permission restrictions, file save/load, recommendation output, combat simulation, and invalid input.
+
+Automated tests are run with:
+
+```bash
+javac -d out $(find src -name '*.java')
+java -cp out test.TestRunner
+```
 
 ## 11. Risk Analysis
 

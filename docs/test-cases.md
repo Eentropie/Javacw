@@ -204,6 +204,102 @@ Actual: The system printed `Loaded data from data`, showed the login menu, and e
 
 Result: Pass.
 
+## Test 13: Recommendation Engine
+
+Input:
+
+```text
+Admin login
+Recommendation engine
+Recommend heroes for a player
+Player ID: P001
+Recommendations: 3
+```
+
+Expected: A ranked list of hero recommendations is displayed with formula and reasons.
+
+Actual: The system printed the hero recommendation formula, recommendations for Li Bai, scores, ownership status, and reason lines.
+
+Result: Pass.
+
+## Test 14: Combat Simulation
+
+Input:
+
+```text
+Admin login
+Combat simulation
+Player A ID: P001
+Hero A ID: H001
+Equipment A ID: [blank]
+Player B ID: P006
+Hero B ID: H002
+Equipment B ID: [blank]
+```
+
+Expected: The system auto-selects compatible equipment, runs a bounded duel, and prints a combat report with turn log and winner.
+
+Actual: The system printed the damage formula, per-turn combat log, winner, loser, remaining HP, and total turns.
+
+Result: Pass.
+
+## Test 15: Optional Web Frontend
+
+Input:
+
+```text
+Start web server:
+javac -d out $(find src -name '*.java')
+java -cp out web.WebMain --no-open
+
+Open:
+http://127.0.0.1:8080/
+
+Login:
+admin / admin123
+
+Click:
+Lookup -> Search
+Ranking -> Show Players
+History -> Show History
+Lookup -> Search
+```
+
+Expected: Browser page loads, dashboard counts are displayed, admin login succeeds, player lookup prints the same Li Bai report as the console flow, and structured ranking/history results render as real tables with CSV controls.
+
+Actual: The browser loaded the `Honor of Kings IMS` web interface with counts `15 players`, `3 teams`, `15 heroes`, `20 equipment`, and `11 matches`. Admin login changed the page to `System Admin (ADMIN)` and showed the `Save Data` button. Lookup for `Li Bai` displayed player ID `P001`, team `Chang'an Blades`, level `28`, win rate `72.7%`, and owned hero equipment lists. Ranking displayed a structured leaderboard table with rank, player, team, level, record, win rate, and score columns; Copy produced a `Table CSV copied` toast and the CSV button was enabled only for structured table output. History displayed a structured player match table with date, match ID, opponent, result, and hero columns. Returning to Lookup replaced the table with the text report and disabled CSV again. The optimized frontend also showed contextual sidebar metrics, relative match dates, status badges, visible API latency, copy-to-clipboard feedback, toast feedback, and a combat result summary after running the duel simulator.
+
+Result: Pass.
+
+## Automated Tests
+
+The project also includes a dependency-free automated test runner:
+
+```bash
+javac -d out $(find src -name '*.java')
+java -cp out test.TestRunner
+```
+
+Latest run:
+
+```text
+PASS recommendation report ranks heroes
+PASS equipment recommendation uses hero context
+PASS combat simulation produces a winner
+PASS invalid login is rejected
+PASS missing lookup returns a friendly report
+PASS match validation rejects duplicate hero picks
+PASS match validation rejects winner outside match
+PASS match validation rejects player outside teams
+PASS equipment add and delete updates hero references
+PASS default ranking reports stay text based
+PASS player deletion updates team membership
+PASS leaderboard sorts by win rate
+PASS zero-match player win rate is safe
+PASS CSV save/load round trip keeps counts
+Automated tests passed: 14, failed: 0
+```
+
 ## Bug Found During Testing
 
 CSV list fields were initially saved incorrectly because the cleaning method replaced semicolons with commas. The next run failed with `Unknown equipment ID: E001,E002,E013,E017`. This was fixed in commit `ccee720` by preserving list and key-value delimiters while still sanitizing the field separator `|`.

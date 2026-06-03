@@ -113,3 +113,79 @@ Claude read the actual source files and reported that the code was generally sol
 ### My Decision
 
 Accepted the code-grounded findings. Added centralized match validation, safe update-before-mutation behavior, winner participant checks, player team membership checks, player hero ownership checks, and corrected seed match data.
+
+## Prompt 07
+
+Time: 2026-06-03 15:16 CST
+Tool/Model: Antigravity / Claude Opus 4.6 Thinking
+Agent Role: Extra-Credit Reviewer Agent
+Related Commit: Current working-tree update, not committed yet
+
+### My Prompt
+
+Claude Opus review request for JavaCW extra-credit implementation. Please use the coursework rubric: Extra Credit/Creativity, Java Design, Functional Completeness, AI Usage Evidence, Git Process, Documentation, Testing. Current project is a Java console Honor of Kings IMS with model/service layers, CSV persistence, recommendation fields on Hero, equipment ranking formula, manual tests, AI evidence, and previous match-validation fixes. I plan to implement four enhancements now: (1) a real recommendation engine, (2) advanced AI reflection comparing model/agent outputs, (3) automated tests without external dependency risk, and (4) one explicit extra feature, preferably combat simulation rather than GUI unless you strongly disagree. Do NOT edit files, do NOT create artifacts, do NOT run commands. Please give a concise implementation checklist: what to add, where to add it, highest risks, and what evidence/docs/tests should be updated for scoring.
+
+### AI Response Summary
+
+Claude recommended implementing a real `RecommendationService`, implementing combat simulation instead of GUI, using a plain Java test runner if JUnit dependencies are not bundled, documenting formulas and test evidence, and adding an advanced AI comparison file. It also warned about combat infinite loops, empty-team recommendation edge cases, test isolation, temp-file cleanup, and overscoping.
+
+### My Decision
+
+Accepted the direction. Implemented recommendation and combat services, added a dependency-free automated test runner, documented formulas and tests, and added `ai/model-comparison.md`. GUI was rejected because it would add runtime and scope risk without improving the core scoring as directly as combat simulation.
+
+## Prompt 08
+
+Time: 2026-06-03 15:58 CST
+Tool/Model: Antigravity / Claude Opus 4.6 Thinking
+Agent Role: Frontend Reviewer Agent
+Related Commit: Current working-tree update, not committed yet
+
+### My Prompt
+
+Frontend extra-credit review for the current JavaCW project. Keep the existing console Main unchanged. I want to add a real local web frontend using only JDK built-ins if possible: Java HttpServer backend, static HTML/CSS/JS, REST-like endpoints for login/search/leaderboard/recommendations/combat, and a macOS one-click .command launcher that compiles, starts the web server, and opens the browser. No Maven/Gradle, no external deps. Please give a concise architecture/risk checklist and what documentation/tests should be updated. Do not write code and do not assume files beyond the current Java console project.
+
+### AI Response Summary
+
+Claude recommended keeping the web layer as a second entry point beside `Main`, reusing the model and service classes, serving static files from `web/`, returning JSON from local API endpoints, avoiding CORS by keeping the frontend and backend on the same server, and using a single-threaded executor to avoid mutable data concurrency issues.
+
+### My Decision
+
+Accepted the architecture. Implemented `web.WebMain`, `web.WebServer`, static frontend assets, and a macOS one-click launcher without adding Maven, Gradle, external Java libraries, or external JavaScript libraries.
+
+## Prompt 09
+
+Time: 2026-06-03 16:56 CST
+Tool/Model: Antigravity / Claude Opus 4.6 Thinking
+Agent Role: Frontend Design Reviewer Agent
+Related Commit: Current working-tree update, not committed yet
+
+### My Prompt
+
+Design optimization review for the JavaCW web frontend already implemented. Current UI: single-page vanilla HTML/CSS/JS, top sticky header with brand/login, overview band with arena visual + count tiles, left vertical tool nav, central form panel, right insight panel, bottom report panel. It is functional but feels sparse in the central workspace and the visual hierarchy could be stronger. Constraints: no new dependencies, no backend changes unless absolutely necessary, keep console Main unchanged, keep coursework/professional admin-tool feel, avoid marketing hero page, keep responsive layout, no decorative gradient orbs. Please give a concise actionable frontend design checklist: layout, spacing, controls, status/report presentation, mobile behavior, and color/typography refinements. Do not write full code; focus on what to change in index.html/styles.css/app.js.
+
+### AI Response Summary
+
+Claude recommended an 8px spacing pass, stronger panel hierarchy, a left-accent active navigation state, compact section headers, full-width form controls, loading feedback, toast notifications, a clearer report container, contextual right-panel content, and responsive collapse from three columns to two columns to a single mobile layout. It also recommended rendering tabular data as real tables where structured data is available.
+
+### My Decision
+
+Accepted the low-risk frontend improvements: revised panel hierarchy, spacing, active navigation, report/status presentation, loading bar, toast notifications, contextual insight panel, and responsive behavior. Deferred table rendering because the current service endpoints intentionally return formatted reports; parsing those report strings in JavaScript would be brittle unless the backend API is extended with structured result arrays.
+
+## Prompt 10
+
+Time: 2026-06-03 17:18 CST
+Tool/Model: Antigravity / Claude Opus 4.6 Thinking
+Agent Role: Frontend Ideas Reviewer Agent
+Related Commit: Current working-tree update, not committed yet
+
+### My Prompt
+
+Any more possible improvements? Disperse your ideas.
+
+### AI Response Summary
+
+Claude suggested a broad set of frontend polish and product ideas, including favicon, page title updates, hash routing, skeleton loaders, animated count-up tiles, sparklines, relative time, report copy-to-clipboard, print styles, session timeout indicators, collapsible nav, contextual placeholders, table cross-links, retry handling, raw JSON preview, connection status, hero portrait placeholders, focus-visible styling, semantic HTML audit, debounced search, and visible API latency.
+
+### My Decision
+
+Accepted the low-risk improvements that fit the existing dependency-free frontend: favicon, page title updates, report copy-to-clipboard, contextual placeholders, visible API latency, relative match dates, title attributes for compact rows, and keyboard focus polish. Deferred higher-risk ideas such as hash routing, structured table rendering, raw JSON preview, retry/backoff, and session timeout to isolated branch experiments.
