@@ -8,9 +8,11 @@ import model.Person;
 import model.Player;
 import model.Team;
 import service.AuthenticationService;
+import service.CombatSimulationService;
 import service.FileStorageService;
 import service.GameDataManager;
 import service.RankingService;
+import service.RecommendationService;
 import service.SearchService;
 import util.DataInitializer;
 import util.InputHelper;
@@ -34,6 +36,8 @@ public class Main {
     private GameDataManager dataManager;
     private AuthenticationService authenticationService;
     private RankingService rankingService;
+    private RecommendationService recommendationService;
+    private CombatSimulationService combatSimulationService;
     private SearchService searchService;
     private Person currentUser;
 
@@ -82,6 +86,8 @@ public class Main {
     private void wireServices() {
         authenticationService = new AuthenticationService(dataManager);
         rankingService = new RankingService(dataManager);
+        recommendationService = new RecommendationService(dataManager, rankingService);
+        combatSimulationService = new CombatSimulationService(dataManager, rankingService);
         searchService = new SearchService(dataManager, rankingService);
     }
 
@@ -111,11 +117,11 @@ public class Main {
         System.out.println();
         System.out.println("=== Admin Menu ===");
         printCommonOptions();
-        System.out.println("7. Data management");
-        System.out.println("8. Save data");
-        System.out.println("9. Logout");
+        System.out.println("9. Data management");
+        System.out.println("10. Save data");
+        System.out.println("11. Logout");
         System.out.println("0. Exit");
-        int choice = input.readInt("Choice: ", 0, 9);
+        int choice = input.readInt("Choice: ", 0, 11);
         return handleAdminChoice(choice);
     }
 
@@ -126,6 +132,8 @@ public class Main {
         System.out.println("4. Equipment statistics");
         System.out.println("5. Match history");
         System.out.println("6. Leaderboard");
+        System.out.println("7. Recommendation engine");
+        System.out.println("8. Combat simulation");
     }
 
     private boolean handleAdminChoice(int choice) {
@@ -137,9 +145,11 @@ public class Main {
                 case 4 -> equipmentStatistics();
                 case 5 -> matchHistory();
                 case 6 -> leaderboard();
-                case 7 -> dataManagementMenu();
-                case 8 -> saveData();
-                case 9 -> logout();
+                case 7 -> recommendations();
+                case 8 -> combatSimulation();
+                case 9 -> dataManagementMenu();
+                case 10 -> saveData();
+                case 11 -> logout();
                 case 0 -> {
                     return true;
                 }
@@ -163,9 +173,11 @@ public class Main {
         System.out.println("6. Equipment statistics");
         System.out.println("7. My match history");
         System.out.println("8. Leaderboard");
-        System.out.println("9. Logout");
+        System.out.println("9. Recommendation engine");
+        System.out.println("10. Combat simulation");
+        System.out.println("11. Logout");
         System.out.println("0. Exit");
-        int choice = input.readInt("Choice: ", 0, 9);
+        int choice = input.readInt("Choice: ", 0, 11);
         try {
             switch (choice) {
                 case 1 -> System.out.println(searchService.playerReport(player));
@@ -179,7 +191,9 @@ public class Main {
                     System.out.println(searchService.playerMatchHistory(player.getId(), limit));
                 }
                 case 8 -> leaderboard();
-                case 9 -> logout();
+                case 9 -> recommendations();
+                case 10 -> combatSimulation();
+                case 11 -> logout();
                 case 0 -> {
                     return true;
                 }
@@ -230,6 +244,36 @@ public class Main {
         String mode = input.readRequired("Mode: ");
         int limit = input.readIntMin("Top how many players? ", 1);
         System.out.println(searchService.leaderboard(mode, limit));
+    }
+
+    private void recommendations() {
+        System.out.println("1. Recommend heroes for a player");
+        System.out.println("2. Recommend equipment for a hero");
+        int choice = input.readInt("Choice: ", 1, 2);
+        int limit = input.readIntMin("How many recommendations? ", 1);
+        if (choice == 1) {
+            String playerQuery = input.readRequired("Player ID/name: ");
+            System.out.println(recommendationService.heroRecommendationReport(playerQuery, limit));
+        } else {
+            String heroQuery = input.readRequired("Hero ID/name: ");
+            System.out.println(recommendationService.equipmentRecommendationReport(heroQuery, limit));
+        }
+    }
+
+    private void combatSimulation() {
+        System.out.println("Leave equipment blank to auto-pick the strongest compatible equipment.");
+        printPlayers();
+        printHeroes();
+        printEquipment();
+        String playerAId = input.readRequired("Player A ID: ");
+        String heroAId = input.readRequired("Hero A ID: ");
+        String equipmentAId = input.readLine("Equipment A ID: ");
+        String playerBId = input.readRequired("Player B ID: ");
+        String heroBId = input.readRequired("Hero B ID: ");
+        String equipmentBId = input.readLine("Equipment B ID: ");
+        System.out.println(combatSimulationService.simulateDuel(
+                playerAId, heroAId, equipmentAId,
+                playerBId, heroBId, equipmentBId).format());
     }
 
     private void dataManagementMenu() {

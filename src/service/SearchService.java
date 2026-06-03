@@ -1,5 +1,6 @@
 package service;
 
+import enums.MatchResult;
 import model.Equipment;
 import model.Hero;
 import model.MatchRecord;
@@ -163,15 +164,15 @@ public class SearchService {
         for (MatchRecord record : matches) {
             String opponentId = record.opponentForTeam(teamId);
             Team opponent = opponentId.isEmpty() ? null : dataManager.requireTeam(opponentId);
-            boolean win = record.getWinnerTeamId().equals(teamId);
-            if (win) {
+            MatchResult result = record.resultForTeam(teamId);
+            if (result == MatchResult.WIN) {
                 wins++;
             } else {
                 losses++;
             }
             output.append("- ").append(record.getDate())
                     .append(" vs ").append(opponent == null ? "Unknown" : opponent.getName())
-                    .append(" result ").append(win ? "WIN" : "LOSS")
+                    .append(" result ").append(result)
                     .append(" picks ");
             if (playerId == null) {
                 output.append(heroPickText(record.getHeroPicks()));
