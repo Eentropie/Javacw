@@ -1,0 +1,263 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light">
+  <title>Honor of Kings IMS</title>
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+  <div id="toastRegion" class="toast-region" aria-live="polite"></div>
+  <div class="app-shell">
+    <header class="topbar">
+      <div class="brand">
+        <div class="brand-mark">HK</div>
+        <div>
+          <h1>Honor of Kings IMS</h1>
+          <p>Web control panel</p>
+        </div>
+      </div>
+
+      <form id="loginForm" class="login-form">
+        <input id="username" name="username" autocomplete="username" placeholder="Username" value="admin">
+        <input id="password" name="password" type="password" autocomplete="current-password" placeholder="Password" value="admin123">
+        <button type="submit">Login</button>
+      </form>
+
+      <div id="userBar" class="user-bar hidden">
+        <span id="userBadge"></span>
+        <button id="saveBtn" type="button" class="secondary hidden">Save Data</button>
+        <button id="logoutBtn" type="button" class="secondary">Logout</button>
+      </div>
+    </header>
+
+    <main>
+      <section class="overview-band">
+        <div class="arena-visual" aria-hidden="true">
+          <span class="arena-label">System Map</span>
+          <div class="lane lane-a"></div>
+          <div class="lane lane-b"></div>
+          <div class="lane lane-c"></div>
+          <div class="node node-a"></div>
+          <div class="node node-b"></div>
+          <div class="node node-c"></div>
+          <div class="node node-d"></div>
+        </div>
+        <div id="countGrid" class="count-grid"></div>
+      </section>
+
+      <section class="workspace">
+        <nav class="tool-nav" aria-label="Tools">
+          <button class="nav-pill active" data-target="lookupPanel" data-short="L">Lookup</button>
+          <button class="nav-pill" data-target="rankingPanel" data-short="R">Ranking</button>
+          <button class="nav-pill" data-target="historyPanel" data-short="H">History</button>
+          <button class="nav-pill" data-target="recommendPanel" data-short="RC">Recommend</button>
+          <button class="nav-pill" data-target="combatPanel" data-short="C">Combat</button>
+        </nav>
+
+        <section class="tool-surface">
+          <div id="lookupPanel" class="tool-panel active">
+            <div class="panel-heading">
+              <div>
+                <span class="eyebrow">Lookup</span>
+                <h2>Record Lookup</h2>
+                <p>Player, team, and hero index</p>
+              </div>
+              <span class="panel-badge">SearchService</span>
+            </div>
+            <div class="form-grid">
+              <label>
+                Search type
+                <select id="lookupType">
+                  <option value="player">Player</option>
+                  <option value="team">Team</option>
+                  <option value="hero">Hero</option>
+                </select>
+              </label>
+              <label>
+                Query
+                <input id="lookupQuery" placeholder="e.g. Li Bai or P001" value="Li Bai">
+              </label>
+              <button id="lookupBtn" type="button">Search</button>
+            </div>
+            <div class="metric-strip">
+              <span>Default query: Li Bai</span>
+              <span>Case-insensitive IDs and names</span>
+            </div>
+          </div>
+
+          <div id="rankingPanel" class="tool-panel">
+            <div class="panel-heading">
+              <div>
+                <span class="eyebrow">Ranking</span>
+                <h2>Competitive Tables</h2>
+                <p>Player leaderboard and equipment score</p>
+              </div>
+              <span class="panel-badge">RankingService</span>
+            </div>
+            <div class="form-grid">
+              <label>
+                Leaderboard
+                <select id="leaderMode">
+                  <option value="winrate">Win rate</option>
+                  <option value="level">Level</option>
+                  <option value="matches">Matches</option>
+                  <option value="score">Custom score</option>
+                </select>
+              </label>
+              <label>
+                Limit
+                <input id="leaderLimit" type="number" min="1" max="20" value="5">
+              </label>
+              <button id="leaderBtn" type="button">Show Players</button>
+              <button id="equipmentBtn" type="button" class="secondary">Show Equipment</button>
+            </div>
+            <div class="metric-strip">
+              <span>Win rate, level, matches, custom score</span>
+              <span>Limit capped at 20</span>
+            </div>
+          </div>
+
+          <div id="historyPanel" class="tool-panel">
+            <div class="panel-heading">
+              <div>
+                <span class="eyebrow">History</span>
+                <h2>Match Timeline</h2>
+                <p>Newest-first match records</p>
+              </div>
+              <span class="panel-badge">CSV backed</span>
+            </div>
+            <div class="form-grid">
+              <label>
+                History type
+                <select id="historyType">
+                  <option value="player">Player</option>
+                  <option value="team">Team</option>
+                </select>
+              </label>
+              <label id="historyPlayerWrap">
+                Player
+                <select id="historyPlayer"></select>
+              </label>
+              <label id="historyTeamWrap" class="hidden">
+                Team
+                <select id="historyTeam"></select>
+              </label>
+              <label>
+                Limit
+                <input id="historyLimit" type="number" min="1" max="20" value="3">
+              </label>
+              <button id="historyBtn" type="button">Show History</button>
+            </div>
+            <div class="metric-strip">
+              <span>Player or team scope</span>
+              <span>Uses validated match records</span>
+            </div>
+          </div>
+
+          <div id="recommendPanel" class="tool-panel">
+            <div class="panel-heading">
+              <div>
+                <span class="eyebrow">Recommend</span>
+                <h2>Recommendation Engine</h2>
+                <p>Hero and equipment fit reports</p>
+              </div>
+              <span class="panel-badge">Extra credit</span>
+            </div>
+            <div class="form-grid">
+              <label>
+                Player
+                <select id="recommendPlayer"></select>
+              </label>
+              <button id="recommendHeroBtn" type="button">Recommend Heroes</button>
+              <label>
+                Hero
+                <select id="recommendHero"></select>
+              </label>
+              <button id="recommendEquipmentBtn" type="button">Recommend Equipment</button>
+            </div>
+            <div class="metric-strip">
+              <span>Uses player history and hero compatibility</span>
+              <span>Dependency-free scoring</span>
+            </div>
+          </div>
+
+          <div id="combatPanel" class="tool-panel">
+            <div class="panel-heading">
+              <div>
+                <span class="eyebrow">Combat</span>
+                <h2>Duel Simulator</h2>
+                <p>Two players, selected heroes, optional equipment</p>
+              </div>
+              <span class="panel-badge">Extra credit</span>
+            </div>
+            <div class="combat-grid">
+              <div class="combat-side">
+                <h2>Player A</h2>
+                <label>Player <select id="combatPlayerA"></select></label>
+                <label>Hero <select id="combatHeroA"></select></label>
+                <label>Equipment <select id="combatEquipmentA"></select></label>
+              </div>
+              <div class="combat-side">
+                <h2>Player B</h2>
+                <label>Player <select id="combatPlayerB"></select></label>
+                <label>Hero <select id="combatHeroB"></select></label>
+                <label>Equipment <select id="combatEquipmentB"></select></label>
+              </div>
+            </div>
+            <div class="versus-divider" aria-hidden="true">VS</div>
+            <button id="combatBtn" type="button">Run Combat</button>
+          </div>
+        </section>
+
+        <aside class="insight-panel">
+          <div class="mini-section">
+            <div class="section-heading">
+              <span class="eyebrow">Context</span>
+              <h2 id="insightTitle">System Snapshot</h2>
+            </div>
+            <div id="contextInsight" class="compact-list"></div>
+          </div>
+          <div class="mini-section">
+            <div class="section-heading">
+              <span class="eyebrow">Latest</span>
+              <h2>Recent Matches</h2>
+            </div>
+            <div id="recentMatches" class="compact-list"></div>
+          </div>
+          <div class="mini-section">
+            <div class="section-heading">
+              <span class="eyebrow">Power</span>
+              <h2>Top Equipment</h2>
+            </div>
+            <div id="topEquipment" class="compact-list"></div>
+          </div>
+        </aside>
+      </section>
+
+      <section class="report-band">
+        <div class="report-header">
+          <div>
+            <span class="eyebrow">Output</span>
+            <h2 id="reportTitle">Report</h2>
+          </div>
+          <div class="report-actions">
+            <span id="latencyText" class="report-meta">No request yet</span>
+            <span id="statusText" class="status-pill" data-tone="ready">Ready</span>
+            <button id="copyReportBtn" type="button" class="secondary compact-button">Copy</button>
+            <button id="csvExportBtn" type="button" class="secondary compact-button" disabled>CSV</button>
+          </div>
+        </div>
+        <div id="reportShell" class="report-shell empty">
+          <pre id="reportOutput">Results will appear here.</pre>
+          <div id="tableOutput" class="table-output hidden"></div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <script src="/app.js"></script>
+</body>
+</html>
