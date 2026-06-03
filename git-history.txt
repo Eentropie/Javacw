@@ -1,4 +1,9 @@
-* f009858 (HEAD -> main) [Docs] update AI evidence commit links
+* 31200fe (HEAD -> main) [Docs] update submission evidence and audit
+* 151414f [Frontend] add optional local web UI
+* b21c5fa [Tests] add dependency-free automated coverage
+* 7410b35 [Extra-Credit] add recommendation and combat simulation
+* 851a81d (codex/structured-results-fork) [Docs] export git history
+* f009858 [Docs] update AI evidence commit links
 * 6e4c439 [AI-Review] document Claude review and test evidence
 * 12948b5 [AI-Review] fix match record validation issues
 * 80739be [AI-Architect] document CSV data design
