@@ -1,4 +1,6 @@
-* 31200fe (HEAD -> main) [Docs] update submission evidence and audit
+* 2169353 (HEAD -> main) [Project] add IntelliJ project metadata
+* 97bccbb [Docs] refresh git history evidence
+* 31200fe [Docs] update submission evidence and audit
 * 151414f [Frontend] add optional local web UI
 * b21c5fa [Tests] add dependency-free automated coverage
 * 7410b35 [Extra-Credit] add recommendation and combat simulation
