@@ -26,7 +26,7 @@ The project made the relationship between encapsulation and data consistency cle
 
 ## 7. What Java concept are you still unsure about?
 
-I am still less confident with larger persistence designs, especially deciding when a simple CSV structure should be replaced by JSON, JDBC, or a database-backed repository. This project helped me understand file I/O, but a larger project would need stronger schema migration and transaction handling.
+I am still less confident about persistence design beyond simple CSV files. This project helped me understand how to load and save structured text data, but I still need more practice with relational database schema design, transactions, and deciding where exception handling should belong in a larger Java application.
 
 ## 8. Did AI make the project easier, harder, or both? Explain.
 
@@ -34,8 +34,8 @@ Both. AI made requirement breakdown and boilerplate implementation faster, but i
 
 ## 9. Which parts of the final project were mainly written by you?
 
-I reviewed the requirement mapping, checked whether the implemented menus matched the PDF, ran compile and console tests, inspected the AI review results, and made final decisions about rejecting dependency-heavy suggestions such as Gson/JSON and GUI work. I also need to make sure the final Git history and submitted reflection accurately describe the real development process.
+I mainly handled the requirement checking, manual review, testing decisions, and final project judgement. I compared the implementation against the coursework requirements, ran and checked the program output, reviewed Claude's findings against the actual source code, decided which suggestions to accept or reject, and organized the final human-authored fixes and commits before submission.
 
 ## 10. Which parts were mainly generated or heavily assisted by AI?
 
-The class skeletons, service implementation, CSV persistence, console menu flow, recommendation engine, combat simulation, automated test runner, and documentation drafts were heavily assisted by Codex. Claude Opus was used for architecture, testing review, and extra-credit planning. Gemini was used only as a secondary comparison point and was not treated as primary evidence after its project-mismatched suggestions were identified.
+The model classes, service-layer implementation, CSV persistence logic, console menu flow, initial documentation drafts, and review checklist were heavily assisted by Codex. Claude Opus was mainly used as a reviewer to check the architecture, requirement coverage, testing evidence, and match-record validation logic. I treated the AI output as draft work and review support rather than as automatically correct final evidence.
