@@ -30,6 +30,10 @@ All player leaderboard modes apply the selected metric first. If two players hav
 
 ## Recommendation Engine
 
+Why this formula ： explains each signal (statScore, ownerSuccess, teamRoleGapBonus, difficultyFit, equipmentSupport) and why they're combined
+Why owned heroes are penalized rather than excluded ： rationale for -20 penalty over hard filter
+Known limitations ： manually tuned weights, single-owner bias, no opponent/meta context
+
 The recommendation engine is implemented in `RecommendationService` and has two report types.
 
 Hero recommendation score:
