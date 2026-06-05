@@ -307,3 +307,17 @@ CSV list fields were initially saved incorrectly because the cleaning method rep
 ## Bug Found During Claude Review
 
 Claude Opus reviewed the actual source files and found that match editing could mutate an existing record before validation. It also found that match winners were not restricted to participating teams and that some seed matches had duplicate hero picks. These issues were fixed in commit `12948b5` by adding centralized match validation, safe update-before-mutation behavior, participant checks, ownership checks, and corrected seed match data.
+
+
+## Personal Console Verification
+
+I personally ran the console application and verified the recommendation and combat flows before submission.
+
+### Recommendation flow (Admin)
+
+```text
+Login: admin / admin123
+Menu option 7 → Recommendation engine
+Sub-option 1 → Recommend heroes for a player
+Player ID: P001
+Recommendations: 3
