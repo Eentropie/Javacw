@@ -1,5 +1,7 @@
-* f3900ab (HEAD -> main) [Docs] tighten AI evidence and rubric audit
-* b751251 (origin/main) [Docs] refresh git history after Windows compatibility update
+* dcbc40e (HEAD -> main) [AI-Implementation][GPT] strengthen association evidence and process maps
+* 3a94c00 (origin/main) [Docs] refresh git history after rubric audit
+* f3900ab [Docs] tighten AI evidence and rubric audit
+* b751251 [Docs] refresh git history after Windows compatibility update
 * 771c9c7 [AI-Implementation] add Windows launcher after human compatibility review
 * 57ea08a [Docs] final git history export
 * 2b24373 [Human] polish final submission documentation
