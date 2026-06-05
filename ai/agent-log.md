@@ -100,7 +100,8 @@ Human decision:
 - The structured-result fork proved a safer path by extending selected endpoints with `format=json` while preserving their default report responses. Only the stable backend structured rows, table renderer, copy-to-CSV behavior, and CSV export control were absorbed into `main`; hash routing and raw JSON preview stayed out of the mainline.
 - The remaining fork worktree was preserved as branch `codex/structured-results-fork`. API smoke checks still passed, but raw JSON preview and hash routing were kept branch-only because their scoring value is lower than their UI/state risk.
 - A final submission-audit pass expanded the dependency-free automated test runner from 10 to 14 checks, adding invalid-login, missing-lookup, equipment add/delete cascade, and text-report compatibility coverage. A submission evidence map was added so requirement, test, AI, and run-command evidence is easier to inspect.
+- Human review of the published GitHub README identified a Windows compatibility gap: the one-click launcher was macOS-only and the documented compile command used Unix shell syntax. Codex added a Windows batch launcher and cross-platform README instructions without changing the original console entry point.
 
 Related commits:
 
-- Current working-tree update for optional web frontend and one-click launcher.
+- Current working-tree update for optional web frontend, one-click launcher, and Windows compatibility follow-up.

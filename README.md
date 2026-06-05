@@ -8,13 +8,22 @@ This project is a console-first Java information management system for Honor of 
 
 ### Console version
 
-Compile from the project root:
+Compile from the project root.
+
+macOS/Linux:
 
 ```bash
 javac -d out $(find src -name '*.java')
 ```
 
-Run:
+Windows PowerShell:
+
+```powershell
+$files = Get-ChildItem -Recurse src -Filter *.java | ForEach-Object { $_.FullName }
+javac -d out $files
+```
+
+Run on any platform:
 
 ```bash
 java -cp out Main
@@ -30,12 +39,26 @@ On macOS, double-click:
 Open-JavaCW-Web.command
 ```
 
+On Windows, double-click:
+
+```text
+Open-JavaCW-Web.bat
+```
+
 This compiles the project, starts the local web server, and opens the browser automatically.
 
-Manual web command:
+Manual web command on macOS/Linux:
 
 ```bash
 javac -d out $(find src -name '*.java')
+java -cp out web.WebMain
+```
+
+Manual web command on Windows PowerShell:
+
+```powershell
+$files = Get-ChildItem -Recurse src -Filter *.java | ForEach-Object { $_.FullName }
+javac -d out $files
 java -cp out web.WebMain
 ```
 
@@ -93,8 +116,16 @@ Manual test cases are documented in `docs/test-cases.md`. I personally verified 
 Automated tests can be run without external dependencies:
 
 ```bash
- javac -d out $(find src -name '*.java')
- java -cp out test.TestRunner
+javac -d out $(find src -name '*.java')
+java -cp out test.TestRunner
+```
+
+Windows PowerShell equivalent:
+
+```powershell
+$files = Get-ChildItem -Recurse src -Filter *.java | ForEach-Object { $_.FullName }
+javac -d out $files
+java -cp out test.TestRunner
 ```
 
 Current automated coverage includes 14 service-level checks for recommendations, combat, authentication failure, missing lookups, match validation, equipment add/delete cascade behavior, leaderboard ordering, zero-match win-rate safety, text-report compatibility, and CSV round trip.
@@ -113,4 +144,5 @@ Current automated coverage includes 14 service-level checks for recommendations,
 - The console UI is functional rather than graphical.
 - Automated tests use a plain Java runner rather than JUnit because no JUnit dependency is bundled with the repository.
 - The recommendation formula uses manually tuned weights rather than data-driven learning.
-- The optional web frontend requires Java 18+ for the built-in HttpServer and is tested on macOS only.
+- The optional web frontend requires Java 18+ for the built-in HttpServer and a local browser.
+- Windows startup support is provided through `Open-JavaCW-Web.bat`; final automated verification was run in the local macOS workspace.

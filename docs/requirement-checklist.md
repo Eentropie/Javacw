@@ -64,7 +64,7 @@
 | UML draft | `docs/uml.md` |
 | `docs/test-cases.md` | Present with actual results |
 | Automated tests | `src/test/TestRunner.java` runs 14 dependency-free automated service tests |
-| One-click web launcher | `Open-JavaCW-Web.command` starts the optional browser frontend on macOS |
+| One-click web launcher | `Open-JavaCW-Web.command` starts the optional browser frontend on macOS; `Open-JavaCW-Web.bat` provides the Windows launcher |
 | `ai/prompts.md` | Present |
 | `ai/agent-log.md` | Present |
 | `ai/reflection.md` | Present, with complete draft answers |
@@ -82,8 +82,8 @@
 | Advanced AI reflection | `ai/model-comparison.md` compares Gemini and Claude Opus review quality. |
 | Automated tests | `src/test/TestRunner.java` covers recommendations, combat, authentication failure, missing lookups, CRUD cascade behavior, validation, leaderboard, win-rate edge cases, text-report compatibility, and CSV round trip. |
 
-## Remaining Student Work Before Submission
+## Final Student Checks Before Submission
 
-- Add at least four genuine human-authored planning/debugging/refactoring commits. Do not fake these.
-- Re-run tests on the final submitted machine if using a different Java version.
-- Re-export `git-history.txt` after the final commit.
+- Genuine human-authored review/reflection commits are already present in Git history. Do not add fake human commits.
+- Re-run tests on the final submitted machine if using a different Java version or Windows.
+- Re-export `git-history.txt` after any further commit sequence.
