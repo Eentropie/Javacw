@@ -119,6 +119,20 @@ public class Hero implements Searchable {
         return recommendedEquipmentIds.remove(equipmentId) || removed;
     }
 
+    public void replaceCompatibleEquipment(List<String> equipmentIds) {
+        compatibleEquipmentIds.clear();
+        if (equipmentIds != null) {
+            equipmentIds.forEach(this::addCompatibleEquipment);
+        }
+    }
+
+    public void replaceRecommendedEquipment(List<String> equipmentIds) {
+        recommendedEquipmentIds.clear();
+        if (equipmentIds != null) {
+            equipmentIds.forEach(this::addRecommendedEquipment);
+        }
+    }
+
     @Override
     public boolean matches(String query) {
         if (query == null) {
