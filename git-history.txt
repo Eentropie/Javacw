@@ -1,9 +1,12 @@
-* 2956736 (HEAD -> main, codex/hok-web-polish) [Docs][GPT] record Gemini web polish evidence
+* 13cf7c9 (HEAD -> main, codex/desktop-ui-polish) [Docs][GPT] record desktop design review evidence
+* 70498f6 [AI-Implementation][GPT] apply Claude-approved Swing desktop polish
+* 19a52f9 (origin/main) [Docs][GPT] refresh git history after Gemini web polish
+* 2956736 (codex/hok-web-polish) [Docs][GPT] record Gemini web polish evidence
 * 602d0b7 [AI-Implementation][GPT] apply Gemini arena web polish
 * 3e02a5d [Docs][GPT] align desktop evidence after merge
 * 444ae15 (codex/swing-desktop-app) [Docs][GPT] document desktop app evidence and run path
 * 663fc8f [AI-Implementation][GPT] add cross-platform Swing desktop app
-* ef731cd (origin/main) [Docs][GPT] refresh git history after process evidence update
+* ef731cd [Docs][GPT] refresh git history after process evidence update
 * dcbc40e [AI-Implementation][GPT] strengthen association evidence and process maps
 * 3a94c00 [Docs] refresh git history after rubric audit
 * f3900ab [Docs] tighten AI evidence and rubric audit
