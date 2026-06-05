@@ -50,7 +50,7 @@
 | Recommendation engine | `RecommendationService` and console recommendation options. |
 | Combat simulation | `CombatSimulationService`, `CombatReport`, and console combat simulation options. |
 | Optional desktop app | `gui.DesktopMain` provides a Java Swing local app for login, reports, recommendations, combat, player profile edits, admin CRUD, save, and reload without using a web server. |
-| Optional web frontend | `web.WebMain`, `web.WebServer`, and static assets in `web/` provide browser access to core features. |
+| Optional web frontend | `web.WebMain`, `web.WebServer`, and static assets in `web/` provide browser access to core features with a Gemini-reviewed dark arena dashboard theme. |
 | Data management | Admin data-management menu supports add/edit/delete for players, heroes, equipment, teams, and match records. |
 | Authentication | `AuthenticationService` supports Admin and Player login. |
 | Player permissions | Player menu excludes data management and allows only limited profile edits. |
@@ -84,7 +84,7 @@
 | Recommendation engine | Hero and equipment recommendation formulas in `RecommendationService` and `docs/design.md`. |
 | Combat simulation | Turn-based duel with compatible equipment, critical hits, dodges, bounded turns, and a `CombatReport`. |
 | Desktop app | Dependency-free Swing interface with macOS and Windows one-click launchers. |
-| Browser frontend | Dependency-free local web UI using JDK `HttpServer`, static HTML/CSS/JS, and a one-click launcher. |
+| Browser frontend | Dependency-free local web UI using JDK `HttpServer`, static HTML/CSS/JS, a one-click launcher, structured result tables, and a dark arena control-panel visual polish. |
 | Advanced AI reflection | `ai/model-comparison.md` compares Gemini and Claude Opus review quality. |
 | Automated tests | `src/test/TestRunner.java` covers recommendations, combat, authentication failure, missing lookups, CRUD cascade behavior, validation, object association helpers, leaderboard, win-rate edge cases, text-report compatibility, and CSV round trip. |
 

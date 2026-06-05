@@ -73,7 +73,7 @@ On Windows, double-click:
 Open-JavaCW-Web.bat
 ```
 
-This compiles the project, starts the local web server, and opens the browser automatically.
+This compiles the project, starts the local web server, and opens the browser automatically. The web frontend is a dependency-free dark arena control panel with readable gold-accented forms, reports, tables, and status feedback.
 
 Manual web command on macOS/Linux:
 

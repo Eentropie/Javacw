@@ -36,10 +36,11 @@ Existing commits are not rewritten because changing commit messages would change
 
 | Evidence label | Meaning | Related commit evidence |
 |---|---|---|
-| `[GPT]` | Codex / GPT-5 directly planned, implemented, tested, or documented the change. | `05d011d`, `b968786`, `dab6880`, `d13236d`, `0b86ad2`, `eb02042`, `ccee720`, `a4c0510`, `771c9c7`, `f3900ab`, `3a94c00`, `663fc8f`, `444ae15` |
+| `[GPT]` | Codex / GPT-5 directly planned, implemented, tested, or documented the change. | `05d011d`, `b968786`, `dab6880`, `d13236d`, `0b86ad2`, `eb02042`, `ccee720`, `a4c0510`, `771c9c7`, `f3900ab`, `3a94c00`, `663fc8f`, `444ae15`, `602d0b7` |
 | `[Claude]` | Antigravity Claude Opus supplied the primary architecture or review input behind the change. | `ba63aa0`, `5a6630d`, `80739be`, `12948b5`, `6e4c439` |
 | `[Claude] review + [GPT] implementation` | Claude supplied the review/design direction, then Codex implemented or documented the accepted low-risk work. | `7410b35`, `b21c5fa`, `151414f`, `31200fe`, `851a81d` |
 | `[Gemini]` | Gemini was briefly used for comparison, but its mismatched architecture suggestions were not kept as primary evidence. | `6e4c439` |
+| `[Gemini] review + [GPT] implementation` | Gemini supplied a frontend visual critique and CSS-token direction, then Codex implemented the accepted dependency-free web polish. | `602d0b7` |
 
 ## Git History Export Boundary
 
@@ -54,4 +55,5 @@ The live repository history is the authoritative source for the latest commit, w
 3. Review and debugging commits fixed CSV delimiter preservation and match-record validation.
 4. Extra-credit commits added recommendation, combat simulation, and automated tests.
 5. Frontend work was kept optional and dependency-free, preserving the required console entry point.
-6. Final documentation commits tightened AI evidence, rubric mapping, Windows compatibility notes, and Git history export evidence.
+6. Later optional-interface work added a dependency-free Swing desktop app and a Gemini-reviewed arena-style web visual polish while preserving the required console entry point.
+7. Final documentation commits tightened AI evidence, rubric mapping, Windows compatibility notes, optional interface evidence, and Git history export evidence.

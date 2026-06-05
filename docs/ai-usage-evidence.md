@@ -8,7 +8,7 @@ This file consolidates the AI evidence required by `requirement.pdf`. The detail
 
 | Requirement | Evidence |
 |---|---|
-| Actual prompts recorded | `ai/prompts.md` records 11 important prompts with time, tool/model, agent role, prompt text, response summary, decision, and related commit hashes. |
+| Actual prompts recorded | `ai/prompts.md` records 12 important prompts with time, tool/model, agent role, prompt text, response summary, decision, and related commit hashes. |
 | At least 3 AI agent roles | Architect Agent, Implementation Agent, Testing/Reviewer Agent, Extra-Credit Reviewer Agent, Frontend Reviewer Agent, Desktop Implementation Agent. |
 | Accepted, modified, rejected decisions | `ai/prompts.md` and `ai/agent-log.md` record accepted directions, rejected Gson dependency, rejected fake human commits, rejected unrelated Gemini architecture suggestions, and deferred risky frontend ideas. |
 | Reflection questions | `ai/reflection.md` answers all 10 required reflection questions. |
@@ -31,11 +31,12 @@ This file consolidates the AI evidence required by `requirement.pdf`. The detail
 | Prompt 09 | Frontend Design Reviewer Agent | Claude Opus 4.6 Thinking | `[Claude]` review, `[GPT]` implementation | Applied low-risk frontend design improvements. | `151414f` |
 | Prompt 10 | Frontend Ideas Reviewer Agent | Claude Opus 4.6 Thinking | `[Claude]` review, `[GPT]` implementation | Accepted low-risk polish and kept higher-risk ideas in branch experiments. | `151414f`, `851a81d`, `31200fe` |
 | Prompt 11 | Desktop Implementation Agent | Codex / GPT-5 | `[GPT]` | Added cross-platform Swing desktop app and macOS/Windows launchers while preserving console and web entry points. | `663fc8f`, `444ae15` |
+| Prompt 12 | Frontend Design Reviewer Agent | Gemini 3.1 Pro High, then Codex / GPT-5 | `[Gemini]` review, `[GPT]` implementation | Applied a dependency-free arena/control-panel visual polish to the optional web frontend while preserving console, web APIs, and JavaScript behavior. | `602d0b7` |
 
 ## Verification Used Against AI Output
 
 - Repeated compilation with `javac -d out $(find src -name '*.java')`.
 - Dependency-free automated tests with `java -cp out test.TestRunner`.
 - Manual console test cases in `docs/test-cases.md`.
-- Source review by Codex and Claude Opus for match validation, frontend scope, desktop scope, and submission evidence.
+- Source review by Codex, Claude Opus, and Gemini for match validation, frontend scope, desktop scope, frontend visual polish, and submission evidence.
 - Git history showing separated planning, implementation, review, fix, test, and documentation commits.

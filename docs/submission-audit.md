@@ -55,11 +55,12 @@ Automated tests passed: 15, failed: 0
 
 - The console workflow is the safest grading path and should be demonstrated first.
 - The optional Swing desktop app is extra evidence only; it does not replace `Main`.
-- The optional web frontend is extra evidence only; it does not replace `Main`.
+- The optional web frontend is extra evidence only; it does not replace `Main`. Its latest visual pass was reviewed through Antigravity Gemini 3.1 Pro High and implemented as a dependency-free dark arena/control-panel CSS polish without external assets.
 - ID-backed relationships are resolved through explicit object association helpers in `GameDataManager`, preserving CSV persistence while making OOP association evidence clearer.
 - Human review of the GitHub README found that the first web launcher documented only macOS and used Unix shell compile syntax. Follow-up work added Windows `.bat` launchers and Windows PowerShell commands.
 - Core Java code uses standard JDK APIs and `Path`/`Files` for data paths, so there is no intentional macOS-only code path. The local verification environment is macOS; Windows execution should still be re-run on the final Windows machine if that platform is used for marking.
 - The fork branch `codex/structured-results-fork` preserves higher-risk UI experiments. Only structured tables and CSV controls were accepted into `main`; hash routing and raw JSON preview remain out of the mainline.
+- The latest Chrome web check verified the dark arena dashboard at `http://127.0.0.1:8080/`, admin login, lookup output, and first-viewport report visibility after the wide-screen insight-panel layout adjustment.
 - `git-history.txt` has been regenerated after the final commit sequence.
 
 ## Personal Verification

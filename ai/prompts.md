@@ -208,3 +208,22 @@ Codex created branch `codex/swing-desktop-app`, added a dependency-free Java Swi
 ### My Decision
 
 Accepted the Swing route because it keeps the original `Main` console entry unchanged, avoids external dependencies, works on Windows and macOS with a JDK, and gives a real local app interface that is separate from the optional webserver.
+
+## Prompt 12
+
+Time: 2026-06-05 22:05 CST
+Tool/Model: Antigravity / Gemini 3.1 Pro High, then Codex / GPT-5
+Agent Role: Frontend Design Reviewer Agent
+Related Commit: `602d0b7`
+
+### My Prompt
+
+Review JavaCW web frontend at `/Users/pengc/Desktop/CodexSpace/JavaCW/JavaCW`. Use Gemini 3.1 Pro High. Give a practical low-risk design checklist to make `web/index.html`, `web/styles.css`, and `web/app.js` more polished and thematically closer to a serious Honor of Kings arena/control-panel interface. Keep it dependency-free, do not use external assets or copyrighted artwork, do not edit files directly, preserve the console and Java services, and focus on dark battlefield surfaces, gold accents, crisp panel borders, forms, tables, focus states, and mobile responsiveness.
+
+### AI Response Summary
+
+Gemini said the existing web UI was functional but still looked like a generic bright SaaS dashboard. It recommended a CSS-token pass with deep backgrounds, lifted panels, gold accent lines, dark form controls, scoreboard-like table headers, stronger active navigation, and a darker arena/minimap visual. It also warned against over-gamifying the coursework UI, lowering contrast, adding external dependencies, or renaming JavaScript-coupled classes.
+
+### My Decision
+
+Accepted the low-risk visual direction and implemented it with static HTML/CSS changes only. I preserved `Main`, `web.WebMain`, `web/app.js` behavior, all existing API endpoints, and all dependency-free constraints. I also adjusted the wide-screen web layout after visual testing so the report panel appears sooner instead of being pushed down by the right insight column.

@@ -92,6 +92,8 @@ Main contribution:
 - A second Claude Opus review focused on frontend design quality after implementation.
 - It recommended denser spacing, clearer panel hierarchy, active navigation accents, contextual insight content, loading feedback, toast notifications, and stronger responsive behavior.
 - A later Claude Opus brainstorm generated additional frontend polish and higher-risk product ideas.
+- Antigravity Gemini 3.1 Pro High later reviewed the existing web frontend specifically for a more polished Honor of Kings arena/control-panel visual direction.
+- Gemini recommended deep battlefield backgrounds, gold accent tokens, darker form controls, crisp panel borders, scoreboard-style tables, and stronger focus states while keeping the coursework admin-tool feel.
 
 Human decision:
 
@@ -104,6 +106,7 @@ Human decision:
 - The remaining fork worktree was preserved as branch `codex/structured-results-fork`. API smoke checks still passed, but raw JSON preview and hash routing were kept branch-only because their scoring value is lower than their UI/state risk.
 - A final submission-audit pass expanded the dependency-free automated test runner from 10 to 14 checks, adding invalid-login, missing-lookup, equipment add/delete cascade, and text-report compatibility coverage. A submission evidence map was added so requirement, test, AI, and run-command evidence is easier to inspect.
 - Human review of the published GitHub README identified a Windows compatibility gap: the one-click launcher was macOS-only and the documented compile command used Unix shell syntax. Codex added a Windows batch launcher and cross-platform README instructions without changing the original console entry point.
+- The Gemini visual direction was accepted only as a low-risk CSS/theme pass. External assets, copyrighted game artwork, new dependencies, and JavaScript class renames were rejected. Visual testing also found a large desktop gap before the report panel, so the right insight panel was height-limited on wide screens.
 
 Related commits:
 
@@ -112,6 +115,7 @@ Related commits:
 - `31200fe` update submission evidence and audit after accepting stable fork work.
 - `771c9c7` add Windows launcher after human compatibility review.
 - `b751251` refresh Git history after Windows compatibility update.
+- `602d0b7` apply Gemini arena web polish.
 
 ## Desktop Implementation Agent
 
@@ -131,3 +135,4 @@ Human decision:
 Related commits:
 
 - `663fc8f` add cross-platform Swing desktop app.
+- `444ae15` document desktop app evidence and run path.
