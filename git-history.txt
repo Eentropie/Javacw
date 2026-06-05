@@ -1,4 +1,11 @@
-* 2169353 (HEAD -> main) [Project] add IntelliJ project metadata
+* 0f26691 (HEAD -> main) [Human] polish final submission documentation
+* 5f72a9f [Human] review recommendation formula notes
+* a22ff09 [Human] verify console recommendation and combat flows
+* f122e18 [Human] complete personal reflection
+* 1a8a504 [Human] review recommendation formula notes
+* f399d6b [Human] complete personal reflection
+* 6d76fea [Docs] refresh final git history evidence
+* 2169353 [Project] add IntelliJ project metadata
 * 97bccbb [Docs] refresh git history evidence
 * 31200fe [Docs] update submission evidence and audit
 * 151414f [Frontend] add optional local web UI
