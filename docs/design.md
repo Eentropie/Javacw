@@ -30,11 +30,11 @@ All player leaderboard modes apply the selected metric first. If two players hav
 
 ## Recommendation Engine
 
-Why this formula ： explains each signal (statScore, ownerSuccess, teamRoleGapBonus, difficultyFit, equipmentSupport) and why they're combined
-Why owned heroes are penalized rather than excluded ： rationale for -20 penalty over hard filter
-Known limitations ： manually tuned weights, single-owner bias, no opponent/meta context
-
 The recommendation engine is implemented in `RecommendationService` and has two report types.
+
+### Why this formula
+
+The hero recommendation score combines several independent signals so that each recommendation can be justified with a reason line rather than just a bare number. The idea is that a useful recommendation should consider more than raw stats.
 
 Hero recommendation score:
 
@@ -45,22 +45,6 @@ score = statScore
       + difficultyFit
       + equipmentSupport
       - ownedPenalty
-```
-
-- `statScore` uses hero attack, defense, and health.
-- `ownerSuccess` uses the average win rate of players who already own the hero.
-- `teamRoleGapBonus` rewards a hero type that is missing or rare in the player's team.
-- `difficultyFit` rewards heroes whose difficulty fits the player's level.
-- `equipmentSupport` uses the top compatible equipment scores from `RankingService`.
-- `ownedPenalty` pushes already-owned heroes below useful new options.
-
-Equipment recommendation score:
-
-```text
-score = equipmentRankingScore
-      + explicitRecommendationBonus
-      + compatibilityBonus
-      + heroTypeSynergy
 ```
 
 This reuses the existing equipment ranking formula and adds hero-specific context.
