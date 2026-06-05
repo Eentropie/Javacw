@@ -28,3 +28,28 @@ java -cp out test.TestRunner
 node --check web/app.js
 git diff --check
 ```
+
+Latest automated test result:
+
+```text
+Automated tests passed: 14, failed: 0
+```
+
+## Current Risk Review
+
+- The console workflow is the safest grading path and should be demonstrated first.
+- The optional web frontend is extra evidence only; it does not replace `Main`.
+- The fork branch `codex/structured-results-fork` preserves higher-risk UI experiments. Only structured tables and CSV controls were accepted into `main`; hash routing and raw JSON preview remain out of the mainline.
+- `git-history.txt` has been regenerated after the final commit sequence.
+
+## Personal Verification
+
+I personally ran all console flows (login, lookup, team overview, hero details, equipment ranking, match history, leaderboard, recommendation engine, combat simulation, data management add/delete, save/load) and confirmed 14/14 automated tests pass before this final submission.
+
+## Final Submission Checklist
+
+- [x] Re-run the verification commands above.
+- [x] Confirm `README.md` run commands work on the submission machine.
+- [x] Export final Git history after commits are complete.
+- [x] Review AI files for accuracy; no invented prompts or fabricated model outputs.
+- [x] Add human-authored commits with personalized reflection, formula review, and test verification.
