@@ -37,6 +37,7 @@ import javax.swing.SpinnerNumberModel;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.GridBagConstraints;
@@ -54,6 +55,18 @@ import java.util.Optional;
 
 public final class DesktopMain {
     private static final Path DATA_DIR = Path.of("data");
+    private static final Color THEME_PAPER = new Color(0x080B12);
+    private static final Color THEME_NAV = new Color(0x0F141F);
+    private static final Color THEME_PANEL = new Color(0x121722);
+    private static final Color THEME_PANEL_SOFT = new Color(0x1A2130);
+    private static final Color THEME_PANEL_LIFT = new Color(0x202838);
+    private static final Color THEME_LINE = new Color(0x38445B);
+    private static final Color THEME_INK = new Color(0xE8EDF7);
+    private static final Color THEME_MUTED = new Color(0xA2ADBF);
+    private static final Color THEME_GOLD = new Color(0xE3C174);
+    private static final Color THEME_GREEN = new Color(0x26C281);
+    private static final Color THEME_BLUE = new Color(0x4D8DFF);
+    private static final Color THEME_SELECTION = new Color(0x3D475C);
 
     private final FileStorageService storage = new FileStorageService();
     private GameDataManager dataManager;
@@ -91,12 +104,81 @@ public final class DesktopMain {
         }
         SwingUtilities.invokeLater(() -> {
             try {
-                UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+                UIManager.setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName());
             } catch (Exception ignored) {
-                // Default Swing look and feel is acceptable if the platform one is unavailable.
+                // Default Swing look and feel is acceptable if Metal is unavailable.
             }
+            installDarkTheme();
             new DesktopMain().show();
         });
+    }
+
+    private static void installDarkTheme() {
+        UIManager.put("Panel.background", THEME_PANEL);
+        UIManager.put("Label.foreground", THEME_INK);
+        UIManager.put("TextField.background", THEME_PANEL_SOFT);
+        UIManager.put("TextField.foreground", THEME_INK);
+        UIManager.put("TextField.caretForeground", THEME_GOLD);
+        UIManager.put("TextField.selectionBackground", THEME_SELECTION);
+        UIManager.put("TextField.selectionForeground", THEME_INK);
+        UIManager.put("TextField.inactiveBackground", THEME_PANEL_SOFT);
+        UIManager.put("TextField.border", BorderFactory.createCompoundBorder(
+                BorderFactory.createLineBorder(THEME_LINE),
+                BorderFactory.createEmptyBorder(2, 4, 2, 4)));
+        UIManager.put("PasswordField.background", THEME_PANEL_SOFT);
+        UIManager.put("PasswordField.foreground", THEME_INK);
+        UIManager.put("PasswordField.caretForeground", THEME_GOLD);
+        UIManager.put("PasswordField.selectionBackground", THEME_SELECTION);
+        UIManager.put("PasswordField.selectionForeground", THEME_INK);
+        UIManager.put("PasswordField.border", BorderFactory.createCompoundBorder(
+                BorderFactory.createLineBorder(THEME_LINE),
+                BorderFactory.createEmptyBorder(2, 4, 2, 4)));
+        UIManager.put("FormattedTextField.background", THEME_PANEL_SOFT);
+        UIManager.put("FormattedTextField.foreground", THEME_INK);
+        UIManager.put("FormattedTextField.caretForeground", THEME_GOLD);
+        UIManager.put("FormattedTextField.border", BorderFactory.createCompoundBorder(
+                BorderFactory.createLineBorder(THEME_LINE),
+                BorderFactory.createEmptyBorder(2, 4, 2, 4)));
+        UIManager.put("ComboBox.background", THEME_PANEL_SOFT);
+        UIManager.put("ComboBox.foreground", THEME_INK);
+        UIManager.put("ComboBox.buttonBackground", THEME_PANEL_LIFT);
+        UIManager.put("ComboBox.selectionBackground", THEME_SELECTION);
+        UIManager.put("ComboBox.selectionForeground", THEME_INK);
+        UIManager.put("ComboBox.border", BorderFactory.createLineBorder(THEME_LINE));
+        UIManager.put("List.background", THEME_PANEL_SOFT);
+        UIManager.put("List.foreground", THEME_INK);
+        UIManager.put("List.selectionBackground", THEME_SELECTION);
+        UIManager.put("List.selectionForeground", THEME_INK);
+        UIManager.put("TextArea.background", THEME_PAPER);
+        UIManager.put("TextArea.foreground", THEME_INK);
+        UIManager.put("TextArea.caretForeground", THEME_GOLD);
+        UIManager.put("TextArea.selectionBackground", THEME_SELECTION);
+        UIManager.put("TextArea.border", BorderFactory.createEmptyBorder(8, 8, 8, 8));
+        UIManager.put("TabbedPane.background", THEME_NAV);
+        UIManager.put("TabbedPane.foreground", THEME_INK);
+        UIManager.put("TabbedPane.disabledForeground", THEME_MUTED);
+        UIManager.put("TabbedPane.selected", THEME_PANEL_SOFT);
+        UIManager.put("TabbedPane.contentAreaColor", THEME_PANEL);
+        UIManager.put("TabbedPane.light", THEME_LINE);
+        UIManager.put("TabbedPane.darkShadow", THEME_PAPER);
+        UIManager.put("TabbedPane.shadow", THEME_LINE);
+        UIManager.put("ScrollPane.background", THEME_PANEL);
+        UIManager.put("Viewport.background", THEME_PANEL);
+        UIManager.put("SplitPane.background", THEME_PANEL);
+        UIManager.put("SplitPane.dividerFocusColor", THEME_GOLD);
+        UIManager.put("Button.background", THEME_PANEL_LIFT);
+        UIManager.put("Button.foreground", THEME_INK);
+        UIManager.put("Button.select", THEME_SELECTION);
+        UIManager.put("Button.disabledText", THEME_MUTED);
+        UIManager.put("Button.focus", THEME_GOLD);
+        UIManager.put("Button.border", BorderFactory.createCompoundBorder(
+                BorderFactory.createLineBorder(THEME_LINE),
+                BorderFactory.createEmptyBorder(4, 10, 4, 10)));
+        UIManager.put("Spinner.background", THEME_PANEL_SOFT);
+        UIManager.put("Spinner.border", BorderFactory.createLineBorder(THEME_LINE));
+        UIManager.put("OptionPane.background", THEME_PANEL);
+        UIManager.put("OptionPane.messageForeground", THEME_INK);
+        UIManager.put("TitledBorder.titleColor", THEME_GOLD);
     }
 
     private DesktopMain() {
@@ -141,10 +223,11 @@ public final class DesktopMain {
     }
 
     private void show() {
-        frame = new JFrame("JavaCW Desktop");
+        frame = new JFrame("Honor of Kings IMS - Desktop");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setMinimumSize(new Dimension(1100, 720));
         frame.setLayout(new BorderLayout(8, 8));
+        frame.getContentPane().setBackground(THEME_PANEL);
         frame.add(buildTopBar(), BorderLayout.NORTH);
 
         tabs = new JTabbedPane();
@@ -153,16 +236,32 @@ public final class DesktopMain {
         tabs.addTab("Combat", buildCombatPanel());
         tabs.addTab("Player Tools", buildPlayerPanel());
         tabs.addTab("Admin Data", buildAdminPanel());
+        tabs.setBackground(THEME_NAV);
+        tabs.setForeground(THEME_INK);
+        for (int i = 0; i < tabs.getTabCount(); i++) {
+            tabs.setBackgroundAt(i, THEME_NAV);
+            tabs.setForegroundAt(i, THEME_INK);
+        }
 
         outputArea = new JTextArea();
         outputArea.setEditable(false);
         outputArea.setLineWrap(false);
         outputArea.setFont(new java.awt.Font(java.awt.Font.MONOSPACED, java.awt.Font.PLAIN, 13));
+        outputArea.setBackground(THEME_PAPER);
+        outputArea.setForeground(THEME_INK);
+        outputArea.setCaretColor(THEME_GOLD);
+        outputArea.setSelectionColor(THEME_SELECTION);
+        outputArea.setSelectedTextColor(THEME_INK);
+        outputArea.setMargin(new Insets(10, 10, 10, 10));
         JScrollPane outputScroll = new JScrollPane(outputArea);
-        outputScroll.setBorder(BorderFactory.createTitledBorder("Output"));
+        outputScroll.setBackground(THEME_PANEL);
+        outputScroll.getViewport().setBackground(THEME_PAPER);
+        outputScroll.setBorder(BorderFactory.createTitledBorder(
+                BorderFactory.createLineBorder(THEME_LINE), "Output / Battle Report"));
 
         JSplitPane splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, tabs, outputScroll);
         splitPane.setResizeWeight(0.38);
+        splitPane.setBackground(THEME_PANEL);
         frame.add(splitPane, BorderLayout.CENTER);
 
         refreshAllControls();
@@ -175,9 +274,13 @@ public final class DesktopMain {
 
     private JPanel buildTopBar() {
         JPanel panel = new JPanel(new BorderLayout(8, 4));
-        panel.setBorder(BorderFactory.createEmptyBorder(8, 8, 4, 8));
+        panel.setBackground(THEME_NAV);
+        panel.setBorder(BorderFactory.createCompoundBorder(
+                BorderFactory.createMatteBorder(0, 0, 1, 0, THEME_GOLD),
+                BorderFactory.createEmptyBorder(10, 10, 8, 10)));
 
         JPanel loginPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 8, 0));
+        loginPanel.setBackground(THEME_NAV);
         usernameField = new JTextField("admin", 10);
         passwordField = new JPasswordField("admin123", 10);
         JButton loginButton = new JButton("Login");
@@ -200,7 +303,9 @@ public final class DesktopMain {
         loginPanel.add(reloadButton);
 
         statusLabel = new JLabel("Not logged in");
+        statusLabel.setForeground(THEME_MUTED);
         dataSummaryLabel = new JLabel();
+        dataSummaryLabel.setForeground(THEME_MUTED);
         panel.add(loginPanel, BorderLayout.WEST);
         panel.add(statusLabel, BorderLayout.CENTER);
         panel.add(dataSummaryLabel, BorderLayout.SOUTH);
@@ -630,6 +735,13 @@ public final class DesktopMain {
                 : "Logged in as " + currentUser.getName() + " (" + currentUser.getRole() + ")";
         if (statusLabel != null) {
             statusLabel.setText(status);
+            if (currentUser == null) {
+                statusLabel.setForeground(THEME_MUTED);
+            } else if (currentUser.getRole() == Role.ADMIN) {
+                statusLabel.setForeground(THEME_GREEN);
+            } else {
+                statusLabel.setForeground(THEME_BLUE);
+            }
         }
         if (tabs != null) {
             boolean player = currentUser != null && currentUser.getRole() == Role.PLAYER;
@@ -746,6 +858,7 @@ public final class DesktopMain {
     private void updateDataSummary() {
         if (dataSummaryLabel != null) {
             dataSummaryLabel.setText(summaryLine());
+            dataSummaryLabel.setForeground(THEME_MUTED);
         }
     }
 
