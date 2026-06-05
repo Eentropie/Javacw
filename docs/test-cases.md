@@ -271,6 +271,33 @@ Actual: The browser loaded the `Honor of Kings IMS` web interface with counts `1
 
 Result: Pass.
 
+## Test 16: Optional Swing Desktop App
+
+Input:
+
+```text
+Compile:
+javac -d out $(find src -name '*.java')
+
+Terminal smoke check:
+java -cp out gui.DesktopMain --smoke
+
+Manual launch:
+java -cp out gui.DesktopMain
+```
+
+Expected: The smoke check initializes the Swing entry point without opening a window and verifies login, reports, recommendations, combat simulation, and desktop-only helper wiring. The manual Swing app opens a local desktop interface with login, reports, recommendations, combat, player profile tools, admin CRUD, save, and reload tabs.
+
+Actual:
+
+```text
+Desktop smoke check passed: Swing entry initialized services with 15 players, 3 teams, 15 heroes.
+```
+
+The manual launch also opened a foreground Java application named `DesktopMain` on macOS during verification.
+
+Result: Pass.
+
 ## Automated Tests
 
 The project also includes a dependency-free automated test runner:
@@ -278,6 +305,7 @@ The project also includes a dependency-free automated test runner:
 ```bash
 javac -d out $(find src -name '*.java')
 java -cp out test.TestRunner
+java -cp out gui.DesktopMain --smoke
 ```
 
 Latest run:

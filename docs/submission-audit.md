@@ -5,7 +5,10 @@ Status date: 2026-06-05.
 ## Entry Points
 
 - **Required** console entry point: `src/Main.java`. This is the primary deliverable and should be graded first.
+- **Optional** desktop entry point: `src/gui/DesktopMain.java`. This is a cross-platform Swing app and does not require a web server or browser.
 - **Optional** web entry point: `src/web/WebMain.java`. This is extra-credit evidence, not a replacement for the console workflow.
+- macOS desktop launcher: `Open-JavaCW-Desktop.command`.
+- Windows desktop launcher: `Open-JavaCW-Desktop.bat`.
 - macOS one-click launcher: `Open-JavaCW-Web.command`.
 - Windows one-click launcher: `Open-JavaCW-Web.bat`.
 
@@ -17,7 +20,7 @@ Status date: 2026-06-05.
 | OOP concepts | `docs/requirement-checklist.md`, `docs/uml.md`, `docs/design.md`; `GameDataManager` exposes ID-backed object association helpers |
 | Console features | `src/Main.java`, `src/service/SearchService.java`, `RankingService.java`, `GameDataManager.java` |
 | File I/O | `src/service/FileStorageService.java`, `docs/data-design.md` |
-| Extra-credit features | `RecommendationService`, `CombatSimulationService`, `src/web/`, `Open-JavaCW-Web.command`, `Open-JavaCW-Web.bat` |
+| Extra-credit features | `RecommendationService`, `CombatSimulationService`, `src/gui/`, `src/web/`, desktop launchers, and web launchers |
 | AI evidence | `ai/prompts.md`, `ai/agent-log.md`, `ai/reflection.md`, `ai/model-comparison.md`, `docs/ai-usage-evidence.md` |
 | Git evidence | `git-history.txt`, `docs/git-process-evidence.md` |
 | Tests | `docs/test-cases.md`, `src/test/TestRunner.java` — 15 automated checks, all passing |
@@ -29,6 +32,7 @@ Status date: 2026-06-05.
 javac -d out $(find src -name '*.java')
 java -cp out test.TestRunner
 node --check web/app.js
+java -cp out gui.DesktopMain --smoke
 git diff --check
 ```
 
@@ -38,6 +42,7 @@ Windows PowerShell compile/test equivalent:
 $files = Get-ChildItem -Recurse src -Filter *.java | ForEach-Object { $_.FullName }
 javac -d out $files
 java -cp out test.TestRunner
+java -cp out gui.DesktopMain --smoke
 ```
 
 Latest automated test result:
@@ -49,16 +54,17 @@ Automated tests passed: 15, failed: 0
 ## Current Risk Review
 
 - The console workflow is the safest grading path and should be demonstrated first.
+- The optional Swing desktop app is extra evidence only; it does not replace `Main`.
 - The optional web frontend is extra evidence only; it does not replace `Main`.
 - ID-backed relationships are resolved through explicit object association helpers in `GameDataManager`, preserving CSV persistence while making OOP association evidence clearer.
-- Human review of the GitHub README found that the first web launcher documented only macOS and used Unix shell compile syntax. The follow-up added a Windows `.bat` launcher and Windows PowerShell commands.
+- Human review of the GitHub README found that the first web launcher documented only macOS and used Unix shell compile syntax. Follow-up work added Windows `.bat` launchers and Windows PowerShell commands.
 - Core Java code uses standard JDK APIs and `Path`/`Files` for data paths, so there is no intentional macOS-only code path. The local verification environment is macOS; Windows execution should still be re-run on the final Windows machine if that platform is used for marking.
 - The fork branch `codex/structured-results-fork` preserves higher-risk UI experiments. Only structured tables and CSV controls were accepted into `main`; hash routing and raw JSON preview remain out of the mainline.
 - `git-history.txt` has been regenerated after the final commit sequence.
 
 ## Personal Verification
 
-I personally ran all console flows (login, lookup, team overview, hero details, equipment ranking, match history, leaderboard, recommendation engine, combat simulation, data management add/delete, save/load) and confirmed 15/15 automated tests pass before this final submission.
+I personally ran all console flows (login, lookup, team overview, hero details, equipment ranking, match history, leaderboard, recommendation engine, combat simulation, data management add/delete, save/load), confirmed the Swing desktop smoke check, and confirmed 15/15 automated tests pass before this final submission.
 
 ## Final Submission Checklist
 

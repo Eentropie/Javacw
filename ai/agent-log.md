@@ -112,3 +112,22 @@ Related commits:
 - `31200fe` update submission evidence and audit after accepting stable fork work.
 - `771c9c7` add Windows launcher after human compatibility review.
 - `b751251` refresh Git history after Windows compatibility update.
+
+## Desktop Implementation Agent
+
+Main contribution:
+
+- Codex implemented a dependency-free Java Swing desktop app as a third entry point beside the console and web interfaces.
+- The desktop app reuses `AuthenticationService`, `SearchService`, `RecommendationService`, `CombatSimulationService`, `GameDataManager`, and `FileStorageService`.
+- It covers login, reports, recommendations, combat simulation, player limited profile edits, admin CRUD, save, and reload.
+- macOS and Windows one-click desktop launchers were added.
+
+Human decision:
+
+- Swing was selected over Electron, Tauri, or JavaFX because it is bundled with the standard JDK and keeps the coursework dependency-free.
+- The work was isolated on branch `codex/swing-desktop-app` because it is higher risk than documentation or formula polishing.
+- The required console `Main` and optional web `WebMain` entry points were preserved unchanged.
+
+Related commits:
+
+- `663fc8f` add cross-platform Swing desktop app.

@@ -49,6 +49,7 @@
 | Leaderboard | `RankingService.topPlayers`, `SearchService.leaderboard`, and menu option 6. |
 | Recommendation engine | `RecommendationService` and console recommendation options. |
 | Combat simulation | `CombatSimulationService`, `CombatReport`, and console combat simulation options. |
+| Optional desktop app | `gui.DesktopMain` provides a Java Swing local app for login, reports, recommendations, combat, player profile edits, admin CRUD, save, and reload without using a web server. |
 | Optional web frontend | `web.WebMain`, `web.WebServer`, and static assets in `web/` provide browser access to core features. |
 | Data management | Admin data-management menu supports add/edit/delete for players, heroes, equipment, teams, and match records. |
 | Authentication | `AuthenticationService` supports Admin and Player login. |
@@ -64,6 +65,7 @@
 | UML draft | `docs/uml.md` |
 | `docs/test-cases.md` | Present with actual results |
 | Automated tests | `src/test/TestRunner.java` runs 15 dependency-free automated service tests |
+| One-click desktop launcher | `Open-JavaCW-Desktop.command` starts the optional Swing desktop app on macOS; `Open-JavaCW-Desktop.bat` provides the Windows launcher |
 | One-click web launcher | `Open-JavaCW-Web.command` starts the optional browser frontend on macOS; `Open-JavaCW-Web.bat` provides the Windows launcher |
 | `ai/prompts.md` | Present |
 | `ai/agent-log.md` | Present |
@@ -81,6 +83,7 @@
 |---|---|
 | Recommendation engine | Hero and equipment recommendation formulas in `RecommendationService` and `docs/design.md`. |
 | Combat simulation | Turn-based duel with compatible equipment, critical hits, dodges, bounded turns, and a `CombatReport`. |
+| Desktop app | Dependency-free Swing interface with macOS and Windows one-click launchers. |
 | Browser frontend | Dependency-free local web UI using JDK `HttpServer`, static HTML/CSS/JS, and a one-click launcher. |
 | Advanced AI reflection | `ai/model-comparison.md` compares Gemini and Claude Opus review quality. |
 | Automated tests | `src/test/TestRunner.java` covers recommendations, combat, authentication failure, missing lookups, CRUD cascade behavior, validation, object association helpers, leaderboard, win-rate edge cases, text-report compatibility, and CSV round trip. |

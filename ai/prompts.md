@@ -189,3 +189,22 @@ Claude suggested a broad set of frontend polish and product ideas, including fav
 ### My Decision
 
 Accepted the low-risk improvements that fit the existing dependency-free frontend: favicon, page title updates, report copy-to-clipboard, contextual placeholders, visible API latency, relative match dates, title attributes for compact rows, and keyboard focus polish. Deferred higher-risk ideas such as hash routing, structured table rendering, raw JSON preview, retry/backoff, and session timeout to isolated branch experiments.
+
+## Prompt 11
+
+Time: 2026-06-05 21:39 CST
+Tool/Model: Codex / GPT-5
+Agent Role: Desktop Implementation Agent
+Related Commit: `663fc8f`
+
+### My Prompt
+
+Complete the plan for a Windows/macOS-compatible local app interface, not just a webserver. Preserve the existing console and web entry points, use a low-risk branch, and implement the Swing desktop app route described earlier.
+
+### AI Response Summary
+
+Codex created branch `codex/swing-desktop-app`, added a dependency-free Java Swing entry point `gui.DesktopMain`, added macOS and Windows one-click desktop launchers, and reused the existing services for login, reports, recommendations, combat simulation, player profile edits, admin CRUD, save, and reload. It also added `gui.DesktopMain --smoke` so the desktop entry can be verified from a terminal without opening a GUI window.
+
+### My Decision
+
+Accepted the Swing route because it keeps the original `Main` console entry unchanged, avoids external dependencies, works on Windows and macOS with a JDK, and gives a real local app interface that is separate from the optional webserver.

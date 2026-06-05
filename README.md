@@ -31,6 +31,34 @@ java -cp out Main
 
 The application creates CSV data files in the `data/` folder if they do not already exist.
 
+### Optional desktop app
+
+On macOS, double-click:
+
+```text
+Open-JavaCW-Desktop.command
+```
+
+On Windows, double-click:
+
+```text
+Open-JavaCW-Desktop.bat
+```
+
+This compiles the project and starts a local Java Swing desktop interface. It does not start a web server and does not require a browser.
+
+Manual desktop command on any platform after compilation:
+
+```bash
+java -cp out gui.DesktopMain
+```
+
+Terminal smoke check for the desktop entry point:
+
+```bash
+java -cp out gui.DesktopMain --smoke
+```
+
 ### Optional web frontend
 
 On macOS, double-click:
@@ -91,6 +119,7 @@ Password: player123
 - Leaderboard by win rate, level, match count, or custom score.
 - Recommendation engine for hero and equipment suggestions.
 - Turn-based combat simulation with equipment, critical hits, dodges, and a combat report.
+- Optional Java Swing desktop app for login, reports, recommendations, combat, player profile edits, admin CRUD, save, and reload.
 - Optional browser-based frontend for login, lookup, rankings, recommendations, and combat simulation.
 - Admin data management for players, heroes, equipment, teams, and match records.
 - Player self-service for limited personal profile edits.
@@ -130,6 +159,12 @@ java -cp out test.TestRunner
 
 Current automated coverage includes 15 service-level checks for recommendations, combat, authentication failure, missing lookups, match validation, equipment add/delete cascade behavior, object association helpers, leaderboard ordering, zero-match win-rate safety, text-report compatibility, and CSV round trip.
 
+The optional desktop app also has a dependency-free smoke check:
+
+```bash
+java -cp out gui.DesktopMain --smoke
+```
+
 ## 8. Submission Evidence Map
 
 - Requirement coverage: `docs/requirement-checklist.md`
@@ -144,8 +179,7 @@ Current automated coverage includes 15 service-level checks for recommendations,
 ## 9. Known Limitations
 
 - The project uses CSV rather than a database to keep the submission dependency-free.
-- The console UI is functional rather than graphical.
+- The required console UI is functional rather than graphical; optional Swing and web interfaces are provided as extra-credit entry points.
 - Automated tests use a plain Java runner rather than JUnit because no JUnit dependency is bundled with the repository.
 - The recommendation formula uses manually tuned weights rather than data-driven learning.
-- The optional web frontend requires Java 18+ for the built-in HttpServer and a local browser.
-- Windows startup support is provided through `Open-JavaCW-Web.bat`; final automated verification was run in the local macOS workspace.
+- Windows startup support is provided through `.bat` launchers for both the Swing desktop app and the web frontend; final automated verification was run in the local macOS workspace.

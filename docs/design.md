@@ -7,9 +7,21 @@ The application uses a layered architecture:
 - Model layer: domain objects and enums.
 - Service layer: authentication, data management, searching, ranking, and storage.
 - Utility layer: seed data and input handling.
-- UI layer: `Main` console menus and optional `web.WebMain` browser frontend.
+- UI layer: `Main` console menus, optional `gui.DesktopMain` Swing desktop app, and optional `web.WebMain` browser frontend.
 
 This keeps `Main` responsible for interaction flow rather than business rules.
+
+## Optional Swing Desktop App
+
+`gui.DesktopMain` is a dependency-free local desktop interface built with Java Swing. It is a separate entry point and does not replace the required console `Main` class. It loads and saves the same CSV data through `FileStorageService` and delegates business behavior to the existing services:
+
+- `AuthenticationService` for Admin and Player login.
+- `SearchService` for lookup, team overview, hero details, equipment statistics, match history, and leaderboards.
+- `RecommendationService` for hero and equipment recommendations.
+- `CombatSimulationService` for turn-based duel reports.
+- `GameDataManager` for admin CRUD and player profile updates.
+
+The desktop app includes a `--smoke` mode so the entry point can be verified from a terminal without opening a graphical window. macOS and Windows launchers compile the same source tree and start `gui.DesktopMain`.
 
 ## ID-Backed Object Associations
 
