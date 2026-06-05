@@ -30,7 +30,7 @@ This file consolidates the AI evidence required by `requirement.pdf`. The detail
 | Prompt 08 | Frontend Reviewer Agent | Claude Opus 4.6 Thinking | `[Claude]` review, `[GPT]` implementation | Added optional local web frontend while preserving console `Main`. | `151414f` |
 | Prompt 09 | Frontend Design Reviewer Agent | Claude Opus 4.6 Thinking | `[Claude]` review, `[GPT]` implementation | Applied low-risk frontend design improvements. | `151414f` |
 | Prompt 10 | Frontend Ideas Reviewer Agent | Claude Opus 4.6 Thinking | `[Claude]` review, `[GPT]` implementation | Accepted low-risk polish and kept higher-risk ideas in branch experiments. | `151414f`, `851a81d`, `31200fe` |
-| Prompt 11 | Desktop Implementation Agent | Codex / GPT-5 | `[GPT]` | Added cross-platform Swing desktop app and macOS/Windows launchers while preserving console and web entry points. | `663fc8f` |
+| Prompt 11 | Desktop Implementation Agent | Codex / GPT-5 | `[GPT]` | Added cross-platform Swing desktop app and macOS/Windows launchers while preserving console and web entry points. | `663fc8f`, `444ae15` |
 
 ## Verification Used Against AI Output
 

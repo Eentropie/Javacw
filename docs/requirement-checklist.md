@@ -75,7 +75,7 @@
 | Rubric self-evaluation | `docs/rubric-evaluation.md` |
 | AI usage evidence map | `docs/ai-usage-evidence.md` |
 | Git process evidence map | `docs/git-process-evidence.md` |
-| `git-history.txt` | To be exported after final commit |
+| `git-history.txt` | Exported after the final commit sequence; the newest export-only commit is explained in `docs/git-process-evidence.md` |
 
 ## Extra Credit / Creativity Evidence
 
