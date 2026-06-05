@@ -78,7 +78,10 @@ Human decision:
 
 Related commits:
 
-- Current working-tree update for recommendation engine, combat simulation, tests, and documentation updates.
+- `7410b35` add recommendation and combat simulation.
+- `b21c5fa` add dependency-free automated coverage.
+- `31200fe` update submission evidence and audit.
+- `f009858` update AI evidence commit links.
 
 ## Frontend Reviewer Agent
 
@@ -104,4 +107,8 @@ Human decision:
 
 Related commits:
 
-- Current working-tree update for optional web frontend, one-click launcher, and Windows compatibility follow-up.
+- `151414f` add optional local web UI and macOS launcher.
+- `851a81d` preserve structured-result fork history evidence.
+- `31200fe` update submission evidence and audit after accepting stable fork work.
+- `771c9c7` add Windows launcher after human compatibility review.
+- `b751251` refresh Git history after Windows compatibility update.

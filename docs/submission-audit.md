@@ -20,6 +20,7 @@ Status date: 2026-06-05.
 | Extra-credit features | `RecommendationService`, `CombatSimulationService`, `src/web/`, `Open-JavaCW-Web.command`, `Open-JavaCW-Web.bat` |
 | AI evidence | `ai/prompts.md`, `ai/agent-log.md`, `ai/reflection.md`, `ai/model-comparison.md` |
 | Tests | `docs/test-cases.md`, `src/test/TestRunner.java` — 14 automated checks, all passing |
+| Rubric audit | `docs/rubric-evaluation.md` maps the final project against the 20-mark rubric |
 
 ## Latest Verification Commands
 

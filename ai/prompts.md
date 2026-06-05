@@ -119,7 +119,7 @@ Accepted the code-grounded findings. Added centralized match validation, safe up
 Time: 2026-06-03 15:16 CST
 Tool/Model: Antigravity / Claude Opus 4.6 Thinking
 Agent Role: Extra-Credit Reviewer Agent
-Related Commit: Current working-tree update, not committed yet
+Related Commit: `7410b35`, `b21c5fa`, `31200fe`, `f009858`
 
 ### My Prompt
 
@@ -138,7 +138,7 @@ Accepted the direction. Implemented recommendation and combat services, added a 
 Time: 2026-06-03 15:58 CST
 Tool/Model: Antigravity / Claude Opus 4.6 Thinking
 Agent Role: Frontend Reviewer Agent
-Related Commit: Current working-tree update, not committed yet
+Related Commit: `151414f`
 
 ### My Prompt
 
@@ -157,7 +157,7 @@ Accepted the architecture. Implemented `web.WebMain`, `web.WebServer`, static fr
 Time: 2026-06-03 16:56 CST
 Tool/Model: Antigravity / Claude Opus 4.6 Thinking
 Agent Role: Frontend Design Reviewer Agent
-Related Commit: Current working-tree update, not committed yet
+Related Commit: `151414f`
 
 ### My Prompt
 
@@ -176,7 +176,7 @@ Accepted the low-risk frontend improvements: revised panel hierarchy, spacing, a
 Time: 2026-06-03 17:18 CST
 Tool/Model: Antigravity / Claude Opus 4.6 Thinking
 Agent Role: Frontend Ideas Reviewer Agent
-Related Commit: Current working-tree update, not committed yet
+Related Commit: `151414f`, `851a81d`, `31200fe`
 
 ### My Prompt
 

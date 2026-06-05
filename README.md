@@ -137,6 +137,7 @@ Current automated coverage includes 14 service-level checks for recommendations,
 - Manual and automated testing: `docs/test-cases.md`, `src/test/TestRunner.java`
 - AI usage evidence: `ai/prompts.md`, `ai/agent-log.md`, `ai/reflection.md`, `ai/model-comparison.md`
 - Final pre-submission audit: `docs/submission-audit.md`
+- Rubric self-evaluation: `docs/rubric-evaluation.md`
 
 ## 9. Known Limitations
 
