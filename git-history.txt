@@ -1,5 +1,7 @@
-* 771c9c7 (HEAD -> main) [AI-Implementation] add Windows launcher after human compatibility review
-* 57ea08a (origin/main) [Docs] final git history export
+* f3900ab (HEAD -> main) [Docs] tighten AI evidence and rubric audit
+* b751251 (origin/main) [Docs] refresh git history after Windows compatibility update
+* 771c9c7 [AI-Implementation] add Windows launcher after human compatibility review
+* 57ea08a [Docs] final git history export
 * 2b24373 [Human] polish final submission documentation
 * 6b87ede [Docs] final git history export
 * 0f26691 [Human] polish final submission documentation
