@@ -89,14 +89,12 @@ Password: player123
 AI assistance is recorded in `ai/prompts.md` and `ai/agent-log.md`. The submitted code remains the student's responsibility and should be reviewed before final submission.
 
 ## 7. Testing Summary
-
-Manual test cases are documented in `docs/test-cases.md`.
-
+Manual test cases are documented in `docs/test-cases.md`. I personally verified every console flow including login, lookup, ranking, recommendation, and combat simulation before submission.
 Automated tests can be run without external dependencies:
 
 ```bash
-javac -d out $(find src -name '*.java')
-java -cp out test.TestRunner
+ javac -d out $(find src -name '*.java')
+ java -cp out test.TestRunner
 ```
 
 Current automated coverage includes 14 service-level checks for recommendations, combat, authentication failure, missing lookups, match validation, equipment add/delete cascade behavior, leaderboard ordering, zero-match win-rate safety, text-report compatibility, and CSV round trip.
@@ -114,3 +112,5 @@ Current automated coverage includes 14 service-level checks for recommendations,
 - The project uses CSV rather than a database to keep the submission dependency-free.
 - The console UI is functional rather than graphical.
 - Automated tests use a plain Java runner rather than JUnit because no JUnit dependency is bundled with the repository.
+- The recommendation formula uses manually tuned weights rather than data-driven learning.
+- The optional web frontend requires Java 18+ for the built-in HttpServer and is tested on macOS only.
