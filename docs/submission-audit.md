@@ -14,12 +14,13 @@ Status date: 2026-06-05.
 | Area | Evidence |
 |---|---|
 | Required model classes | `src/model/Person.java`, `Player.java`, `Admin.java`, `Hero.java`, `Equipment.java`, `Team.java`, `MatchRecord.java` |
-| OOP concepts | `docs/requirement-checklist.md`, `docs/uml.md`, `docs/design.md` |
+| OOP concepts | `docs/requirement-checklist.md`, `docs/uml.md`, `docs/design.md`; `GameDataManager` exposes ID-backed object association helpers |
 | Console features | `src/Main.java`, `src/service/SearchService.java`, `RankingService.java`, `GameDataManager.java` |
 | File I/O | `src/service/FileStorageService.java`, `docs/data-design.md` |
 | Extra-credit features | `RecommendationService`, `CombatSimulationService`, `src/web/`, `Open-JavaCW-Web.command`, `Open-JavaCW-Web.bat` |
-| AI evidence | `ai/prompts.md`, `ai/agent-log.md`, `ai/reflection.md`, `ai/model-comparison.md` |
-| Tests | `docs/test-cases.md`, `src/test/TestRunner.java` — 14 automated checks, all passing |
+| AI evidence | `ai/prompts.md`, `ai/agent-log.md`, `ai/reflection.md`, `ai/model-comparison.md`, `docs/ai-usage-evidence.md` |
+| Git evidence | `git-history.txt`, `docs/git-process-evidence.md` |
+| Tests | `docs/test-cases.md`, `src/test/TestRunner.java` — 15 automated checks, all passing |
 | Rubric audit | `docs/rubric-evaluation.md` maps the final project against the 20-mark rubric |
 
 ## Latest Verification Commands
@@ -42,13 +43,14 @@ java -cp out test.TestRunner
 Latest automated test result:
 
 ```text
-Automated tests passed: 14, failed: 0
+Automated tests passed: 15, failed: 0
 ```
 
 ## Current Risk Review
 
 - The console workflow is the safest grading path and should be demonstrated first.
 - The optional web frontend is extra evidence only; it does not replace `Main`.
+- ID-backed relationships are resolved through explicit object association helpers in `GameDataManager`, preserving CSV persistence while making OOP association evidence clearer.
 - Human review of the GitHub README found that the first web launcher documented only macOS and used Unix shell compile syntax. The follow-up added a Windows `.bat` launcher and Windows PowerShell commands.
 - Core Java code uses standard JDK APIs and `Path`/`Files` for data paths, so there is no intentional macOS-only code path. The local verification environment is macOS; Windows execution should still be re-run on the final Windows machine if that platform is used for marking.
 - The fork branch `codex/structured-results-fork` preserves higher-risk UI experiments. Only structured tables and CSV controls were accepted into `main`; hash routing and raw JSON preview remain out of the mainline.
@@ -56,7 +58,7 @@ Automated tests passed: 14, failed: 0
 
 ## Personal Verification
 
-I personally ran all console flows (login, lookup, team overview, hero details, equipment ranking, match history, leaderboard, recommendation engine, combat simulation, data management add/delete, save/load) and confirmed 14/14 automated tests pass before this final submission.
+I personally ran all console flows (login, lookup, team overview, hero details, equipment ranking, match history, leaderboard, recommendation engine, combat simulation, data management add/delete, save/load) and confirmed 15/15 automated tests pass before this final submission.
 
 ## Final Submission Checklist
 

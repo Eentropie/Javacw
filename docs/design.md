@@ -11,6 +11,19 @@ The application uses a layered architecture:
 
 This keeps `Main` responsible for interaction flow rather than business rules.
 
+## ID-Backed Object Associations
+
+The model stores relationships by stable IDs so CSV save/load remains simple and portable. To make the object relationships explicit in the Java design, `GameDataManager` resolves those IDs into domain-object associations through helper methods:
+
+- `teamForPlayer(Player)` resolves a player's team.
+- `playersForTeam(Team)` resolves team membership as `Player` objects.
+- `heroesForPlayer(Player)` resolves owned heroes as `Hero` objects.
+- `compatibleEquipmentForHero(Hero)` and `recommendedEquipmentForHero(Hero)` resolve hero-equipment associations as `Equipment` objects.
+- `playersOwningHero(Hero)` resolves the reverse player-hero association.
+- `matchesForTeam(String)` and `matchesForPlayer(String)` resolve match history relationships.
+
+`SearchService` uses these association helpers when building reports. This keeps persistence ID-based while still demonstrating association and aggregation in the service layer.
+
 ## Equipment Ranking Formula
 
 Equipment score:

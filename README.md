@@ -128,7 +128,7 @@ javac -d out $files
 java -cp out test.TestRunner
 ```
 
-Current automated coverage includes 14 service-level checks for recommendations, combat, authentication failure, missing lookups, match validation, equipment add/delete cascade behavior, leaderboard ordering, zero-match win-rate safety, text-report compatibility, and CSV round trip.
+Current automated coverage includes 15 service-level checks for recommendations, combat, authentication failure, missing lookups, match validation, equipment add/delete cascade behavior, object association helpers, leaderboard ordering, zero-match win-rate safety, text-report compatibility, and CSV round trip.
 
 ## 8. Submission Evidence Map
 
@@ -138,6 +138,8 @@ Current automated coverage includes 14 service-level checks for recommendations,
 - AI usage evidence: `ai/prompts.md`, `ai/agent-log.md`, `ai/reflection.md`, `ai/model-comparison.md`
 - Final pre-submission audit: `docs/submission-audit.md`
 - Rubric self-evaluation: `docs/rubric-evaluation.md`
+- AI usage evidence map: `docs/ai-usage-evidence.md`
+- Git process evidence map: `docs/git-process-evidence.md`
 
 ## 9. Known Limitations
 

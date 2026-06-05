@@ -251,6 +251,54 @@ public class GameDataManager {
         return matchRecords.values();
     }
 
+    public Team teamForPlayer(Player player) {
+        return requireTeam(player.getTeamId());
+    }
+
+    public List<Player> playersForTeam(Team team) {
+        return team.getPlayerIds().stream()
+                .map(this::requirePlayer)
+                .toList();
+    }
+
+    public List<Hero> heroesForPlayer(Player player) {
+        return player.getHeroIds().stream()
+                .map(this::requireHero)
+                .toList();
+    }
+
+    public List<Equipment> compatibleEquipmentForHero(Hero hero) {
+        return hero.getCompatibleEquipmentIds().stream()
+                .map(this::requireEquipment)
+                .toList();
+    }
+
+    public List<Equipment> recommendedEquipmentForHero(Hero hero) {
+        return hero.getRecommendedEquipmentIds().stream()
+                .map(this::requireEquipment)
+                .toList();
+    }
+
+    public List<Player> playersOwningHero(Hero hero) {
+        return players.values().stream()
+                .filter(player -> player.ownsHero(hero.getId()))
+                .toList();
+    }
+
+    public List<MatchRecord> matchesForTeam(String teamId) {
+        requireTeam(teamId);
+        return getMatchesNewestFirst().stream()
+                .filter(record -> record.includesTeam(teamId))
+                .toList();
+    }
+
+    public List<MatchRecord> matchesForPlayer(String playerId) {
+        requirePlayer(playerId);
+        return getMatchesNewestFirst().stream()
+                .filter(record -> record.includesPlayer(playerId))
+                .toList();
+    }
+
     public List<MatchRecord> getMatchesNewestFirst() {
         return matchRecords.values().stream()
                 .sorted(Comparator.comparing(MatchRecord::getDate).reversed())

@@ -294,10 +294,11 @@ PASS match validation rejects player outside teams
 PASS equipment add and delete updates hero references
 PASS default ranking reports stay text based
 PASS player deletion updates team membership
+PASS ID-backed associations resolve to domain objects
 PASS leaderboard sorts by win rate
 PASS zero-match player win rate is safe
 PASS CSV save/load round trip keeps counts
-Automated tests passed: 14, failed: 0
+Automated tests passed: 15, failed: 0
 ```
 
 ## Bug Found During Testing

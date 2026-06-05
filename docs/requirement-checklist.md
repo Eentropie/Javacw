@@ -17,8 +17,8 @@
 | Concept | Evidence |
 |---|---|
 | Inheritance | `Player` and `Admin` extend `Person`. |
-| Association | `Player` stores owned hero IDs; `Hero` stores compatible equipment IDs. |
-| Aggregation/composition | `Team` stores player IDs and is rebuilt from player membership. |
+| Association | `Player`, `Hero`, and `Equipment` store stable IDs for CSV persistence; `GameDataManager` resolves them into domain-object relationships with `teamForPlayer`, `heroesForPlayer`, `compatibleEquipmentForHero`, `recommendedEquipmentForHero`, and `playersOwningHero`. |
+| Aggregation/composition | `Team` stores player IDs and is rebuilt from player membership; `playersForTeam` exposes team membership as `Player` objects. |
 | Interface | `Searchable` is implemented by `Person`, `Hero`, `Equipment`, `Team`, and `MatchRecord`. |
 | Encapsulation | Fields are private; list/map fields expose unmodifiable views and controlled mutation methods. |
 | Polymorphism | `Main.currentUser` is a `Person`; menus branch on role. |
@@ -63,13 +63,16 @@
 | `docs/design.md` | Present |
 | UML draft | `docs/uml.md` |
 | `docs/test-cases.md` | Present with actual results |
-| Automated tests | `src/test/TestRunner.java` runs 14 dependency-free automated service tests |
+| Automated tests | `src/test/TestRunner.java` runs 15 dependency-free automated service tests |
 | One-click web launcher | `Open-JavaCW-Web.command` starts the optional browser frontend on macOS; `Open-JavaCW-Web.bat` provides the Windows launcher |
 | `ai/prompts.md` | Present |
 | `ai/agent-log.md` | Present |
 | `ai/reflection.md` | Present, with complete draft answers |
 | Advanced AI comparison | `ai/model-comparison.md` |
 | Submission audit | `docs/submission-audit.md` |
+| Rubric self-evaluation | `docs/rubric-evaluation.md` |
+| AI usage evidence map | `docs/ai-usage-evidence.md` |
+| Git process evidence map | `docs/git-process-evidence.md` |
 | `git-history.txt` | To be exported after final commit |
 
 ## Extra Credit / Creativity Evidence
@@ -80,7 +83,7 @@
 | Combat simulation | Turn-based duel with compatible equipment, critical hits, dodges, bounded turns, and a `CombatReport`. |
 | Browser frontend | Dependency-free local web UI using JDK `HttpServer`, static HTML/CSS/JS, and a one-click launcher. |
 | Advanced AI reflection | `ai/model-comparison.md` compares Gemini and Claude Opus review quality. |
-| Automated tests | `src/test/TestRunner.java` covers recommendations, combat, authentication failure, missing lookups, CRUD cascade behavior, validation, leaderboard, win-rate edge cases, text-report compatibility, and CSV round trip. |
+| Automated tests | `src/test/TestRunner.java` covers recommendations, combat, authentication failure, missing lookups, CRUD cascade behavior, validation, object association helpers, leaderboard, win-rate edge cases, text-report compatibility, and CSV round trip. |
 
 ## Final Student Checks Before Submission
 

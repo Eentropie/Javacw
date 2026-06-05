@@ -7,6 +7,7 @@ import model.MatchRecord;
 import model.Player;
 import model.Team;
 
+import java.util.Collection;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -31,7 +32,7 @@ public class SearchService {
 
     public String playerReport(Player player) {
         StringBuilder output = new StringBuilder();
-        Team team = dataManager.requireTeam(player.getTeamId());
+        Team team = dataManager.teamForPlayer(player);
         output.append("Player ID: ").append(player.getId()).append(System.lineSeparator());
         output.append("Name: ").append(player.getName()).append(System.lineSeparator());
         output.append("Team: ").append(team.getName()).append(" (").append(team.getId()).append(")").append(System.lineSeparator());
@@ -39,10 +40,9 @@ public class SearchService {
         output.append("Record: ").append(player.getWins()).append("W-").append(player.getLosses()).append("L").append(System.lineSeparator());
         output.append("Win rate: ").append(formatPercent(player.getWinRate())).append(System.lineSeparator());
         output.append("Owned heroes and equipment:").append(System.lineSeparator());
-        for (String heroId : player.getHeroIds()) {
-            Hero hero = dataManager.requireHero(heroId);
+        for (Hero hero : dataManager.heroesForPlayer(player)) {
             output.append("- ").append(hero.getName()).append(" [").append(hero.getType()).append("]").append(System.lineSeparator());
-            output.append("  Equipped/compatible: ").append(namesForEquipment(hero.getCompatibleEquipmentIds())).append(System.lineSeparator());
+            output.append("  Equipped/compatible: ").append(namesForEquipment(dataManager.compatibleEquipmentForHero(hero))).append(System.lineSeparator());
         }
         return output.toString();
     }
@@ -53,12 +53,11 @@ public class SearchService {
             return "No team found for: " + query;
         }
         Team team = match.get();
-        List<Player> members = team.getPlayerIds().stream()
-                .map(dataManager::requirePlayer)
-                .toList();
+        List<Player> members = dataManager.playersForTeam(team);
         int totalLevel = members.stream().mapToInt(Player::getLevel).sum();
-        int totalMatches = (int) dataManager.getMatchRecords().stream().filter(record -> record.includesTeam(team.getId())).count();
-        int wins = (int) dataManager.getMatchRecords().stream().filter(record -> record.getWinnerTeamId().equals(team.getId())).count();
+        List<MatchRecord> teamMatches = dataManager.matchesForTeam(team.getId());
+        int totalMatches = teamMatches.size();
+        int wins = (int) teamMatches.stream().filter(record -> record.getWinnerTeamId().equals(team.getId())).count();
         double winRate = totalMatches == 0 ? 0.0 : wins * 100.0 / totalMatches;
         Player topPlayer = members.stream()
                 .sorted((a, b) -> Double.compare(rankingService.playerCustomScore(b), rankingService.playerCustomScore(a)))
@@ -95,11 +94,10 @@ public class SearchService {
                 .append(", HP ").append(hero.getHealth())
                 .append(", difficulty ").append(hero.getDifficulty())
                 .append(System.lineSeparator());
-        output.append("Compatible equipment: ").append(namesForEquipment(hero.getCompatibleEquipmentIds())).append(System.lineSeparator());
-        output.append("Recommended equipment: ").append(namesForEquipment(hero.getRecommendedEquipmentIds())).append(System.lineSeparator());
+        output.append("Compatible equipment: ").append(namesForEquipment(dataManager.compatibleEquipmentForHero(hero))).append(System.lineSeparator());
+        output.append("Recommended equipment: ").append(namesForEquipment(dataManager.recommendedEquipmentForHero(hero))).append(System.lineSeparator());
         output.append("Players who own this hero:").append(System.lineSeparator());
-        dataManager.getPlayers().stream()
-                .filter(player -> player.ownsHero(hero.getId()))
+        dataManager.playersOwningHero(hero).stream()
                 .forEach(player -> output.append("- ").append(player.getName()).append(" (").append(player.getId()).append(")").append(System.lineSeparator()));
         return output.toString();
     }
@@ -123,8 +121,7 @@ public class SearchService {
 
     public String playerMatchHistory(String playerId, int limit) {
         Player player = dataManager.requirePlayer(playerId);
-        List<MatchRecord> matches = dataManager.getMatchesNewestFirst().stream()
-                .filter(record -> record.includesPlayer(playerId))
+        List<MatchRecord> matches = dataManager.matchesForPlayer(playerId).stream()
                 .limit(Math.max(0, limit))
                 .toList();
         return matchHistoryReport("Player " + player.getName(), player.getTeamId(), playerId, matches);
@@ -132,8 +129,7 @@ public class SearchService {
 
     public String teamMatchHistory(String teamId, int limit) {
         Team team = dataManager.requireTeam(teamId);
-        List<MatchRecord> matches = dataManager.getMatchesNewestFirst().stream()
-                .filter(record -> record.includesTeam(teamId))
+        List<MatchRecord> matches = dataManager.matchesForTeam(teamId).stream()
                 .limit(Math.max(0, limit))
                 .toList();
         return matchHistoryReport("Team " + team.getName(), teamId, null, matches);
@@ -217,12 +213,12 @@ public class SearchService {
         return dataManager.requireHero(heroId).getName();
     }
 
-    private String namesForEquipment(List<String> equipmentIds) {
-        if (equipmentIds.isEmpty()) {
+    private String namesForEquipment(Collection<Equipment> equipmentItems) {
+        if (equipmentItems.isEmpty()) {
             return "None";
         }
-        return equipmentIds.stream()
-                .map(id -> dataManager.requireEquipment(id).getName())
+        return equipmentItems.stream()
+                .map(Equipment::getName)
                 .toList()
                 .toString();
     }

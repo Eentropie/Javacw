@@ -2,8 +2,10 @@ package test;
 
 import enums.EquipmentType;
 import model.Equipment;
+import model.Hero;
 import model.MatchRecord;
 import model.Player;
+import model.Team;
 import service.AuthenticationService;
 import service.CombatSimulationService;
 import service.FileStorageService;
@@ -36,6 +38,7 @@ public class TestRunner {
         run("equipment add and delete updates hero references", TestRunner::testEquipmentAddDeleteCascade);
         run("default ranking reports stay text based", TestRunner::testDefaultReportsStayTextBased);
         run("player deletion updates team membership", TestRunner::testDeletePlayerUpdatesTeam);
+        run("ID-backed associations resolve to domain objects", TestRunner::testAssociationHelpersResolveObjects);
         run("leaderboard sorts by win rate", TestRunner::testLeaderboardSortsByWinRate);
         run("zero-match player win rate is safe", TestRunner::testZeroMatchWinRate);
         run("CSV save/load round trip keeps counts", TestRunner::testCsvRoundTrip);
@@ -149,6 +152,25 @@ public class TestRunner {
         assertTrue(!data.requireTeam("T001").getPlayerIds().contains("P001"), "P001 should be removed from T001");
     }
 
+    private static void testAssociationHelpersResolveObjects() {
+        GameDataManager data = sample();
+        Player player = data.requirePlayer("P001");
+        Team team = data.teamForPlayer(player);
+        Hero hero = data.requireHero("H001");
+
+        assertEquals("T001", team.getId(), "player team association");
+        assertTrue(data.playersForTeam(team).stream().anyMatch(member -> member.getId().equals("P001")),
+                "team should resolve member player objects");
+        assertTrue(data.heroesForPlayer(player).stream().anyMatch(ownedHero -> ownedHero.getId().equals("H001")),
+                "player should resolve owned hero objects");
+        assertTrue(data.compatibleEquipmentForHero(hero).size() >= 2,
+                "hero should resolve compatible equipment objects");
+        assertTrue(data.playersOwningHero(hero).stream().anyMatch(owner -> owner.getId().equals("P001")),
+                "hero should resolve owning player objects");
+        assertTrue(!data.matchesForTeam(team.getId()).isEmpty(), "team should resolve related matches");
+        assertTrue(!data.matchesForPlayer(player.getId()).isEmpty(), "player should resolve related matches");
+    }
+
     private static void testLeaderboardSortsByWinRate() {
         GameDataManager data = sample();
         SearchService search = new SearchService(data, new RankingService(data));
@@ -201,6 +223,12 @@ public class TestRunner {
 
     private static void assertEquals(int expected, int actual, String label) {
         if (expected != actual) {
+            throw new AssertionError(label + " expected " + expected + " got " + actual);
+        }
+    }
+
+    private static void assertEquals(String expected, String actual, String label) {
+        if (!expected.equals(actual)) {
             throw new AssertionError(label + " expected " + expected + " got " + actual);
         }
     }
