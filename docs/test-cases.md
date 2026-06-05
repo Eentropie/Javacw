@@ -286,7 +286,7 @@ Manual launch:
 java -cp out gui.DesktopMain
 ```
 
-Expected: The smoke check initializes the Swing entry point without opening a window and verifies login, reports, recommendations, combat simulation, and desktop-only helper wiring. The manual Swing app opens a local desktop interface with login, reports, recommendations, combat, player profile tools, admin CRUD, save, and reload tabs.
+Expected: The smoke check initializes the Swing entry point without opening a window and verifies login, reports, recommendations, combat simulation, and desktop-only helper wiring. The manual Swing app opens a local desktop interface with login, reports, recommendations, combat, player profile tools, admin CRUD, save, and reload tabs. The polished desktop theme should show a dark control-panel surface, readable form fields, visible tabs, a gold top-bar divider, role-colored status text, and a dark output/report area.
 
 Actual:
 
@@ -294,7 +294,7 @@ Actual:
 Desktop smoke check passed: Swing entry initialized services with 15 players, 3 teams, 15 heroes.
 ```
 
-The manual launch also opened a foreground Java application named `DesktopMain` on macOS during verification.
+The manual launch also opened a foreground Java application on macOS. After the Gemini/Claude-reviewed desktop visual pass, macOS accessibility confirmed the window title `Honor of Kings IMS - Desktop` and visible UI elements for `Username`, `Password`, `Not logged in`, and the data summary `Dataset: 15 players, 3 teams, 15 heroes, 20 equipment, 11 matches.`.
 
 Result: Pass.
 

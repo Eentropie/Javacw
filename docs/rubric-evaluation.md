@@ -1,6 +1,6 @@
 # Rubric Evaluation
 
-Status date: 2026-06-05.
+Status date: 2026-06-06.
 
 This file records a final self-audit against the 20-mark rubric in `requirement.pdf`. It is not a replacement for source code, tests, or Git history; it is an evidence map showing where each scoring area is satisfied.
 
@@ -14,7 +14,7 @@ This file records a final self-audit against the 20-mark rubric in `requirement.
 | Git Process Evidence | 3 | `git-history.txt`, Git log, `docs/git-process-evidence.md` | Strong. More than 12 commits and more than 4 human review/reflection commits are present; old specific prefixes and GPT/Claude model labels are mapped without rewriting hashes. |
 | plan.md and Documentation | 2 | `plan.md`, `README.md`, `docs/design.md`, `docs/uml.md`, `docs/test-cases.md`, `docs/submission-audit.md` | Strong. Required plan sections and final run instructions are present. |
 | Testing and Reliability | 1 | `docs/test-cases.md`, `src/test/TestRunner.java` | Strong. 16 manual/smoke tests documented and 15 automated checks pass. |
-| Extra Credit or Creativity | 1 | `RecommendationService`, `CombatSimulationService`, `src/gui/`, `src/web/`, `ai/model-comparison.md` | Strong. Multiple extra-credit features are implemented, including a dependency-free Swing desktop app and a Gemini-reviewed dark arena browser frontend. |
+| Extra Credit or Creativity | 1 | `RecommendationService`, `CombatSimulationService`, `src/gui/`, `src/web/`, `ai/model-comparison.md` | Strong. Multiple extra-credit features are implemented, including a dependency-free Swing desktop app with Gemini/Claude-reviewed dark theme and a Gemini-reviewed dark arena browser frontend. |
 
 Estimated result: A-band evidence, approximately 18-19/20 depending on marker strictness.
 
@@ -40,6 +40,7 @@ Latest optional interface check:
 
 ```text
 Chrome loaded http://127.0.0.1:8080/ with the dark arena web dashboard, admin login succeeded, Lookup produced the Li Bai report, and the report panel remained visible after the wide-screen layout adjustment.
+Swing launched the polished local desktop window titled Honor of Kings IMS - Desktop, with login/status/data-summary controls visible through macOS accessibility.
 ```
 
 Dataset audit:

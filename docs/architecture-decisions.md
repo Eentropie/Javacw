@@ -4,7 +4,7 @@
 
 The coursework recommends a console application first and treats GUI as optional extra credit. The project therefore prioritizes a reliable console UI and full requirement coverage over Swing or JavaFX.
 
-For the final extra-credit pass, combat simulation was selected instead of GUI because it directly uses the existing hero, equipment, and player data while avoiding GUI toolkit setup risk on a marker's machine.
+For the first extra-credit pass, combat simulation was selected before GUI because it directly used the existing hero, equipment, and player data while avoiding GUI toolkit setup risk on a marker's machine. After the console, services, tests, and documentation were stable, optional Swing and web entry points were added as separate extra-credit interfaces without replacing `Main`.
 
 ## Decision 02: Dependency-Free CSV Persistence
 

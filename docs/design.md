@@ -23,6 +23,8 @@ This keeps `Main` responsible for interaction flow rather than business rules.
 
 The desktop app includes a `--smoke` mode so the entry point can be verified from a terminal without opening a graphical window. macOS and Windows launchers compile the same source tree and start `gui.DesktopMain`.
 
+The desktop visual layer uses the standard JDK Metal look and feel with a small `UIManager` dark-theme pass. The palette is matched to the optional web frontend's deployed tokens: dark paper and panel surfaces, gold separators, readable light text, muted data summaries, and role-colored status labels for Admin and Player logins. This was intentionally implemented as theme configuration rather than custom painting, hover listeners, or external look-and-feel dependencies so the app remains portable on Windows and macOS.
+
 ## ID-Backed Object Associations
 
 The model stores relationships by stable IDs so CSV save/load remains simple and portable. To make the object relationships explicit in the Java design, `GameDataManager` resolves those IDs into domain-object associations through helper methods:

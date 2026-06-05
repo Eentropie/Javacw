@@ -227,3 +227,26 @@ Gemini said the existing web UI was functional but still looked like a generic b
 ### My Decision
 
 Accepted the low-risk visual direction and implemented it with static HTML/CSS changes only. I preserved `Main`, `web.WebMain`, `web/app.js` behavior, all existing API endpoints, and all dependency-free constraints. I also adjusted the wide-screen web layout after visual testing so the report panel appears sooner instead of being pushed down by the right insight column.
+
+## Prompt 13
+
+Time: 2026-06-06 03:02 CST
+Tool/Model: Antigravity / Gemini 3.1 Pro High, Antigravity / Claude Opus 4.6 Thinking, then Codex / GPT-5
+Agent Role: Desktop Design Reviewer Agent
+Related Commit: `70498f6`
+
+### My Prompt
+
+Review JavaCW Swing desktop app at `/Users/pengc/Desktop/CodexSpace/JavaCW/JavaCW`. Use Gemini 3.1 Pro High to propose a low-risk design checklist for `src/gui/DesktopMain.java`. Do not edit files. Preserve `Main`, `WebMain`, services, CSV, launchers, and `gui.DesktopMain --smoke`. Use only standard JDK Swing, keep Windows/macOS compatibility, avoid assets and dependencies, and make the local desktop UI visually consistent with the dark Honor of Kings arena/control-panel web theme.
+
+Then ask Claude Opus to review Gemini's plan and the actual `DesktopMain.java` as the risk reviewer and approval gate. Claude should say whether to implement, which parts are safe, which parts are risky, the exact helper methods or constants worth adding, and the verification checklist.
+
+### AI Response Summary
+
+Gemini recommended a dependency-free Swing theme pass using cross-platform Metal or Nimbus, `UIManager` color overrides, dark panels, gold accents, readable form controls, role-colored status, and a darker output report area. It warned against external dependencies, copyrighted assets, fragile custom painting, and breaking the smoke entry.
+
+Claude approved the direction only with scope reduction. It specifically approved Metal cross-platform look and feel, bulk `UIManager.put()` overrides using the deployed web color tokens, a gold top-bar separator, role-colored status labels, dark output-area styling, and frame title/background changes. It rejected mouse hover listeners, focus-listener border swaps, recursive component styling, Nimbus look and feel, and Swing equivalents of web-only visual tricks.
+
+### My Decision
+
+Accepted Claude's reduced scope. Implemented a low-risk theme layer in `DesktopMain.java` only: Metal look and feel, shared dark palette constants, `installDarkTheme()`, dark form/list/button/tab/output colors, top-bar gold divider, role status colors, and the `Honor of Kings IMS - Desktop` window title. I preserved console `Main`, web `WebMain`, services, CSV data, launchers, admin/player behavior, and `gui.DesktopMain --smoke`.

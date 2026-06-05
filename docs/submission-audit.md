@@ -1,11 +1,11 @@
 # Submission Audit
 
-Status date: 2026-06-05.
+Status date: 2026-06-06.
 
 ## Entry Points
 
 - **Required** console entry point: `src/Main.java`. This is the primary deliverable and should be graded first.
-- **Optional** desktop entry point: `src/gui/DesktopMain.java`. This is a cross-platform Swing app and does not require a web server or browser.
+- **Optional** desktop entry point: `src/gui/DesktopMain.java`. This is a cross-platform Swing app with a standard JDK dark Metal theme and does not require a web server or browser.
 - **Optional** web entry point: `src/web/WebMain.java`. This is extra-credit evidence, not a replacement for the console workflow.
 - macOS desktop launcher: `Open-JavaCW-Desktop.command`.
 - Windows desktop launcher: `Open-JavaCW-Desktop.bat`.
@@ -54,18 +54,19 @@ Automated tests passed: 15, failed: 0
 ## Current Risk Review
 
 - The console workflow is the safest grading path and should be demonstrated first.
-- The optional Swing desktop app is extra evidence only; it does not replace `Main`.
+- The optional Swing desktop app is extra evidence only; it does not replace `Main`. Its latest visual pass was reviewed through Antigravity Gemini 3.1 Pro High and Claude Opus 4.6, then implemented as a dependency-free Metal/`UIManager` theme without custom painting, external assets, or runtime dependencies.
 - The optional web frontend is extra evidence only; it does not replace `Main`. Its latest visual pass was reviewed through Antigravity Gemini 3.1 Pro High and implemented as a dependency-free dark arena/control-panel CSS polish without external assets.
 - ID-backed relationships are resolved through explicit object association helpers in `GameDataManager`, preserving CSV persistence while making OOP association evidence clearer.
 - Human review of the GitHub README found that the first web launcher documented only macOS and used Unix shell compile syntax. Follow-up work added Windows `.bat` launchers and Windows PowerShell commands.
 - Core Java code uses standard JDK APIs and `Path`/`Files` for data paths, so there is no intentional macOS-only code path. The local verification environment is macOS; Windows execution should still be re-run on the final Windows machine if that platform is used for marking.
 - The fork branch `codex/structured-results-fork` preserves higher-risk UI experiments. Only structured tables and CSV controls were accepted into `main`; hash routing and raw JSON preview remain out of the mainline.
 - The latest Chrome web check verified the dark arena dashboard at `http://127.0.0.1:8080/`, admin login, lookup output, and first-viewport report visibility after the wide-screen insight-panel layout adjustment.
+- The latest Swing GUI check opened the macOS Java window titled `Honor of Kings IMS - Desktop` and confirmed login labels, status text, and the data summary through the accessibility tree after the dark desktop theme pass.
 - `git-history.txt` has been regenerated after the final commit sequence.
 
 ## Personal Verification
 
-I personally ran all console flows (login, lookup, team overview, hero details, equipment ranking, match history, leaderboard, recommendation engine, combat simulation, data management add/delete, save/load), confirmed the Swing desktop smoke check, and confirmed 15/15 automated tests pass before this final submission.
+I personally ran all console flows (login, lookup, team overview, hero details, equipment ranking, match history, leaderboard, recommendation engine, combat simulation, data management add/delete, save/load), confirmed the Swing desktop smoke check and macOS GUI window title, and confirmed 15/15 automated tests pass before this final submission.
 
 ## Final Submission Checklist
 

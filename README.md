@@ -45,7 +45,7 @@ On Windows, double-click:
 Open-JavaCW-Desktop.bat
 ```
 
-This compiles the project and starts a local Java Swing desktop interface. It does not start a web server and does not require a browser.
+This compiles the project and starts a local Java Swing desktop interface. It does not start a web server and does not require a browser. The desktop app uses only standard JDK Swing/Metal APIs and includes a dark arena/control-panel theme matching the optional web frontend.
 
 Manual desktop command on any platform after compilation:
 
@@ -119,7 +119,7 @@ Password: player123
 - Leaderboard by win rate, level, match count, or custom score.
 - Recommendation engine for hero and equipment suggestions.
 - Turn-based combat simulation with equipment, critical hits, dodges, and a combat report.
-- Optional Java Swing desktop app for login, reports, recommendations, combat, player profile edits, admin CRUD, save, and reload.
+- Optional Java Swing desktop app for login, reports, recommendations, combat, player profile edits, admin CRUD, save, reload, and a dependency-free dark local control-panel theme.
 - Optional browser-based frontend for login, lookup, rankings, recommendations, and combat simulation.
 - Admin data management for players, heroes, equipment, teams, and match records.
 - Player self-service for limited personal profile edits.

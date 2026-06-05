@@ -136,3 +136,29 @@ Related commits:
 
 - `663fc8f` add cross-platform Swing desktop app.
 - `444ae15` document desktop app evidence and run path.
+
+## Desktop Design Reviewer Agent
+
+Main contribution:
+
+- Gemini 3.1 Pro High reviewed the optional Swing desktop app and proposed a dependency-free dark arena/control-panel theme using standard Swing mechanisms.
+- Claude Opus 4.6 reviewed Gemini's plan as the risk gate and approved only a reduced scope: Metal look and feel, `UIManager` color keys, top-bar gold divider, role-colored status label, dark output area, and frame title/background.
+- Codex implemented the accepted scope in `src/gui/DesktopMain.java` without changing the console entry point, web entry point, services, CSV storage, launchers, or smoke path.
+
+Human decision:
+
+- The high-risk ideas were rejected: button hover listeners, focus-listener border swaps, recursive component styling, Nimbus-specific painters, custom artwork, external dependencies, and self-painted game UI effects.
+- The accepted polish keeps the local app Windows/macOS compatible through the standard JDK and preserves the desktop app as optional extra-credit evidence rather than replacing the required console workflow.
+
+Verification:
+
+- `javac -d out $(find src -name '*.java')`
+- `java -cp out test.TestRunner` -> `Automated tests passed: 15, failed: 0`
+- `java -cp out gui.DesktopMain --smoke`
+- `node --check web/app.js`
+- `git diff --check`
+- macOS GUI launch opened the Swing window titled `Honor of Kings IMS - Desktop`; the accessibility tree exposed login labels, status text, data summary, and the desktop window.
+
+Related commit:
+
+- `70498f6` apply Claude-approved Swing desktop polish.
