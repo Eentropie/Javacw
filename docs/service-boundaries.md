@@ -7,8 +7,9 @@ Owns all in-memory collections and consistency rules:
 - stores admins, players, heroes, equipment, teams, and matches;
 - rejects duplicate IDs and unknown references;
 - keeps team membership synchronized when players are added or moved;
+- validates player hero ownership and actual equipment loadouts before applying an update;
 - removes player-owned hero references when a hero is deleted;
-- removes hero-equipment references when equipment is deleted;
+- removes hero-equipment and player-loadout references when equipment is deleted;
 - blocks unsafe team deletion when players or matches still reference the team.
 
 ## `AuthenticationService`
@@ -26,7 +27,7 @@ Owns human-readable reports:
 - player/team match history;
 - leaderboard output.
 
-It resolves IDs into names, formats win rates, and keeps reporting logic out of `Main`.
+It resolves IDs into names, formats win rates, displays actual player equipment loadouts, and uses historical match-team membership so transfers do not rewrite old results. Team pick rates include only the requested team's picks.
 
 ## `RankingService`
 
@@ -64,7 +65,9 @@ Owns CSV persistence:
 
 - detects whether data files exist;
 - saves all records through temporary files and rename;
+- uses unique same-directory temporary files so concurrent local save attempts do not collide;
 - loads records in dependency order: admins, teams, equipment, heroes, players, matches;
+- migrates older player and match rows that do not yet include equipment loadouts or historical participant teams;
 - rebuilds team membership after loading players.
 
 ## `Main`

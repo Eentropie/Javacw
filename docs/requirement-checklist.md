@@ -17,7 +17,7 @@
 | Concept | Evidence |
 |---|---|
 | Inheritance | `Player` and `Admin` extend `Person`. |
-| Association | `Player`, `Hero`, and `Equipment` store stable IDs for CSV persistence; `GameDataManager` resolves them into domain-object relationships with `teamForPlayer`, `heroesForPlayer`, `compatibleEquipmentForHero`, `recommendedEquipmentForHero`, and `playersOwningHero`. |
+| Association | `Player`, `Hero`, and `Equipment` store stable IDs for CSV persistence; player-owned heroes also store actual equipment loadouts. `GameDataManager` resolves IDs through `teamForPlayer`, `heroesForPlayer`, `compatibleEquipmentForHero`, `recommendedEquipmentForHero`, and `playersOwningHero`. |
 | Aggregation/composition | `Team` stores player IDs and is rebuilt from player membership; `playersForTeam` exposes team membership as `Player` objects. |
 | Interface | `Searchable` is implemented by `Person`, `Hero`, `Equipment`, `Team`, and `MatchRecord`. |
 | Encapsulation | Fields are private; list/map fields expose unmodifiable views and controlled mutation methods. |
@@ -41,11 +41,11 @@
 
 | Feature | Implementation |
 |---|---|
-| Player lookup | `SearchService.playerLookup` and menu option 1. |
+| Player lookup | `SearchService.playerLookup` and menu option 1 display player identity, team, level, win rate, owned heroes, and each hero's actual equipped items. |
 | Team overview | `SearchService.teamOverview` and menu option 2. |
 | Hero details | `SearchService.heroDetails` and menu option 3. |
 | Equipment statistics | `RankingService.topEquipment`, `SearchService.equipmentStatistics`, and menu option 4. |
-| Match history | `SearchService.playerMatchHistory`, `SearchService.teamMatchHistory`, and menu option 5. |
+| Match history | `SearchService.playerMatchHistory`, `SearchService.teamMatchHistory`, and menu option 5 use historical participant-team data and team-filtered hero pick rates. |
 | Leaderboard | `RankingService.topPlayers`, `SearchService.leaderboard`, and menu option 6. |
 | Recommendation engine | `RecommendationService` and console recommendation options. |
 | Combat simulation | `CombatSimulationService`, `CombatReport`, and console combat simulation options. |
@@ -64,7 +64,7 @@
 | `docs/design.md` | Present |
 | UML draft | `docs/uml.md` |
 | `docs/test-cases.md` | Present with actual results |
-| Automated tests | `src/test/TestRunner.java` runs 15 dependency-free automated service tests |
+| Automated tests | `src/test/TestRunner.java` runs 20 dependency-free automated service tests |
 | One-click desktop launcher | `Open-JavaCW-Desktop.command` starts the optional Swing desktop app on macOS; `Open-JavaCW-Desktop.bat` provides the Windows launcher |
 | One-click web launcher | `Open-JavaCW-Web.command` starts the optional browser frontend on macOS; `Open-JavaCW-Web.bat` provides the Windows launcher |
 | `ai/prompts.md` | Present |
@@ -86,7 +86,7 @@
 | Desktop app | Dependency-free Swing interface with a Claude-approved dark Metal theme and macOS/Windows one-click launchers. |
 | Browser frontend | Dependency-free local web UI using JDK `HttpServer`, static HTML/CSS/JS, a one-click launcher, structured result tables, and a dark arena control-panel visual polish. |
 | Advanced AI reflection | `ai/model-comparison.md` compares Gemini and Claude Opus review quality. |
-| Automated tests | `src/test/TestRunner.java` covers recommendations, combat, authentication failure, missing lookups, CRUD cascade behavior, validation, object association helpers, leaderboard, win-rate edge cases, text-report compatibility, and CSV round trip. |
+| Automated tests | `src/test/TestRunner.java` covers recommendations, combat, authentication failure, missing lookups, CRUD cascades, actual loadouts, historical match membership, team-filtered pick rates, atomic player updates, object associations, leaderboard and win-rate edge cases, concurrent saves, and CSV round trip. |
 
 ## Final Student Checks Before Submission
 

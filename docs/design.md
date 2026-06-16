@@ -38,6 +38,20 @@ The model stores relationships by stable IDs so CSV save/load remains simple and
 
 `SearchService` uses these association helpers when building reports. This keeps persistence ID-based while still demonstrating association and aggregation in the service layer.
 
+## Player Equipment Loadouts
+
+Each `Player` stores an equipment loadout for each owned hero as a map from hero ID to equipment IDs. This is separate from a hero's global compatibility and recommendation lists:
+
+- compatible equipment describes every item the hero is allowed to use;
+- recommended equipment supplies sensible defaults;
+- a player loadout records the items actually equipped on that player's owned hero.
+
+`GameDataManager` validates that a loadout only references heroes owned by the player and equipment compatible with that hero. Deleting a hero or equipment item also removes the related loadout references. Player reports therefore display actual equipped items rather than all compatible items.
+
+## Historical Match Membership
+
+`MatchRecord` stores both the hero picked by each player and the team represented by that player in that match. Keeping this historical participant-team mapping prevents later player transfers from changing old opponents or results. Team match reports filter picks through this mapping, so pick-rate calculations include only the requested team's heroes.
+
 ## Equipment Ranking Formula
 
 Equipment score:
@@ -66,15 +80,33 @@ The hero recommendation score combines several independent signals so that each 
 Hero recommendation score:
 
 ```text
-score = statScore
-      + ownerSuccess
-      + teamRoleGapBonus
-      + difficultyFit
-      + equipmentSupport
-      - ownedPenalty
+statScore = attack * 0.10 + defense * 0.08 + health * 0.005
+ownerSuccess = average owner win rate * 0.15
+teamRoleGapBonus = 12 if the role is absent, 6 if it appears once, otherwise 0
+difficultyFit = max(0, 10 - abs(targetDifficulty - heroDifficulty))
+equipmentSupport = average score of the best two compatible items / 10
+ownedPenalty = 20 if the player already owns the hero, otherwise 0
+
+score = statScore + ownerSuccess + teamRoleGapBonus
+      + difficultyFit + equipmentSupport - ownedPenalty
 ```
 
-This reuses the existing equipment ranking formula and adds hero-specific context.
+The owned-hero penalty lowers repeated recommendations without excluding them completely. This keeps the output useful when the requested limit is larger than the number of unowned heroes.
+
+Equipment recommendation score:
+
+```text
+explicitRecommendationBonus = 30 if listed as recommended, otherwise 0
+compatibilityBonus = 12 if listed as compatible, otherwise 0
+heroTypeSynergy = 1 to 10 based on hero and equipment type
+
+score = equipmentRankingScore
+      + explicitRecommendationBonus
+      + compatibilityBonus
+      + heroTypeSynergy
+```
+
+This reuses the documented equipment ranking formula and then adds hero-specific context. The current weights are manually tuned coursework heuristics rather than values learned from match data.
 
 ## Combat Simulation
 

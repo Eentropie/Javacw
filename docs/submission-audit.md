@@ -1,6 +1,6 @@
 # Submission Audit
 
-Status date: 2026-06-06.
+Status date: 2026-06-16.
 
 ## Entry Points
 
@@ -23,7 +23,7 @@ Status date: 2026-06-06.
 | Extra-credit features | `RecommendationService`, `CombatSimulationService`, `src/gui/`, `src/web/`, desktop launchers, and web launchers |
 | AI evidence | `ai/prompts.md`, `ai/agent-log.md`, `ai/reflection.md`, `ai/model-comparison.md`, `docs/ai-usage-evidence.md` |
 | Git evidence | `git-history.txt`, `docs/git-process-evidence.md` |
-| Tests | `docs/test-cases.md`, `src/test/TestRunner.java` — 15 automated checks, all passing |
+| Tests | `docs/test-cases.md`, `src/test/TestRunner.java` — 20 automated checks, all passing |
 | Rubric audit | `docs/rubric-evaluation.md` maps the final project against the 20-mark rubric |
 
 ## Latest Verification Commands
@@ -48,7 +48,7 @@ java -cp out gui.DesktopMain --smoke
 Latest automated test result:
 
 ```text
-Automated tests passed: 15, failed: 0
+Automated tests passed: 20, failed: 0
 ```
 
 ## Current Risk Review
@@ -57,6 +57,9 @@ Automated tests passed: 15, failed: 0
 - The optional Swing desktop app is extra evidence only; it does not replace `Main`. Its latest visual pass was reviewed through Antigravity Gemini 3.1 Pro High and Claude Opus 4.6, then implemented as a dependency-free Metal/`UIManager` theme without custom painting, external assets, or runtime dependencies.
 - The optional web frontend is extra evidence only; it does not replace `Main`. Its latest visual pass was reviewed through Antigravity Gemini 3.1 Pro High and implemented as a dependency-free dark arena/control-panel CSS polish without external assets.
 - ID-backed relationships are resolved through explicit object association helpers in `GameDataManager`, preserving CSV persistence while making OOP association evidence clearer.
+- Player lookup now uses persisted per-player hero equipment loadouts rather than presenting every compatible item as equipped.
+- Match records persist each participant's historical team, so player transfers do not alter old opponents/results and team pick rates exclude the opponent's picks.
+- Player updates validate the complete proposed state before mutating the live object, and CSV saves use unique temporary files to avoid local multi-process `.tmp` collisions.
 - Human review of the GitHub README found that the first web launcher documented only macOS and used Unix shell compile syntax. Follow-up work added Windows `.bat` launchers and Windows PowerShell commands.
 - Core Java code uses standard JDK APIs and `Path`/`Files` for data paths, so there is no intentional macOS-only code path. The local verification environment is macOS; Windows execution should still be re-run on the final Windows machine if that platform is used for marking.
 - The fork branch `codex/structured-results-fork` preserves higher-risk UI experiments. Only structured tables and CSV controls were accepted into `main`; hash routing and raw JSON preview remain out of the mainline.
@@ -66,7 +69,7 @@ Automated tests passed: 15, failed: 0
 
 ## Personal Verification
 
-I personally ran all console flows (login, lookup, team overview, hero details, equipment ranking, match history, leaderboard, recommendation engine, combat simulation, data management add/delete, save/load), confirmed the Swing desktop smoke check and macOS GUI window title, and confirmed 15/15 automated tests pass before this final submission.
+I personally ran all console flows (login, lookup, team overview, hero details, equipment ranking, match history, leaderboard, recommendation engine, combat simulation, data management add/delete, save/load), confirmed the Swing desktop smoke check and macOS GUI window title, and confirmed the automated test suite passes before this final submission.
 
 ## Final Submission Checklist
 

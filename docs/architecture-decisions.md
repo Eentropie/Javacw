@@ -35,6 +35,8 @@ This avoids the low-scoring pattern of one large procedural `Main` class.
 
 Model classes store related object IDs rather than direct object references. This makes CSV save/load simpler and avoids cyclic serialization problems. Services resolve IDs into objects when creating reports.
 
+Player equipment is stored as an ID-backed map from owned hero IDs to actually equipped item IDs. Match records also preserve the team represented by each player in that match. The historical team snapshot is necessary because a later player transfer must not rewrite old opponents, results, or team pick-rate reports.
+
 ## Decision 05: Tie Handling and Zero-Match Safety
 
 Player win rate returns `0.0` when total matches are zero. Leaderboard ties are resolved by player name and then player ID. Equipment ranking ties are resolved by equipment name and ID.
@@ -55,3 +57,9 @@ This keeps the extra-credit GUI dependency-free:
 - the one-click macOS launcher compiles, starts the server, and opens the browser.
 
 `WebServer` uses a single-threaded executor because `GameDataManager` stores mutable in-memory collections. This avoids concurrency risk in a local coursework demo.
+
+## Decision 08: Validate Before Mutation
+
+Admin player updates are assembled as a proposed state and validated against teams, heroes, equipment, compatibility, and numeric constraints before the live `Player` object is changed. This prevents a rejected hero or equipment ID from leaving an in-memory partial update that could be saved later.
+
+CSV files use unique temporary filenames rather than one fixed `<file>.tmp` name. This keeps separate local entry points from colliding if they save at nearly the same time.

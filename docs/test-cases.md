@@ -51,7 +51,7 @@ Search player: Li Bai
 
 Expected: The system displays Li Bai's ID, team, level, win rate, owned heroes, and equipment.
 
-Actual: The system displayed `P001`, team `Chang'an Blades`, level `28`, win rate `72.7%`, and the owned heroes Li Bai, Sun Wukong, and Mulan with compatible equipment lists.
+Actual: The system displayed `P001`, team `Chang'an Blades`, level `28`, win rate `72.7%`, and the owned heroes Li Bai, Sun Wukong, and Mulan with their persisted equipment loadouts.
 
 Result: Pass.
 
@@ -321,12 +321,17 @@ PASS match validation rejects winner outside match
 PASS match validation rejects player outside teams
 PASS equipment add and delete updates hero references
 PASS default ranking reports stay text based
+PASS player lookup shows actual equipped items
+PASS team history counts only the requested team picks
+PASS player history keeps historical team after transfer
+PASS invalid player update is atomic
 PASS player deletion updates team membership
 PASS ID-backed associations resolve to domain objects
 PASS leaderboard sorts by win rate
 PASS zero-match player win rate is safe
 PASS CSV save/load round trip keeps counts
-Automated tests passed: 15, failed: 0
+PASS concurrent CSV saves use independent temp files
+Automated tests passed: 20, failed: 0
 ```
 
 ## Bug Found During Testing
@@ -350,3 +355,6 @@ Menu option 7 → Recommendation engine
 Sub-option 1 → Recommend heroes for a player
 Player ID: P001
 Recommendations: 3
+```
+
+The complete expected output, actual output, and pass result for this flow are recorded in Test 13 above. Combat verification is recorded in Test 14.

@@ -20,4 +20,4 @@ Related commit:
 
 ## Gemini Review Note
 
-Gemini was briefly used before the project switched to Claude Opus only. Its output was not used as the primary review evidence because it mentioned non-existent project elements such as `Repository<T>` and `getDisplayInfo`. The useful generic risk categories were replaced by the more code-grounded Claude Opus review.
+Gemini was briefly used during the early code-review phase, after which Claude Opus became the primary code-grounded reviewer for that phase. This Gemini output was not used as primary review evidence because it mentioned non-existent project elements such as `Repository<T>` and `getDisplayInfo`. Gemini was later used again at the user's explicit request for the bounded web and Swing visual reviews recorded as Prompts 12 and 13.

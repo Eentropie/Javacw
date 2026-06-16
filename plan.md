@@ -21,7 +21,7 @@ The goal is to build a Java console application that manages Honor of Kings info
 ## 3. Java Concepts Used
 
 - Inheritance: `Person` is an abstract superclass; `Player` and `Admin` extend it.
-- Association: `Player` stores owned hero IDs; `Hero` stores compatible equipment IDs.
+- Association: `Player` stores owned hero IDs and actual per-hero equipment loadouts; `Hero` stores compatible equipment IDs.
 - Aggregation: `Team` stores member player IDs.
 - Interface: `Searchable` is implemented by searchable model classes.
 - Encapsulation: fields are private and changed through methods.
@@ -34,7 +34,7 @@ The goal is to build a Java console application that manages Honor of Kings info
 ## 4. Class Design
 
 - `Person`: abstract user superclass with ID, name, username, password, and role.
-- `Player`: game player with team ID, level, win/loss counts, and owned heroes.
+- `Player`: game player with team ID, level, win/loss counts, owned heroes, and actual equipment loadouts.
 - `Admin`: administrator with full data-management permission.
 - `Hero`: playable hero with type, base stats, difficulty, compatible equipment, and recommended equipment.
 - `Equipment`: item with type, stats, usage count, rating, and win contribution.
@@ -84,7 +84,7 @@ CombatSimulationService --> CombatReport
 
 ## 6. Data Design
 
-The initial dataset includes at least 3 teams, 10 players, 15 heroes, 20 equipment items, and 10 match records. CSV is selected because it needs no external libraries and is easy to inspect. Relationship fields store IDs separated by semicolons, and match hero picks are stored as `playerId:heroId` pairs.
+The initial dataset includes at least 3 teams, 10 players, 15 heroes, 20 equipment items, and 10 match records. CSV is selected because it needs no external libraries and is easy to inspect. Relationship fields store IDs separated by semicolons. Player loadouts use `heroId:equipmentId,equipmentId`, and match picks use `playerId:heroId:historicalTeamId` so later transfers do not change old reports.
 
 ## 7. AI Usage Plan
 
@@ -114,7 +114,7 @@ Prompts should specify one role, one task, existing class names, edge cases, and
 
 ## 10. Testing Plan
 
-Manual test cases cover login, player lookup, team overview, hero details, equipment ranking, match history, leaderboard, admin CRUD, player permission restrictions, file save/load, recommendation output, combat simulation, and invalid input.
+Manual test cases cover login, player lookup, team overview, hero details, equipment ranking, match history, leaderboard, admin CRUD, player permission restrictions, file save/load, recommendation output, combat simulation, and invalid input. Automated regression tests additionally cover actual equipment loadouts, team-filtered pick rates, historical results after transfers, atomic rejected updates, and concurrent saves.
 
 Automated tests are run with:
 

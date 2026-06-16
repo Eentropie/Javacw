@@ -17,6 +17,7 @@ class Player extends Person
   - wins: int
   - losses: int
   - heroIds: List<String>
+  - equipmentLoadouts: Map<String, List<String>>
 
 class Admin extends Person
 
@@ -54,6 +55,7 @@ class MatchRecord implements Searchable
   - teamBId: String
   - winnerTeamId: String
   - heroPicks: Map<String, String>
+  - participantTeamIds: Map<String, String>
 
 class CombatReport
   - title: String

@@ -10,22 +10,31 @@ The application stores data in the `data/` folder.
 | `teams.csv` | `id`, `name` |
 | `equipment.csv` | `id`, `name`, `type`, `power`, `defense`, `price`, `averageRating`, `usageCount`, `winContribution` |
 | `heroes.csv` | `id`, `name`, `type`, `attack`, `defense`, `health`, `difficulty`, `compatibleEquipmentIds`, `recommendedEquipmentIds` |
-| `players.csv` | `id`, `name`, `username`, `password`, `teamId`, `level`, `wins`, `losses`, `heroIds` |
-| `matches.csv` | `id`, `date`, `teamAId`, `teamBId`, `winnerTeamId`, `playerHeroPicks` |
+| `players.csv` | `id`, `name`, `username`, `password`, `teamId`, `level`, `wins`, `losses`, `heroIds`, `equipmentLoadouts` |
+| `matches.csv` | `id`, `date`, `teamAId`, `teamBId`, `winnerTeamId`, `playerHeroTeamPicks` |
 
 ## Delimiters
 
 - `|` separates CSV fields.
 - `;` separates ID lists.
-- `:` separates player/hero pairs in match records.
+- `:` separates keys and values in loadouts and match records.
+- `,` separates equipment IDs within one hero loadout.
 
-Example:
+Player loadout example:
 
 ```text
-P001:H001;P002:H002
+H001:E002,E017;H007:E002,E018
 ```
 
-This means player `P001` picked hero `H001`, and player `P002` picked hero `H002`.
+This means that the player's `H001` hero has `E002` and `E017` equipped, while `H007` has `E002` and `E018`.
+
+Match pick example:
+
+```text
+P001:H001:T001;P006:H008:T002
+```
+
+This stores the player, selected hero, and historical team for each pick. The loader also accepts the older `playerId:heroId` form and derives the team during migration.
 
 ## Load Order
 
@@ -44,13 +53,14 @@ This order prevents references from being checked before the referenced records 
 
 - A player must reference an existing team.
 - A player-owned hero ID must reference an existing hero.
+- A player equipment loadout must reference an owned hero and equipment compatible with that hero.
 - A hero's compatible and recommended equipment IDs must reference existing equipment.
-- A match must reference two existing teams, one existing winner team, existing players, and existing heroes.
+- A match must reference two existing teams, one participating winner team, existing players, existing heroes, and a historical participant team for each pick.
 - A team's player list is rebuilt from players after loading.
 
 ## Save Strategy
 
-Each file is written to a temporary file first and then moved to the final CSV path. This reduces the chance of a partially written data file if saving is interrupted.
+Each file is written to a uniquely named temporary file in the same directory and then moved to the final CSV path. Unique names prevent two running interfaces from competing for one fixed `.tmp` file, while same-directory atomic replacement reduces the chance of a partially written data file.
 
 ## Known Tradeoff
 

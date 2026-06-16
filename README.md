@@ -111,7 +111,7 @@ Password: player123
 ## 4. Implemented Features
 
 - Login and logout with Admin and Player roles.
-- Player lookup by ID or name.
+- Player lookup by ID or name, including each owned hero's actual equipment loadout.
 - Team overview by ID or name.
 - Hero details by name.
 - Equipment ranking by a documented score.
@@ -157,7 +157,7 @@ javac -d out $files
 java -cp out test.TestRunner
 ```
 
-Current automated coverage includes 15 service-level checks for recommendations, combat, authentication failure, missing lookups, match validation, equipment add/delete cascade behavior, object association helpers, leaderboard ordering, zero-match win-rate safety, text-report compatibility, and CSV round trip.
+Current automated coverage includes 20 service-level checks for recommendations, combat, authentication failure, missing lookups, match validation, actual equipment loadouts, team-filtered pick rates, historical match membership after transfers, atomic player updates, deletion cascades, object association helpers, leaderboard ordering, zero-match win-rate safety, concurrent CSV saves, text-report compatibility, and CSV round trip.
 
 The optional desktop app also has a dependency-free smoke check:
 
@@ -175,6 +175,7 @@ java -cp out gui.DesktopMain --smoke
 - Rubric self-evaluation: `docs/rubric-evaluation.md`
 - AI usage evidence map: `docs/ai-usage-evidence.md`
 - Git process evidence map: `docs/git-process-evidence.md`
+- Codex and Antigravity conversation audit: `docs/codex-conversation-audit.md`
 
 ## 9. Known Limitations
 
