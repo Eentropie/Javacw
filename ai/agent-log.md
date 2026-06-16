@@ -191,3 +191,4 @@ Related commits:
 - `e6a79ba` fix loadout persistence and match history consistency.
 - `81f5a9d` add final consistency regression coverage.
 - `1437354` document final consistency repairs.
+- `4b1ec04` correct final AI attribution and audit evidence.
