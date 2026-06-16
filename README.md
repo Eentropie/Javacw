@@ -1,5 +1,49 @@
 # AI-Assisted Honor of Kings Information Management System
 
+## Quick Access
+
+GitHub repository:
+
+```text
+https://github.com/Eentropie/Javacw
+```
+
+Main submission entry point:
+
+```bash
+javac -d out $(find src -name '*.java')
+java -cp out Main
+```
+
+Other launch options:
+
+```bash
+# Automated tests
+java -cp out test.TestRunner
+
+# Optional Swing desktop app
+java -cp out gui.DesktopMain
+
+# Optional local web frontend
+java -cp out web.WebMain
+```
+
+One-click launchers:
+
+```text
+Open-JavaCW-Desktop.command   macOS desktop app
+Open-JavaCW-Desktop.bat       Windows desktop app
+Open-JavaCW-Web.command       macOS web frontend
+Open-JavaCW-Web.bat           Windows web frontend
+```
+
+Default login accounts:
+
+```text
+Admin:  admin / admin123
+Player: libai / player123
+```
+
 ## 1. Project Overview
 
 This project is a console-first Java information management system for Honor of Kings. It manages players, admins, heroes, equipment, teams, and match records. The system demonstrates Java OOP design, role-based access, searching, ranking, file I/O, and documented AI-assisted development.
