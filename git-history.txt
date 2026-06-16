@@ -1,6 +1,12 @@
-* 13cf7c9 (HEAD -> main, codex/desktop-ui-polish) [Docs][GPT] record desktop design review evidence
+* 448c93d (HEAD -> main) [Docs][GPT] fill final audit evidence commit hash
+* 4b1ec04 [Docs][GPT] correct final AI attribution and audit evidence
+* 1437354 [Docs][GPT] document final consistency repairs
+* 81f5a9d [Test][GPT] add final consistency regression coverage
+* e6a79ba [AI-Implementation][GPT] fix loadout persistence and match history consistency
+* 13ef664 (origin/main) [Docs][GPT] refresh git history after desktop polish
+* 13cf7c9 (codex/desktop-ui-polish) [Docs][GPT] record desktop design review evidence
 * 70498f6 [AI-Implementation][GPT] apply Claude-approved Swing desktop polish
-* 19a52f9 (origin/main) [Docs][GPT] refresh git history after Gemini web polish
+* 19a52f9 [Docs][GPT] refresh git history after Gemini web polish
 * 2956736 (codex/hok-web-polish) [Docs][GPT] record Gemini web polish evidence
 * 602d0b7 [AI-Implementation][GPT] apply Gemini arena web polish
 * 3e02a5d [Docs][GPT] align desktop evidence after merge
