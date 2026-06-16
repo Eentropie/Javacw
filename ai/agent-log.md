@@ -216,3 +216,4 @@ Verification:
 Related commit:
 
 - `b58e1d2` add selectable player and team prompts.
+- `340e004` record human-guided selectable ID prompt fix.
