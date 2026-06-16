@@ -16,7 +16,12 @@ public class Team implements Searchable {
         this.name = Person.requireText(name, "name");
         this.playerIds = new ArrayList<>();
         if (playerIds != null) {
-            playerIds.forEach(this::addPlayer);
+            for (String playerId : playerIds) {
+                String value = Person.requireText(playerId, "playerId");
+                if (!this.playerIds.contains(value)) {
+                    this.playerIds.add(value);
+                }
+            }
         }
     }
 

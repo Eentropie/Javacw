@@ -42,12 +42,7 @@ public class GameDataManager {
 
     public void addPlayer(Player player) {
         requireUniqueUser(player.getId(), player.getUsername());
-        if (!teams.containsKey(player.getTeamId())) {
-            throw new IllegalArgumentException("Unknown team ID: " + player.getTeamId());
-        }
-        for (String heroId : player.getHeroIds()) {
-            requireHero(heroId);
-        }
+        validatePlayerReferences(player);
         players.put(player.getId(), player);
         teams.get(player.getTeamId()).addPlayer(player.getId());
     }
@@ -75,7 +70,13 @@ public class GameDataManager {
 
     public void addMatchRecord(MatchRecord record) {
         requireUnique(matchRecords, record.getId(), "match record");
-        validateMatchRecord(record.getTeamAId(), record.getTeamBId(), record.getWinnerTeamId(), record.getHeroPicks());
+        Map<String, String> participantTeamIds = validateMatchRecord(
+                record.getTeamAId(),
+                record.getTeamBId(),
+                record.getWinnerTeamId(),
+                record.getHeroPicks(),
+                record.getParticipantTeamIds());
+        record.replaceHeroPicks(new LinkedHashMap<>(record.getHeroPicks()), participantTeamIds);
         matchRecords.put(record.getId(), record);
     }
 
@@ -123,6 +124,9 @@ public class GameDataManager {
         for (Hero hero : heroes.values()) {
             hero.removeEquipment(equipmentId);
         }
+        for (Player player : players.values()) {
+            player.removeEquipmentFromLoadouts(equipmentId);
+        }
         return true;
     }
 
@@ -168,15 +172,55 @@ public class GameDataManager {
     public void updateMatchRecord(String matchId, LocalDate date, String teamAId, String teamBId,
                                   String winnerTeamId, Map<String, String> heroPicks) {
         MatchRecord record = requireMatchRecord(matchId);
-        validateMatchRecord(teamAId, teamBId, winnerTeamId, heroPicks);
+        Map<String, String> participantTeamIds = validateMatchRecord(
+                teamAId, teamBId, winnerTeamId, heroPicks, Map.of());
         record.setDate(date);
         record.setTeamAId(teamAId);
         record.setTeamBId(teamBId);
         record.setWinnerTeamId(winnerTeamId);
-        record.clearHeroPicks();
-        for (Map.Entry<String, String> entry : heroPicks.entrySet()) {
-            record.putHeroPick(entry.getKey(), entry.getValue());
+        record.replaceHeroPicks(heroPicks, participantTeamIds);
+    }
+
+    public void updatePlayer(String playerId, String name, String password, String teamId,
+                             int level, int wins, int losses, List<String> heroIds,
+                             Map<String, List<String>> equipmentLoadouts) {
+        Player player = requirePlayer(playerId);
+        String effectivePassword = password == null || password.isBlank() ? player.getPassword() : password;
+        Player proposed = new Player(
+                player.getId(),
+                name,
+                player.getUsername(),
+                effectivePassword,
+                teamId,
+                level,
+                wins,
+                losses,
+                heroIds,
+                equipmentLoadouts);
+        validatePlayerReferences(proposed);
+
+        player.setName(proposed.getName());
+        player.setPassword(proposed.getPassword());
+        if (!player.getTeamId().equals(proposed.getTeamId())) {
+            movePlayerToTeam(playerId, proposed.getTeamId());
         }
+        player.setLevel(proposed.getLevel());
+        player.setWins(proposed.getWins());
+        player.setLosses(proposed.getLosses());
+        player.replaceHeroes(proposed.getHeroIds());
+        player.replaceEquipmentLoadouts(proposed.getEquipmentLoadouts());
+    }
+
+    public Map<String, List<String>> defaultEquipmentLoadouts(List<String> heroIds) {
+        Map<String, List<String>> loadouts = new LinkedHashMap<>();
+        for (String heroId : heroIds) {
+            Hero hero = requireHero(heroId);
+            List<String> equipmentIds = hero.getRecommendedEquipmentIds().isEmpty()
+                    ? hero.getCompatibleEquipmentIds().stream().limit(2).toList()
+                    : List.copyOf(hero.getRecommendedEquipmentIds());
+            loadouts.put(heroId, equipmentIds);
+        }
+        return loadouts;
     }
 
     public Optional<Player> findPlayer(String query) {
@@ -344,7 +388,30 @@ public class GameDataManager {
         }
     }
 
-    private void validateMatchRecord(String teamAId, String teamBId, String winnerTeamId, Map<String, String> heroPicks) {
+    private void validatePlayerReferences(Player player) {
+        requireTeam(player.getTeamId());
+        for (String heroId : player.getHeroIds()) {
+            requireHero(heroId);
+        }
+        for (Map.Entry<String, List<String>> entry : player.getEquipmentLoadouts().entrySet()) {
+            if (!player.ownsHero(entry.getKey())) {
+                throw new IllegalArgumentException(
+                        "Equipment loadout references hero not owned by player: " + entry.getKey());
+            }
+            Hero hero = requireHero(entry.getKey());
+            for (String equipmentId : entry.getValue()) {
+                requireEquipment(equipmentId);
+                if (!hero.getCompatibleEquipmentIds().contains(equipmentId)) {
+                    throw new IllegalArgumentException(
+                            "Equipment " + equipmentId + " is not compatible with hero " + hero.getId());
+                }
+            }
+        }
+    }
+
+    private Map<String, String> validateMatchRecord(String teamAId, String teamBId, String winnerTeamId,
+                                                    Map<String, String> heroPicks,
+                                                    Map<String, String> suppliedParticipantTeamIds) {
         Team teamA = requireTeam(teamAId);
         Team teamB = requireTeam(teamBId);
         if (teamAId.equals(teamBId)) {
@@ -355,24 +422,37 @@ public class GameDataManager {
         }
         requireTeam(winnerTeamId);
 
-        Set<String> participatingPlayerIds = new HashSet<>();
-        participatingPlayerIds.addAll(teamA.getPlayerIds());
-        participatingPlayerIds.addAll(teamB.getPlayerIds());
+        if (heroPicks == null) {
+            throw new IllegalArgumentException("Hero picks cannot be null");
+        }
+        Map<String, String> participantTeamIds = suppliedParticipantTeamIds == null
+                ? Map.of()
+                : suppliedParticipantTeamIds;
+        boolean historicalTeamsSupplied = !participantTeamIds.isEmpty();
+        if (historicalTeamsSupplied && !participantTeamIds.keySet().equals(heroPicks.keySet())) {
+            throw new IllegalArgumentException("Participant team mapping must match the hero pick players");
+        }
 
         Set<String> pickedHeroIds = new HashSet<>();
+        Map<String, String> normalizedParticipantTeamIds = new LinkedHashMap<>();
         for (Map.Entry<String, String> entry : heroPicks.entrySet()) {
             Player player = requirePlayer(entry.getKey());
             String heroId = entry.getValue();
             requireHero(heroId);
-            if (!participatingPlayerIds.contains(player.getId())) {
+            String participantTeamId = historicalTeamsSupplied
+                    ? participantTeamIds.get(player.getId())
+                    : player.getTeamId();
+            if (!teamAId.equals(participantTeamId) && !teamBId.equals(participantTeamId)) {
                 throw new IllegalArgumentException("Player " + player.getId() + " is not in either participating team");
             }
-            if (!player.ownsHero(heroId)) {
+            if (!historicalTeamsSupplied && !player.ownsHero(heroId)) {
                 throw new IllegalArgumentException("Player " + player.getId() + " does not own hero " + heroId);
             }
             if (!pickedHeroIds.add(heroId)) {
                 throw new IllegalArgumentException("Duplicate hero pick in one match: " + heroId);
             }
+            normalizedParticipantTeamIds.put(player.getId(), participantTeamId);
         }
+        return normalizedParticipantTeamIds;
     }
 }

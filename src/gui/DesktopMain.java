@@ -553,6 +553,7 @@ public final class DesktopMain {
                 putField("wins", String.valueOf(player.getWins()));
                 putField("losses", String.valueOf(player.getLosses()));
                 putField("heroIds", String.join(",", player.getHeroIds()));
+                putField("equipmentLoadouts", formatLoadouts(player.getEquipmentLoadouts()));
             }
             case "Hero" -> {
                 Hero hero = dataManager.requireHero(id);
@@ -595,9 +596,16 @@ public final class DesktopMain {
 
     private void addAdminRecord(String entity) throws IOException {
         switch (entity) {
-            case "Player" -> dataManager.addPlayer(new Player(
-                    text("id"), text("name"), text("username"), text("password"), text("teamId"),
-                    integer("level"), integer("wins"), integer("losses"), idList("heroIds")));
+            case "Player" -> {
+                List<String> heroIds = idList("heroIds");
+                Map<String, List<String>> loadouts = equipmentLoadouts("equipmentLoadouts");
+                if (loadouts.isEmpty()) {
+                    loadouts = dataManager.defaultEquipmentLoadouts(heroIds);
+                }
+                dataManager.addPlayer(new Player(
+                        text("id"), text("name"), text("username"), text("password"), text("teamId"),
+                        integer("level"), integer("wins"), integer("losses"), heroIds, loadouts));
+            }
             case "Hero" -> {
                 validateEquipmentIds(idList("compatibleEquipmentIds"));
                 validateEquipmentIds(idList("recommendedEquipmentIds"));
@@ -622,19 +630,19 @@ public final class DesktopMain {
         switch (entity) {
             case "Player" -> {
                 Player player = dataManager.requirePlayer(id);
-                player.setName(text("name"));
                 String password = field("password").getText().trim();
-                if (!password.isEmpty()) {
-                    player.setPassword(password);
-                }
-                if (!player.getTeamId().equals(text("teamId"))) {
-                    dataManager.movePlayerToTeam(id, text("teamId"));
-                }
-                player.setLevel(integer("level"));
-                player.setWins(integer("wins"));
-                player.setLosses(integer("losses"));
-                validateHeroIds(idList("heroIds"));
-                player.replaceHeroes(idList("heroIds"));
+                List<String> heroIds = idList("heroIds");
+                Map<String, List<String>> loadouts = equipmentLoadouts("equipmentLoadouts");
+                dataManager.updatePlayer(
+                        player.getId(),
+                        text("name"),
+                        password,
+                        text("teamId"),
+                        integer("level"),
+                        integer("wins"),
+                        integer("losses"),
+                        heroIds,
+                        loadouts);
             }
             case "Hero" -> {
                 Hero hero = dataManager.requireHero(id);
@@ -691,7 +699,7 @@ public final class DesktopMain {
         adminFieldsPanel.removeAll();
         String entity = selectedText(adminEntityCombo);
         List<String> fields = switch (entity) {
-            case "Player" -> List.of("id", "name", "username", "password", "teamId", "level", "wins", "losses", "heroIds");
+            case "Player" -> List.of("id", "name", "username", "password", "teamId", "level", "wins", "losses", "heroIds", "equipmentLoadouts");
             case "Hero" -> List.of("id", "name", "type", "attack", "defense", "health", "difficulty", "compatibleEquipmentIds", "recommendedEquipmentIds");
             case "Equipment" -> List.of("id", "name", "type", "power", "defense", "price", "averageRating", "usageCount", "winContribution");
             case "Team" -> List.of("id", "name");
@@ -999,6 +1007,36 @@ public final class DesktopMain {
         return picks;
     }
 
+    private Map<String, List<String>> equipmentLoadouts(String name) {
+        String raw = field(name).getText().trim();
+        Map<String, List<String>> loadouts = new LinkedHashMap<>();
+        if (raw.isEmpty()) {
+            return loadouts;
+        }
+        for (String entry : raw.split(";")) {
+            String[] parts = entry.trim().split(":", -1);
+            if (parts.length != 2 || parts[0].isBlank()) {
+                throw new IllegalArgumentException(
+                        "Equipment loadouts must use heroId:equipmentId,equipmentId entries.");
+            }
+            String heroId = parts[0].trim();
+            if (loadouts.containsKey(heroId)) {
+                throw new IllegalArgumentException("Duplicate hero loadout: " + heroId);
+            }
+            List<String> equipmentIds = new ArrayList<>();
+            if (!parts[1].isBlank()) {
+                for (String equipmentId : parts[1].split(",")) {
+                    String value = equipmentId.trim();
+                    if (!value.isEmpty()) {
+                        equipmentIds.add(value);
+                    }
+                }
+            }
+            loadouts.put(heroId, equipmentIds);
+        }
+        return loadouts;
+    }
+
     private String formatPicks(Map<String, String> picks) {
         List<String> entries = new ArrayList<>();
         for (Map.Entry<String, String> entry : picks.entrySet()) {
@@ -1007,10 +1045,12 @@ public final class DesktopMain {
         return String.join(",", entries);
     }
 
-    private void validateHeroIds(List<String> heroIds) {
-        for (String heroId : heroIds) {
-            dataManager.requireHero(heroId);
+    private String formatLoadouts(Map<String, List<String>> loadouts) {
+        List<String> entries = new ArrayList<>();
+        for (Map.Entry<String, List<String>> entry : loadouts.entrySet()) {
+            entries.add(entry.getKey() + ":" + String.join(",", entry.getValue()));
         }
+        return String.join(";", entries);
     }
 
     private void validateEquipmentIds(List<String> equipmentIds) {

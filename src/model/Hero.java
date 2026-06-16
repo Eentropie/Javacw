@@ -26,14 +26,24 @@ public class Hero implements Searchable {
         this.attack = Person.requireNonNegative(attack, "attack");
         this.defense = Person.requireNonNegative(defense, "defense");
         this.health = Person.requireNonNegative(health, "health");
-        setDifficulty(difficulty);
+        this.difficulty = requireDifficulty(difficulty);
         this.compatibleEquipmentIds = new ArrayList<>();
         this.recommendedEquipmentIds = new ArrayList<>();
         if (compatibleEquipmentIds != null) {
-            compatibleEquipmentIds.forEach(this::addCompatibleEquipment);
+            for (String equipmentId : compatibleEquipmentIds) {
+                String value = Person.requireText(equipmentId, "equipmentId");
+                if (!this.compatibleEquipmentIds.contains(value)) {
+                    this.compatibleEquipmentIds.add(value);
+                }
+            }
         }
         if (recommendedEquipmentIds != null) {
-            recommendedEquipmentIds.forEach(this::addRecommendedEquipment);
+            for (String equipmentId : recommendedEquipmentIds) {
+                String value = Person.requireText(equipmentId, "equipmentId");
+                if (!this.recommendedEquipmentIds.contains(value)) {
+                    this.recommendedEquipmentIds.add(value);
+                }
+            }
         }
     }
 
@@ -86,10 +96,14 @@ public class Hero implements Searchable {
     }
 
     public void setDifficulty(int difficulty) {
+        this.difficulty = requireDifficulty(difficulty);
+    }
+
+    private static int requireDifficulty(int difficulty) {
         if (difficulty < 1 || difficulty > 10) {
             throw new IllegalArgumentException("difficulty must be between 1 and 10");
         }
-        this.difficulty = difficulty;
+        return difficulty;
     }
 
     public List<String> getCompatibleEquipmentIds() {

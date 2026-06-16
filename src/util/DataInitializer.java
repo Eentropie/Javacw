@@ -82,21 +82,21 @@ public final class DataInitializer {
     }
 
     private static void addPlayers(GameDataManager data) {
-        data.addPlayer(new Player("P001", "Li Bai", "libai", "player123", "T001", 28, 32, 12, list("H001", "H007", "H013")));
-        data.addPlayer(new Player("P002", "Chen Qian", "chenq", "player123", "T001", 24, 25, 15, list("H002", "H008", "H015")));
-        data.addPlayer(new Player("P003", "Zhao Yun", "zhaoy", "player123", "T001", 27, 30, 18, list("H003", "H009", "H013")));
-        data.addPlayer(new Player("P004", "Lu Ban", "luban", "player123", "T001", 22, 19, 17, list("H004", "H010", "H014")));
-        data.addPlayer(new Player("P005", "Zhang Fei", "zhangf", "player123", "T001", 26, 29, 16, list("H005", "H012", "H006")));
-        data.addPlayer(new Player("P006", "Xiao Qiao", "xiaoq", "player123", "T002", 25, 28, 14, list("H002", "H008", "H011")));
-        data.addPlayer(new Player("P007", "Sun Ce", "sunce", "player123", "T002", 23, 20, 20, list("H003", "H009", "H013")));
-        data.addPlayer(new Player("P008", "Hou Yi", "houyi", "player123", "T002", 29, 35, 13, list("H010", "H004", "H014")));
-        data.addPlayer(new Player("P009", "Cai Wenji", "caiw", "player123", "T002", 21, 17, 19, list("H011", "H006", "H005")));
-        data.addPlayer(new Player("P010", "Lian Po", "lianp", "player123", "T002", 24, 22, 18, list("H012", "H005", "H009")));
-        data.addPlayer(new Player("P011", "Mulan", "mulan", "player123", "T003", 30, 38, 11, list("H013", "H001", "H003")));
-        data.addPlayer(new Player("P012", "Marco Ace", "marco", "player123", "T003", 27, 31, 16, list("H014", "H004", "H010")));
-        data.addPlayer(new Player("P013", "Luna Star", "luna", "player123", "T003", 26, 27, 15, list("H015", "H002", "H008")));
-        data.addPlayer(new Player("P014", "Yao Support", "yao", "player123", "T003", 22, 21, 18, list("H006", "H011", "H005")));
-        data.addPlayer(new Player("P015", "Arthur King", "arthur", "player123", "T003", 25, 26, 17, list("H009", "H003", "H012")));
+        addPlayer(data, "P001", "Li Bai", "libai", "T001", 28, 32, 12, list("H001", "H007", "H013"));
+        addPlayer(data, "P002", "Chen Qian", "chenq", "T001", 24, 25, 15, list("H002", "H008", "H015"));
+        addPlayer(data, "P003", "Zhao Yun", "zhaoy", "T001", 27, 30, 18, list("H003", "H009", "H013"));
+        addPlayer(data, "P004", "Lu Ban", "luban", "T001", 22, 19, 17, list("H004", "H010", "H014"));
+        addPlayer(data, "P005", "Zhang Fei", "zhangf", "T001", 26, 29, 16, list("H005", "H012", "H006"));
+        addPlayer(data, "P006", "Xiao Qiao", "xiaoq", "T002", 25, 28, 14, list("H002", "H008", "H011"));
+        addPlayer(data, "P007", "Sun Ce", "sunce", "T002", 23, 20, 20, list("H003", "H009", "H013"));
+        addPlayer(data, "P008", "Hou Yi", "houyi", "T002", 29, 35, 13, list("H010", "H004", "H014"));
+        addPlayer(data, "P009", "Cai Wenji", "caiw", "T002", 21, 17, 19, list("H011", "H006", "H005"));
+        addPlayer(data, "P010", "Lian Po", "lianp", "T002", 24, 22, 18, list("H012", "H005", "H009"));
+        addPlayer(data, "P011", "Mulan", "mulan", "T003", 30, 38, 11, list("H013", "H001", "H003"));
+        addPlayer(data, "P012", "Marco Ace", "marco", "T003", 27, 31, 16, list("H014", "H004", "H010"));
+        addPlayer(data, "P013", "Luna Star", "luna", "T003", 26, 27, 15, list("H015", "H002", "H008"));
+        addPlayer(data, "P014", "Yao Support", "yao", "T003", 22, 21, 18, list("H006", "H011", "H005"));
+        addPlayer(data, "P015", "Arthur King", "arthur", "T003", 25, 26, 17, list("H009", "H003", "H012"));
     }
 
     private static void addMatches(GameDataManager data) {
@@ -115,6 +115,21 @@ public final class DataInitializer {
 
     private static List<String> list(String... values) {
         return List.of(values);
+    }
+
+    private static void addPlayer(GameDataManager data, String id, String name, String username,
+                                  String teamId, int level, int wins, int losses, List<String> heroIds) {
+        data.addPlayer(new Player(
+                id,
+                name,
+                username,
+                "player123",
+                teamId,
+                level,
+                wins,
+                losses,
+                heroIds,
+                data.defaultEquipmentLoadouts(heroIds)));
     }
 
     private static Map<String, String> picks(String... entries) {

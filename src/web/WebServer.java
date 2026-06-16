@@ -237,6 +237,7 @@ public class WebServer {
                     .append(",\"level\":").append(player.getLevel())
                     .append(",\"winRate\":").append(String.format(Locale.US, "%.1f", player.getWinRate()))
                     .append(",\"heroIds\":").append(stringListJson(player.getHeroIds()))
+                    .append(",\"equipmentLoadouts\":").append(loadoutsJson(player.getEquipmentLoadouts()))
                     .append("}");
         }
         return out.append("]").toString();
@@ -373,20 +374,31 @@ public class WebServer {
                 out.append(",");
             }
             first = false;
-            String opponentId = match.opponentForTeam(teamId);
+            String historicalTeamId = playerId == null ? teamId : match.teamForPlayer(playerId);
+            String opponentId = match.opponentForTeam(historicalTeamId);
             Team opponent = opponentId.isBlank() ? null : dataManager.requireTeam(opponentId);
             out.append("{\"date\":").append(json(match.getDate().toString()))
                     .append(",\"matchId\":").append(json(match.getId()))
                     .append(",\"opponent\":").append(json(opponent == null ? "Unknown" : opponent.getName()))
-                    .append(",\"result\":").append(json(match.resultForTeam(teamId).name()));
+                    .append(",\"result\":").append(json(match.resultForTeam(historicalTeamId).name()));
             if (playerId == null) {
-                out.append(",\"picks\":").append(json(heroPickText(match.getHeroPicks())));
+                out.append(",\"picks\":").append(json(heroPickText(heroPicksForTeam(match, teamId))));
             } else {
                 out.append(",\"hero\":").append(json(heroName(match.getHeroPicks().get(playerId))));
             }
             out.append("}");
         }
         return out.append("]").toString();
+    }
+
+    private Map<String, String> heroPicksForTeam(MatchRecord match, String teamId) {
+        Map<String, String> teamPicks = new LinkedHashMap<>();
+        for (Map.Entry<String, String> entry : match.getHeroPicks().entrySet()) {
+            if (teamId.equals(match.teamForPlayer(entry.getKey()))) {
+                teamPicks.put(entry.getKey(), entry.getValue());
+            }
+        }
+        return teamPicks;
     }
 
     private String playerSummaryJson(Player player) {
@@ -440,6 +452,19 @@ public class WebServer {
             out.append(json(values.get(i)));
         }
         return out.append("]").toString();
+    }
+
+    private String loadoutsJson(Map<String, List<String>> loadouts) {
+        StringBuilder out = new StringBuilder("{");
+        boolean first = true;
+        for (Map.Entry<String, List<String>> entry : loadouts.entrySet()) {
+            if (!first) {
+                out.append(",");
+            }
+            first = false;
+            out.append(json(entry.getKey())).append(":").append(stringListJson(entry.getValue()));
+        }
+        return out.append("}").toString();
     }
 
     private void handleStatic(HttpExchange exchange) throws IOException {

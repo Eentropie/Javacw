@@ -327,16 +327,27 @@ public class Main {
     private void addPlayer() {
         printTeams();
         printHeroes();
+        String playerId = input.readRequired("Player ID: ");
+        String name = input.readRequired("Name: ");
+        String username = input.readRequired("Username: ");
+        String password = input.readRequired("Password: ");
+        String teamId = input.readRequired("Team ID: ");
+        int level = input.readIntMin("Level: ", 0);
+        int wins = input.readIntMin("Wins: ", 0);
+        int losses = input.readIntMin("Losses: ", 0);
+        List<String> heroIds = readIdList("Hero IDs separated by comma/semicolon: ");
+        Map<String, List<String>> equipmentLoadouts = readEquipmentLoadouts(heroIds, true);
         Player player = new Player(
-                input.readRequired("Player ID: "),
-                input.readRequired("Name: "),
-                input.readRequired("Username: "),
-                input.readRequired("Password: "),
-                input.readRequired("Team ID: "),
-                input.readIntMin("Level: ", 0),
-                input.readIntMin("Wins: ", 0),
-                input.readIntMin("Losses: ", 0),
-                readIdList("Hero IDs separated by comma/semicolon: "));
+                playerId,
+                name,
+                username,
+                password,
+                teamId,
+                level,
+                wins,
+                losses,
+                heroIds,
+                equipmentLoadouts);
         dataManager.addPlayer(player);
         saveData();
         System.out.println("Player added.");
@@ -344,26 +355,41 @@ public class Main {
 
     private void editPlayer() {
         Player player = findPlayerPrompt();
-        player.setName(input.readOptional("Name", player.getName()));
+        String name = input.readOptional("Name", player.getName());
+        String password = null;
         if (input.confirm("Change password?")) {
-            player.setPassword(input.readRequired("New password: "));
+            password = input.readRequired("New password: ");
         }
+        String teamId = player.getTeamId();
         if (input.confirm("Move player to another team?")) {
             printTeams();
-            dataManager.movePlayerToTeam(player.getId(), input.readRequired("New team ID: "));
+            teamId = input.readRequired("New team ID: ");
         }
+        int level = player.getLevel();
+        int wins = player.getWins();
+        int losses = player.getLosses();
         if (input.confirm("Change level/win/loss numbers?")) {
-            player.setLevel(input.readIntMin("Level: ", 0));
-            player.setWins(input.readIntMin("Wins: ", 0));
-            player.setLosses(input.readIntMin("Losses: ", 0));
+            level = input.readIntMin("Level: ", 0);
+            wins = input.readIntMin("Wins: ", 0);
+            losses = input.readIntMin("Losses: ", 0);
         }
+        List<String> heroIds = List.copyOf(player.getHeroIds());
+        Map<String, List<String>> equipmentLoadouts = copyLoadouts(player.getEquipmentLoadouts());
         if (input.confirm("Replace owned hero list?")) {
             printHeroes();
-            player.replaceHeroes(readIdList("Hero IDs separated by comma/semicolon: "));
-            for (String heroId : player.getHeroIds()) {
-                dataManager.requireHero(heroId);
+            heroIds = readIdList("Hero IDs separated by comma/semicolon: ");
+            Map<String, List<String>> defaultLoadouts = dataManager.defaultEquipmentLoadouts(heroIds);
+            Map<String, List<String>> retainedLoadouts = new LinkedHashMap<>();
+            for (String heroId : heroIds) {
+                retainedLoadouts.put(heroId, equipmentLoadouts.getOrDefault(heroId, defaultLoadouts.get(heroId)));
             }
+            equipmentLoadouts = retainedLoadouts;
         }
+        if (input.confirm("Replace equipped item loadouts?")) {
+            equipmentLoadouts = readEquipmentLoadouts(heroIds, false);
+        }
+        dataManager.updatePlayer(
+                player.getId(), name, password, teamId, level, wins, losses, heroIds, equipmentLoadouts);
         saveData();
         System.out.println("Player updated.");
     }
@@ -575,6 +601,51 @@ public class Main {
                 .map(String::trim)
                 .filter(value -> !value.isEmpty())
                 .toList();
+    }
+
+    private Map<String, List<String>> readEquipmentLoadouts(List<String> heroIds, boolean defaultWhenBlank) {
+        printEquipment();
+        System.out.println("Enter loadouts as heroId:equipmentId,equipmentId entries separated by semicolons.");
+        System.out.println("Example: H001:E002,E017;H007:E002,E018");
+        String raw = input.readLine(defaultWhenBlank
+                ? "Equipment loadouts (blank = recommended defaults): "
+                : "Equipment loadouts: ");
+        if (raw.isBlank()) {
+            if (defaultWhenBlank) {
+                return dataManager.defaultEquipmentLoadouts(heroIds);
+            }
+            throw new IllegalArgumentException("Equipment loadouts cannot be blank");
+        }
+        return parseEquipmentLoadouts(raw);
+    }
+
+    private Map<String, List<String>> parseEquipmentLoadouts(String raw) {
+        Map<String, List<String>> loadouts = new LinkedHashMap<>();
+        for (String entry : raw.split(";")) {
+            String[] parts = entry.trim().split(":", -1);
+            if (parts.length != 2 || parts[0].isBlank()) {
+                throw new IllegalArgumentException("Invalid equipment loadout entry: " + entry);
+            }
+            if (loadouts.containsKey(parts[0].trim())) {
+                throw new IllegalArgumentException("Duplicate hero loadout: " + parts[0].trim());
+            }
+            List<String> equipmentIds = parts[1].isBlank()
+                    ? List.of()
+                    : Arrays.stream(parts[1].split(","))
+                    .map(String::trim)
+                    .filter(value -> !value.isEmpty())
+                    .toList();
+            loadouts.put(parts[0].trim(), equipmentIds);
+        }
+        return loadouts;
+    }
+
+    private Map<String, List<String>> copyLoadouts(Map<String, List<String>> source) {
+        Map<String, List<String>> copy = new LinkedHashMap<>();
+        for (Map.Entry<String, List<String>> entry : source.entrySet()) {
+            copy.put(entry.getKey(), List.copyOf(entry.getValue()));
+        }
+        return copy;
     }
 
     private Map<String, String> readPicks() {

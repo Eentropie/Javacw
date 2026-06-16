@@ -22,9 +22,9 @@ public class Equipment implements Searchable {
         this.power = Person.requireNonNegative(power, "power");
         this.defense = Person.requireNonNegative(defense, "defense");
         this.price = Person.requireNonNegative(price, "price");
-        setAverageRating(averageRating);
+        this.averageRating = requireAverageRating(averageRating);
         this.usageCount = Person.requireNonNegative(usageCount, "usageCount");
-        setWinContribution(winContribution);
+        this.winContribution = requireWinContribution(winContribution);
     }
 
     public String getId() {
@@ -76,10 +76,14 @@ public class Equipment implements Searchable {
     }
 
     public void setAverageRating(double averageRating) {
+        this.averageRating = requireAverageRating(averageRating);
+    }
+
+    private static double requireAverageRating(double averageRating) {
         if (averageRating < 0.0 || averageRating > 5.0) {
             throw new IllegalArgumentException("averageRating must be between 0 and 5");
         }
-        this.averageRating = averageRating;
+        return averageRating;
     }
 
     public int getUsageCount() {
@@ -95,10 +99,14 @@ public class Equipment implements Searchable {
     }
 
     public void setWinContribution(double winContribution) {
+        this.winContribution = requireWinContribution(winContribution);
+    }
+
+    private static double requireWinContribution(double winContribution) {
         if (winContribution < 0.0 || winContribution > 1.0) {
             throw new IllegalArgumentException("winContribution must be between 0 and 1");
         }
-        this.winContribution = winContribution;
+        return winContribution;
     }
 
     @Override

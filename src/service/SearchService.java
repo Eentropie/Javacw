@@ -42,7 +42,10 @@ public class SearchService {
         output.append("Owned heroes and equipment:").append(System.lineSeparator());
         for (Hero hero : dataManager.heroesForPlayer(player)) {
             output.append("- ").append(hero.getName()).append(" [").append(hero.getType()).append("]").append(System.lineSeparator());
-            output.append("  Equipped/compatible: ").append(namesForEquipment(dataManager.compatibleEquipmentForHero(hero))).append(System.lineSeparator());
+            List<Equipment> equippedItems = player.getEquippedEquipmentIds(hero.getId()).stream()
+                    .map(dataManager::requireEquipment)
+                    .toList();
+            output.append("  Equipped: ").append(namesForEquipment(equippedItems)).append(System.lineSeparator());
         }
         return output.toString();
     }
@@ -124,7 +127,7 @@ public class SearchService {
         List<MatchRecord> matches = dataManager.matchesForPlayer(playerId).stream()
                 .limit(Math.max(0, limit))
                 .toList();
-        return matchHistoryReport("Player " + player.getName(), player.getTeamId(), playerId, matches);
+        return matchHistoryReport("Player " + player.getName(), null, playerId, matches);
     }
 
     public String teamMatchHistory(String teamId, int limit) {
@@ -158,9 +161,10 @@ public class SearchService {
         int wins = 0;
         int losses = 0;
         for (MatchRecord record : matches) {
-            String opponentId = record.opponentForTeam(teamId);
+            String historicalTeamId = playerId == null ? teamId : record.teamForPlayer(playerId);
+            String opponentId = record.opponentForTeam(historicalTeamId);
             Team opponent = opponentId.isEmpty() ? null : dataManager.requireTeam(opponentId);
-            MatchResult result = record.resultForTeam(teamId);
+            MatchResult result = record.resultForTeam(historicalTeamId);
             if (result == MatchResult.WIN) {
                 wins++;
             } else {
@@ -171,8 +175,9 @@ public class SearchService {
                     .append(" result ").append(result)
                     .append(" picks ");
             if (playerId == null) {
-                output.append(heroPickText(record.getHeroPicks()));
-                for (String heroId : record.getHeroPicks().values()) {
+                Map<String, String> teamPicks = heroPicksForTeam(record, teamId);
+                output.append(heroPickText(teamPicks));
+                for (String heroId : teamPicks.values()) {
                     pickCounts.merge(heroId, 1, Integer::sum);
                 }
             } else {
@@ -190,6 +195,16 @@ public class SearchService {
             output.append("- ").append(heroName(entry.getKey())).append(": ").append(formatPercent(rate)).append(System.lineSeparator());
         }
         return output.toString();
+    }
+
+    private Map<String, String> heroPicksForTeam(MatchRecord record, String teamId) {
+        Map<String, String> teamPicks = new LinkedHashMap<>();
+        for (Map.Entry<String, String> entry : record.getHeroPicks().entrySet()) {
+            if (teamId.equals(record.teamForPlayer(entry.getKey()))) {
+                teamPicks.put(entry.getKey(), entry.getValue());
+            }
+        }
+        return teamPicks;
     }
 
     private String heroPickText(Map<String, String> picks) {

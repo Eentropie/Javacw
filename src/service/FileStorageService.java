@@ -89,7 +89,11 @@ public class FileStorageService {
                     parseList(parts[8])));
         }
         for (String line : readDataLines(directory.resolve(PLAYERS_FILE))) {
-            String[] parts = split(line, 9, PLAYERS_FILE);
+            String[] parts = splitRange(line, 9, 10, PLAYERS_FILE);
+            List<String> heroIds = parseList(parts[8]);
+            Map<String, List<String>> equipmentLoadouts = parts.length == 10
+                    ? parseLoadouts(parts[9])
+                    : data.defaultEquipmentLoadouts(heroIds);
             data.addPlayer(new Player(
                     parts[0],
                     parts[1],
@@ -99,17 +103,20 @@ public class FileStorageService {
                     Integer.parseInt(parts[5]),
                     Integer.parseInt(parts[6]),
                     Integer.parseInt(parts[7]),
-                    parseList(parts[8])));
+                    heroIds,
+                    equipmentLoadouts));
         }
         for (String line : readDataLines(directory.resolve(MATCHES_FILE))) {
             String[] parts = split(line, 6, MATCHES_FILE);
+            ParsedMatchPicks parsedPicks = parsePicks(parts[5]);
             data.addMatchRecord(new MatchRecord(
                     parts[0],
                     LocalDate.parse(parts[1]),
                     parts[2],
                     parts[3],
                     parts[4],
-                    parsePicks(parts[5])));
+                    parsedPicks.heroPicks(),
+                    parsedPicks.participantTeamIds()));
         }
         data.rebuildTeamMembership();
         return data;
@@ -171,7 +178,7 @@ public class FileStorageService {
 
     private List<String> playerLines(GameDataManager data) {
         List<String> lines = new ArrayList<>();
-        lines.add("# id|name|username|password|teamId|level|wins|losses|heroIds");
+        lines.add("# id|name|username|password|teamId|level|wins|losses|heroIds|equipmentLoadouts");
         for (Player player : data.getPlayers()) {
             lines.add(join(
                     player.getId(),
@@ -182,14 +189,15 @@ public class FileStorageService {
                     String.valueOf(player.getLevel()),
                     String.valueOf(player.getWins()),
                     String.valueOf(player.getLosses()),
-                    joinList(player.getHeroIds())));
+                    joinList(player.getHeroIds()),
+                    joinLoadouts(player.getEquipmentLoadouts())));
         }
         return lines;
     }
 
     private List<String> matchLines(GameDataManager data) {
         List<String> lines = new ArrayList<>();
-        lines.add("# id|date|teamAId|teamBId|winnerTeamId|playerHeroPicks");
+        lines.add("# id|date|teamAId|teamBId|winnerTeamId|playerHeroTeamPicks");
         for (MatchRecord record : data.getMatchRecords()) {
             lines.add(join(
                     record.getId(),
@@ -197,18 +205,20 @@ public class FileStorageService {
                     record.getTeamAId(),
                     record.getTeamBId(),
                     record.getWinnerTeamId(),
-                    joinPicks(record.getHeroPicks())));
+                    joinPicks(record)));
         }
         return lines;
     }
 
     private static void writeLinesAtomically(Path target, List<String> lines) throws IOException {
-        Path tempFile = target.resolveSibling(target.getFileName() + ".tmp");
-        Files.write(tempFile, lines, StandardCharsets.UTF_8);
+        Path tempFile = Files.createTempFile(target.getParent(), target.getFileName() + ".", ".tmp");
         try {
+            Files.write(tempFile, lines, StandardCharsets.UTF_8);
             Files.move(tempFile, target, StandardCopyOption.REPLACE_EXISTING, StandardCopyOption.ATOMIC_MOVE);
         } catch (AtomicMoveNotSupportedException ex) {
             Files.move(tempFile, target, StandardCopyOption.REPLACE_EXISTING);
+        } finally {
+            Files.deleteIfExists(tempFile);
         }
     }
 
@@ -223,6 +233,15 @@ public class FileStorageService {
     private static String[] split(String line, int expectedFields, String fileName) throws IOException {
         String[] parts = line.split("\\|", -1);
         if (parts.length != expectedFields) {
+            throw new IOException("Invalid field count in " + fileName + ": " + line);
+        }
+        return parts;
+    }
+
+    private static String[] splitRange(String line, int minimumFields, int maximumFields, String fileName)
+            throws IOException {
+        String[] parts = line.split("\\|", -1);
+        if (parts.length < minimumFields || parts.length > maximumFields) {
             throw new IOException("Invalid field count in " + fileName + ": " + line);
         }
         return parts;
@@ -254,27 +273,62 @@ public class FileStorageService {
         return List.of(value.split(";"));
     }
 
-    private static String joinPicks(Map<String, String> picks) {
+    private static String joinLoadouts(Map<String, List<String>> loadouts) {
         List<String> values = new ArrayList<>();
-        for (Map.Entry<String, String> entry : picks.entrySet()) {
-            values.add(entry.getKey() + ":" + entry.getValue());
+        for (Map.Entry<String, List<String>> entry : loadouts.entrySet()) {
+            values.add(entry.getKey() + ":" + String.join(",", entry.getValue()));
         }
         return String.join(";", values);
     }
 
-    private static Map<String, String> parsePicks(String value) throws IOException {
-        Map<String, String> picks = new LinkedHashMap<>();
+    private static Map<String, List<String>> parseLoadouts(String value) throws IOException {
+        Map<String, List<String>> loadouts = new LinkedHashMap<>();
         if (value == null || value.isBlank()) {
-            return picks;
+            return loadouts;
+        }
+        for (String entry : value.split(";")) {
+            String[] parts = entry.split(":", -1);
+            if (parts.length != 2 || parts[0].isBlank()) {
+                throw new IOException("Invalid equipment loadout entry: " + entry);
+            }
+            List<String> equipmentIds = parts[1].isBlank()
+                    ? List.of()
+                    : List.of(parts[1].split(","));
+            loadouts.put(parts[0], equipmentIds);
+        }
+        return loadouts;
+    }
+
+    private static String joinPicks(MatchRecord record) {
+        List<String> values = new ArrayList<>();
+        for (Map.Entry<String, String> entry : record.getHeroPicks().entrySet()) {
+            String teamId = record.teamForPlayer(entry.getKey());
+            values.add(entry.getKey() + ":" + entry.getValue() + ":" + teamId);
+        }
+        return String.join(";", values);
+    }
+
+    private static ParsedMatchPicks parsePicks(String value) throws IOException {
+        Map<String, String> picks = new LinkedHashMap<>();
+        Map<String, String> participantTeamIds = new LinkedHashMap<>();
+        if (value == null || value.isBlank()) {
+            return new ParsedMatchPicks(picks, participantTeamIds);
         }
         String[] entries = value.split(";");
         for (String entry : entries) {
             String[] parts = entry.split(":", -1);
-            if (parts.length != 2) {
+            if (parts.length != 2 && parts.length != 3) {
                 throw new IOException("Invalid hero pick entry: " + entry);
             }
             picks.put(parts[0], parts[1]);
+            if (parts.length == 3) {
+                participantTeamIds.put(parts[0], parts[2]);
+            }
         }
-        return picks;
+        return new ParsedMatchPicks(picks, participantTeamIds);
+    }
+
+    private record ParsedMatchPicks(Map<String, String> heroPicks,
+                                    Map<String, String> participantTeamIds) {
     }
 }

@@ -15,17 +15,28 @@ public class MatchRecord implements Searchable {
     private String teamBId;
     private String winnerTeamId;
     private final Map<String, String> heroPicks;
+    private final Map<String, String> participantTeamIds;
 
     public MatchRecord(String id, LocalDate date, String teamAId, String teamBId,
                        String winnerTeamId, Map<String, String> heroPicks) {
+        this(id, date, teamAId, teamBId, winnerTeamId, heroPicks, Map.of());
+    }
+
+    public MatchRecord(String id, LocalDate date, String teamAId, String teamBId,
+                       String winnerTeamId, Map<String, String> heroPicks,
+                       Map<String, String> participantTeamIds) {
         this.id = Person.requireText(id, "id");
-        this.date = date;
+        this.date = requireDate(date);
         this.teamAId = Person.requireText(teamAId, "teamAId");
         this.teamBId = Person.requireText(teamBId, "teamBId");
         this.winnerTeamId = Person.requireText(winnerTeamId, "winnerTeamId");
         this.heroPicks = new LinkedHashMap<>();
+        this.participantTeamIds = new LinkedHashMap<>();
         if (heroPicks != null) {
             this.heroPicks.putAll(heroPicks);
+        }
+        if (participantTeamIds != null) {
+            this.participantTeamIds.putAll(participantTeamIds);
         }
     }
 
@@ -38,7 +49,7 @@ public class MatchRecord implements Searchable {
     }
 
     public void setDate(LocalDate date) {
-        this.date = date;
+        this.date = requireDate(date);
     }
 
     public String getTeamAId() {
@@ -69,16 +80,36 @@ public class MatchRecord implements Searchable {
         return Collections.unmodifiableMap(heroPicks);
     }
 
+    public Map<String, String> getParticipantTeamIds() {
+        return Collections.unmodifiableMap(participantTeamIds);
+    }
+
     public void putHeroPick(String playerId, String heroId) {
         heroPicks.put(Person.requireText(playerId, "playerId"), Person.requireText(heroId, "heroId"));
     }
 
+    public void putHeroPick(String playerId, String heroId, String teamId) {
+        String participantId = Person.requireText(playerId, "playerId");
+        heroPicks.put(participantId, Person.requireText(heroId, "heroId"));
+        participantTeamIds.put(participantId, Person.requireText(teamId, "teamId"));
+    }
+
     public boolean removeHeroPick(String playerId) {
+        participantTeamIds.remove(playerId);
         return heroPicks.remove(playerId) != null;
     }
 
     public void clearHeroPicks() {
         heroPicks.clear();
+        participantTeamIds.clear();
+    }
+
+    public void replaceHeroPicks(Map<String, String> newHeroPicks, Map<String, String> newParticipantTeamIds) {
+        clearHeroPicks();
+        for (Map.Entry<String, String> entry : newHeroPicks.entrySet()) {
+            String teamId = newParticipantTeamIds.get(entry.getKey());
+            putHeroPick(entry.getKey(), entry.getValue(), teamId);
+        }
     }
 
     public boolean includesTeam(String teamId) {
@@ -87,6 +118,10 @@ public class MatchRecord implements Searchable {
 
     public boolean includesPlayer(String playerId) {
         return heroPicks.containsKey(playerId);
+    }
+
+    public String teamForPlayer(String playerId) {
+        return participantTeamIds.getOrDefault(playerId, "");
     }
 
     public String opponentForTeam(String teamId) {
@@ -118,5 +153,12 @@ public class MatchRecord implements Searchable {
     @Override
     public String toString() {
         return id + " " + date + " " + teamAId + " vs " + teamBId + " winner=" + winnerTeamId;
+    }
+
+    private static LocalDate requireDate(LocalDate date) {
+        if (date == null) {
+            throw new IllegalArgumentException("date cannot be null");
+        }
+        return date;
     }
 }
