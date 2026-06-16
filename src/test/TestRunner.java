@@ -19,8 +19,12 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.time.LocalDate;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Random;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 
 public class TestRunner {
     private static int passed;
@@ -37,11 +41,16 @@ public class TestRunner {
         run("match validation rejects player outside teams", TestRunner::testRejectPlayerOutsideTeams);
         run("equipment add and delete updates hero references", TestRunner::testEquipmentAddDeleteCascade);
         run("default ranking reports stay text based", TestRunner::testDefaultReportsStayTextBased);
+        run("player lookup shows actual equipped items", TestRunner::testPlayerLookupShowsActualEquipment);
+        run("team history counts only the requested team picks", TestRunner::testTeamHistoryFiltersOpponentPicks);
+        run("player history keeps historical team after transfer", TestRunner::testPlayerHistoryAfterTeamTransfer);
+        run("invalid player update is atomic", TestRunner::testInvalidPlayerUpdateIsAtomic);
         run("player deletion updates team membership", TestRunner::testDeletePlayerUpdatesTeam);
         run("ID-backed associations resolve to domain objects", TestRunner::testAssociationHelpersResolveObjects);
         run("leaderboard sorts by win rate", TestRunner::testLeaderboardSortsByWinRate);
         run("zero-match player win rate is safe", TestRunner::testZeroMatchWinRate);
         run("CSV save/load round trip keeps counts", TestRunner::testCsvRoundTrip);
+        run("concurrent CSV saves use independent temp files", TestRunner::testConcurrentCsvSaves);
 
         System.out.println("Automated tests passed: " + passed + ", failed: " + failed);
         if (failed > 0) {
@@ -122,6 +131,7 @@ public class TestRunner {
         data.addEquipment(item);
         data.requireHero("H001").addCompatibleEquipment("E999");
         data.requireHero("H001").addRecommendedEquipment("E999");
+        data.requirePlayer("P001").replaceEquipmentLoadout("H001", List.of("E002", "E999"));
 
         assertTrue(data.findEquipment("E999").isPresent(), "added equipment should be searchable");
         assertTrue(data.requireHero("H001").getCompatibleEquipmentIds().contains("E999"),
@@ -132,6 +142,8 @@ public class TestRunner {
                 "deleted equipment should be removed from compatible equipment");
         assertTrue(!data.requireHero("H001").getRecommendedEquipmentIds().contains("E999"),
                 "deleted equipment should be removed from recommended equipment");
+        assertTrue(!data.requirePlayer("P001").getEquippedEquipmentIds("H001").contains("E999"),
+                "deleted equipment should be removed from player loadouts");
     }
 
     private static void testDefaultReportsStayTextBased() {
@@ -150,6 +162,62 @@ public class TestRunner {
         assertTrue(data.requireTeam("T001").getPlayerIds().contains("P001"), "P001 should start in T001");
         assertTrue(data.deletePlayer("P001"), "deletePlayer should return true");
         assertTrue(!data.requireTeam("T001").getPlayerIds().contains("P001"), "P001 should be removed from T001");
+    }
+
+    private static void testPlayerLookupShowsActualEquipment() {
+        GameDataManager data = sample();
+        SearchService search = new SearchService(data, new RankingService(data));
+        String report = search.playerLookup("P001");
+        assertContains(report, "Equipped: [Endless Battle, Bloodweeper]");
+        assertNotContains(report, "Equipped/compatible");
+        assertNotContains(report, "Equipped: [Shadow Blade, Endless Battle, Jungle Blade, Bloodweeper]");
+    }
+
+    private static void testTeamHistoryFiltersOpponentPicks() {
+        GameDataManager data = sample();
+        SearchService search = new SearchService(data, new RankingService(data));
+        String report = search.teamMatchHistory("T001", 1);
+        assertContains(report, "Li Bai->Li Bai");
+        assertContains(report, "Zhang Fei->Lian Po");
+        assertNotContains(report, "Xiao Qiao->Angela");
+        assertContains(report, "Li Bai: 20.0%");
+        assertNotContains(report, "10.0%");
+    }
+
+    private static void testPlayerHistoryAfterTeamTransfer() {
+        GameDataManager data = sample();
+        SearchService search = new SearchService(data, new RankingService(data));
+        data.movePlayerToTeam("P001", "T002");
+        String report = search.playerMatchHistory("P001", 2);
+        assertContains(report, "vs River Guardians result LOSS");
+        assertContains(report, "vs Cloud Arena result LOSS");
+        assertNotContains(report, "vs Unknown");
+    }
+
+    private static void testInvalidPlayerUpdateIsAtomic() {
+        GameDataManager data = sample();
+        Player player = data.requirePlayer("P001");
+        List<String> originalHeroIds = List.copyOf(player.getHeroIds());
+        Map<String, List<String>> originalLoadouts = player.getEquipmentLoadouts();
+        String originalName = player.getName();
+        String originalTeamId = player.getTeamId();
+
+        assertThrows(IllegalArgumentException.class, () -> data.updatePlayer(
+                "P001",
+                "Changed Name",
+                null,
+                "T002",
+                99,
+                99,
+                0,
+                List.of("H001", "H999"),
+                Map.of("H001", List.of("E002"))));
+
+        assertEquals(originalName, player.getName(), "name after rejected update");
+        assertEquals(originalTeamId, player.getTeamId(), "team after rejected update");
+        assertTrue(originalHeroIds.equals(player.getHeroIds()), "heroes should be unchanged after rejected update");
+        assertTrue(originalLoadouts.equals(player.getEquipmentLoadouts()),
+                "loadouts should be unchanged after rejected update");
     }
 
     private static void testAssociationHelpersResolveObjects() {
@@ -192,6 +260,41 @@ public class TestRunner {
         assertEquals(data.getPlayers().size(), loaded.getPlayers().size(), "player count after round trip");
         assertEquals(data.getHeroes().size(), loaded.getHeroes().size(), "hero count after round trip");
         assertEquals(data.getMatchRecords().size(), loaded.getMatchRecords().size(), "match count after round trip");
+        assertTrue(data.requirePlayer("P001").getEquipmentLoadouts()
+                        .equals(loaded.requirePlayer("P001").getEquipmentLoadouts()),
+                "equipment loadouts after round trip");
+        assertEquals("T001", loaded.requireMatchRecord("M001").teamForPlayer("P001"),
+                "historical participant team after round trip");
+    }
+
+    private static void testConcurrentCsvSaves() throws Exception {
+        GameDataManager data = sample();
+        FileStorageService storage = new FileStorageService();
+        Path dir = Files.createTempDirectory("javacw-concurrent-save");
+        ExecutorService executor = Executors.newFixedThreadPool(2);
+        try {
+            Future<?> first = executor.submit(() -> saveUnchecked(storage, data, dir));
+            Future<?> second = executor.submit(() -> saveUnchecked(storage, data, dir));
+            first.get();
+            second.get();
+        } finally {
+            executor.shutdownNow();
+        }
+        GameDataManager loaded = storage.loadAll(dir);
+        assertEquals(data.getPlayers().size(), loaded.getPlayers().size(),
+                "player count after concurrent save");
+        try (var files = Files.list(dir)) {
+            assertTrue(files.noneMatch(path -> path.getFileName().toString().endsWith(".tmp")),
+                    "temporary save files should be cleaned up");
+        }
+    }
+
+    private static void saveUnchecked(FileStorageService storage, GameDataManager data, Path dir) {
+        try {
+            storage.saveAll(data, dir);
+        } catch (Exception ex) {
+            throw new RuntimeException(ex);
+        }
     }
 
     private static GameDataManager sample() {
@@ -212,6 +315,12 @@ public class TestRunner {
     private static void assertContains(String actual, String expected) {
         if (!actual.contains(expected)) {
             throw new AssertionError("expected text not found: " + expected);
+        }
+    }
+
+    private static void assertNotContains(String actual, String unexpected) {
+        if (actual.contains(unexpected)) {
+            throw new AssertionError("unexpected text found: " + unexpected);
         }
     }
 
