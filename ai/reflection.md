@@ -2,7 +2,7 @@
 
 ## 1. Which AI tools or models did you use?
 
-I used Codex (GPT-5) as the main code generation assistant and Antigravity with Claude Opus 4.6 Thinking for architecture review and code-level bug finding. Gemini 3.5 Flash was briefly tried once for a review task, but its output referenced classes that did not exist in my project, so I switched to Claude Opus only for the rest of the development.
+I used Codex (GPT-5) as the main code generation assistant and Antigravity with Claude Opus 4.6 Thinking for architecture review and code-level bug finding. Gemini 3.5 Flash was briefly tried for an early review task, but its output referenced classes that did not exist in my project, so Claude became the primary code reviewer. Later, I explicitly asked to use Gemini 3.1 Pro High again for the optional web and Swing visual-design reviews (Prompts 12 and 13); Claude then acted as the risk-approval gate for the Swing plan.
 
 ## 2. Which prompt was the most useful? Why?
 

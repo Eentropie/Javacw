@@ -70,11 +70,11 @@ Run scripted console tests for login, player lookup, equipment ranking, leaderbo
 
 ### AI Response Summary
 
-Codex found a CSV reload bug: list fields had semicolons converted to commas during save, causing hero compatible equipment IDs to load as a single invalid ID.
+During this testing phase, I inspected the saved CSV myself and traced the reload failure to `FileStorageService.clean`: semicolons inside list fields had been converted to commas, so values such as `E001;E002` reloaded as one invalid equipment ID. I made the one-line delimiter fix. Codex then reran the scripted flows and confirmed that save/load preserved the list and map delimiters.
 
 ### My Decision
 
-Accepted the minimal fix. The CSV cleaner now only sanitizes the field separator `|` and preserves `;` and `:` for list and map fields.
+Kept my minimal fix and accepted the AI verification. The CSV cleaner now only sanitizes the field separator `|` and preserves `;` and `:` for list and map fields. This bug was diagnosed and initially fixed by me, not discovered by Codex.
 
 ## Prompt 05
 
@@ -250,3 +250,22 @@ Claude approved the direction only with scope reduction. It specifically approve
 ### My Decision
 
 Accepted Claude's reduced scope. Implemented a low-risk theme layer in `DesktopMain.java` only: Metal look and feel, shared dark palette constants, `installDarkTheme()`, dark form/list/button/tab/output colors, top-bar gold divider, role status colors, and the `Honor of Kings IMS - Desktop` window title. I preserved console `Main`, web `WebMain`, services, CSV data, launchers, admin/player behavior, and `gui.DesktopMain --smoke`.
+
+## Prompt 14
+
+Time: 2026-06-16 14:48 CST
+Tool/Model: Codex / GPT-5, Computer Use
+Agent Role: Final Requirement Audit Agent
+Related Commit: `e6a79ba`, `81f5a9d`, `1437354`
+
+### My Prompt
+
+Review all Codex conversations for this JavaCW project, inspect `requirement.pdf`, inspect the relevant Antigravity JavaCW conversations, and check the whole project against the final submission requirements. Correct these evidence issues: Prompt 12 and Prompt 13 Gemini reviews were requested by me later; the CSV file corruption/missing-data issue was discovered and initially fixed by me, so `ai/prompts.md` must not attribute that discovery to AI; complete the missing evidence; repair and add final project fixes; continue committing and record the latest fixes; accept that my human commits were completed in the same real final-review session. Also give direct steps for the remaining full-mark push because I do not have time to research it myself.
+
+### AI Response Summary
+
+Codex audited the requirement PDF, seven JavaCW Codex threads, three Antigravity JavaCW conversations, the current project files, automated tests, and the local Swing app. It corrected the Prompt 12/13 Gemini attribution, corrected the CSV delimiter bug attribution to human diagnosis and initial fix, added a Codex/Antigravity conversation audit, repaired final consistency issues in loadout persistence and match-history ownership, added regression tests, refreshed documentation, launched the local Swing interface, and verified the current project with JDK 17 compilation, 20 automated tests, Swing smoke, JavaScript syntax check, and Git whitespace checks.
+
+### My Decision
+
+Accepted the final repairs and evidence corrections. The project keeps truthful AI/human attribution: AI implemented and verified bounded changes, while the CSV diagnosis/fix and clustered human review commits remain recorded as human work. I accepted the local Swing and web interfaces as optional extra-credit evidence, not replacements for the required console workflow. I also accepted the remaining full-mark advice: personally rerun console and GUI flows, review the reflection text for personal accuracy, and preserve screenshots or raw conversation access if a marker asks for process evidence.

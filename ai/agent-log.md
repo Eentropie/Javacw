@@ -45,15 +45,15 @@ Related commits:
 
 Main contribution:
 
-- Codex ran scripted smoke tests and found a CSV delimiter bug.
+- Codex ran scripted smoke tests after the user reported and fixed a CSV delimiter bug.
 - Gemini suggested edge cases including delimiter handling, orphan references, division by zero, input skipping, and invalid enum parsing.
-- After the user requested Claude Opus only, Claude Opus reviewed the actual source files and found concrete match-record validation issues.
+- After the user requested Claude Opus only for this code-review phase, Claude Opus reviewed the actual source files and found concrete match-record validation issues.
 
 Human decision:
 
 - Actual test outputs must come from running the program, not from AI guesses.
-- The CSV delimiter bug was fixed with a minimal change and recorded in the test document.
-- Gemini's references to `Repository<T>` and `getDisplayInfo` were rejected because they do not match the implemented design. Gemini was not used as primary review evidence after the user requested Claude Opus only.
+- The user traced the CSV reload failure by comparing the saved CSV with the seed data and made the minimal `FileStorageService.clean` fix. Codex verified the repaired save/load flow and documented the result.
+- Gemini's references to `Repository<T>` and `getDisplayInfo` were rejected because they do not match the implemented design. Gemini was not used as primary evidence for this code-review phase after the user requested Claude Opus only; the user later requested Gemini again for the bounded visual reviews in Prompts 12 and 13.
 - Claude's match-record findings were accepted and fixed.
 
 Related commits:
@@ -153,7 +153,7 @@ Human decision:
 Verification:
 
 - `javac -d out $(find src -name '*.java')`
-- `java -cp out test.TestRunner` -> `Automated tests passed: 15, failed: 0`
+- `java -cp out test.TestRunner` -> `Automated tests passed: 20, failed: 0`
 - `java -cp out gui.DesktopMain --smoke`
 - `node --check web/app.js`
 - `git diff --check`
@@ -162,3 +162,32 @@ Verification:
 Related commit:
 
 - `70498f6` apply Claude-approved Swing desktop polish.
+
+## Final Requirement Audit Agent
+
+Main contribution:
+
+- Codex audited `requirement.pdf`, the JavaCW Codex thread history, the relevant Antigravity JavaCW conversations, the current source tree, documentation, Git evidence, automated tests, and the local Swing interface.
+- It corrected final evidence attribution: Prompt 12 and Prompt 13 Gemini reviews were user-requested later visual-review passes, and the CSV delimiter/missing-data issue was diagnosed and initially fixed by the user before Codex verification.
+- It added a project conversation audit and implemented final consistency repairs for per-hero equipment loadouts, historical match-team membership, atomic player updates, independent temp save files, and interface compatibility.
+
+Human decision:
+
+- The close timestamps of the `[Human]` commits are accepted as the user's real concentrated final-review session, not fabricated evidence.
+- The optional Swing and web interfaces remain extra-credit evidence only; the required console `Main` workflow remains the primary submission path.
+- Final evidence must use real commit hashes and must not rewrite older hashes already referenced by the AI evidence files.
+
+Verification:
+
+- `javac --release 17 -Xlint:all -d out $(find src -name '*.java')`
+- `java -cp out test.TestRunner` -> `Automated tests passed: 20, failed: 0`
+- `java -cp out gui.DesktopMain --smoke`
+- `node --check web/app.js`
+- `git diff --check`
+- Local Swing window launched and rendered with title `Honor of Kings IMS - Desktop`, login controls, Save/Reload, report/recommendation/combat tabs, and dataset summary.
+
+Related commits:
+
+- `e6a79ba` fix loadout persistence and match history consistency.
+- `81f5a9d` add final consistency regression coverage.
+- `1437354` document final consistency repairs.
