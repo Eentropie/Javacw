@@ -39,17 +39,17 @@ Actual: The program printed `Logged in as Li Bai (PLAYER)` and displayed the Pla
 
 Result: Pass.
 
-## Test 03: Player Lookup by Name
+## Test 03: Player Lookup by Choice or Name
 
 Input:
 
 ```text
 Admin login
 Player lookup
-Search player: Li Bai
+Search player: choose list number 1 or enter Li Bai/P001
 ```
 
-Expected: The system displays Li Bai's ID, team, level, win rate, owned heroes, and equipment.
+Expected: The system displays a numbered player list and then shows Li Bai's ID, team, level, win rate, owned heroes, and equipment.
 
 Actual: The system displayed `P001`, team `Chang'an Blades`, level `28`, win rate `72.7%`, and the owned heroes Li Bai, Sun Wukong, and Mulan with their persisted equipment loadouts.
 
@@ -62,10 +62,10 @@ Input:
 ```text
 Admin login
 Team overview
-Search team: T001
+Search team: choose list number 1 or enter T001
 ```
 
-Expected: Members, average level, total matches, win rate, and top player are displayed.
+Expected: The system displays a numbered team list and then shows members, average level, total matches, win rate, and top player.
 
 Actual: The system displayed five Chang'an Blades members, average level `25.4`, total matches `7`, team win rate `42.9%`, and top player `Li Bai`.
 
@@ -112,10 +112,10 @@ Admin login
 Match history
 Player match history
 N: 3
-Player ID: P001
+Player: choose list number 1 or enter P001
 ```
 
-Expected: Last three relevant matches and hero pick rate are displayed.
+Expected: The system displays a numbered player list and then shows the last three relevant matches and hero pick rate.
 
 Actual: The system displayed Li Bai's three latest matches, record `1W-2L`, and pick rates for Li Bai, Mulan, and Sun Wukong.
 

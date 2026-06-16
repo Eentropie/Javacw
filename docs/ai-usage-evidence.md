@@ -8,8 +8,8 @@ This file consolidates the AI evidence required by `requirement.pdf`. The detail
 
 | Requirement | Evidence |
 |---|---|
-| Actual prompts recorded | `ai/prompts.md` records 14 important prompts with time, tool/model, agent role, prompt text, response summary, decision, and related commit hashes. |
-| At least 3 AI agent roles | Architect Agent, Implementation Agent, Testing/Reviewer Agent, Extra-Credit Reviewer Agent, Frontend Reviewer Agent, Desktop Implementation Agent, Desktop Design Reviewer Agent, Final Requirement Audit Agent. |
+| Actual prompts recorded | `ai/prompts.md` records 15 important prompts with time, tool/model, agent role, prompt text, response summary, decision, and related commit hashes. |
+| At least 3 AI agent roles | Architect Agent, Implementation Agent, Testing/Reviewer Agent, Extra-Credit Reviewer Agent, Frontend Reviewer Agent, Desktop Implementation Agent, Desktop Design Reviewer Agent, Final Requirement Audit Agent, Human-Guided Usability Fix Agent. |
 | Accepted, modified, rejected decisions | `ai/prompts.md` and `ai/agent-log.md` record accepted directions, rejected Gson dependency, rejected fake human commits, rejected unrelated Gemini architecture suggestions, and deferred risky frontend ideas. |
 | Reflection questions | `ai/reflection.md` answers all 10 required reflection questions. |
 | Advanced AI comparison | `ai/model-comparison.md` compares Gemini and Claude Opus review quality and usefulness. |
@@ -34,6 +34,7 @@ This file consolidates the AI evidence required by `requirement.pdf`. The detail
 | Prompt 12 | Frontend Design Reviewer Agent | Gemini 3.1 Pro High, then Codex / GPT-5 | `[Gemini]` review, `[GPT]` implementation | Applied a dependency-free arena/control-panel visual polish to the optional web frontend while preserving console, web APIs, and JavaScript behavior. | `602d0b7` |
 | Prompt 13 | Desktop Design Reviewer Agent | Gemini 3.1 Pro High, Claude Opus 4.6 Thinking, then Codex / GPT-5 | `[Gemini]` review, `[Claude]` approval, `[GPT]` implementation | Applied a Claude-approved, dependency-free dark Metal Swing theme to the optional local desktop app while preserving console, web, service, CSV, launcher, and smoke behavior. | `70498f6` |
 | Prompt 14 | Final Requirement Audit Agent | Codex / GPT-5, Computer Use | `[GPT]` audit and implementation | Audited requirement, Codex threads, Antigravity conversations, evidence attribution, implementation consistency, tests, and local Swing launch; corrected final attribution and added final repairs. | `e6a79ba`, `81f5a9d`, `1437354`, `4b1ec04` |
+| Prompt 15 | Human-Guided Usability Fix Agent | Codex / GPT-5 | `[Human]` discovery and direction, `[GPT]` implementation | The user found that blind `P00x`/`T00x` console entry was not user-friendly; Codex added numbered player/team choices while preserving ID/name input. | `b58e1d2` |
 
 ## Verification Used Against AI Output
 

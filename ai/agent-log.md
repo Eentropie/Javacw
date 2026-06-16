@@ -192,3 +192,27 @@ Related commits:
 - `81f5a9d` add final consistency regression coverage.
 - `1437354` document final consistency repairs.
 - `4b1ec04` correct final AI attribution and audit evidence.
+
+## Human-Guided Usability Fix Agent
+
+Main contribution:
+
+- Codex implemented the user's final manual-testing feedback that `P00x` and `T00x` inputs had no guidance in the console workflow.
+- It changed player and team prompts to display numbered options and accept either a number, ID, or name.
+- The fix covers player lookup, team overview, match history, player recommendations, combat player selection, admin player/team operations, and match team selection.
+
+Human decision:
+
+- The issue was discovered by the user while manually testing `P001` and `T001` flows.
+- The user directed the fix: make player/team choices selectable while preserving the original manual ID/name input path.
+
+Verification:
+
+- `javac --release 17 -Xlint:all -d out $(find src -name '*.java')`
+- `java -cp out test.TestRunner` -> `Automated tests passed: 20, failed: 0`
+- `java -cp out gui.DesktopMain --smoke`
+- Scripted console run selected `P001` and `T001` by list number and displayed the expected player/team reports and match history.
+
+Related commit:
+
+- `b58e1d2` add selectable player and team prompts.

@@ -111,11 +111,11 @@ Password: player123
 ## 4. Implemented Features
 
 - Login and logout with Admin and Player roles.
-- Player lookup by ID or name, including each owned hero's actual equipment loadout.
-- Team overview by ID or name.
+- Player lookup by list number, ID, or name, including each owned hero's actual equipment loadout.
+- Team overview by list number, ID, or name.
 - Hero details by name.
 - Equipment ranking by a documented score.
-- Match history for players and teams.
+- Match history for players and teams, with visible player/team choices before ID selection.
 - Leaderboard by win rate, level, match count, or custom score.
 - Recommendation engine for hero and equipment suggestions.
 - Turn-based combat simulation with equipment, critical hits, dodges, and a combat report.

@@ -36,7 +36,7 @@ Existing commits are not rewritten because changing commit messages would change
 
 | Evidence label | Meaning | Related commit evidence |
 |---|---|---|
-| `[GPT]` | Codex / GPT-5 directly planned, implemented, tested, or documented the change. For `ccee720`, GPT verified and documented a bug that the user had already diagnosed and fixed. | `05d011d`, `b968786`, `dab6880`, `d13236d`, `0b86ad2`, `eb02042`, `ccee720`, `a4c0510`, `771c9c7`, `f3900ab`, `3a94c00`, `663fc8f`, `444ae15`, `602d0b7`, `70498f6`, `e6a79ba`, `81f5a9d`, `1437354`, `4b1ec04` |
+| `[GPT]` | Codex / GPT-5 directly planned, implemented, tested, or documented the change. For `ccee720`, GPT verified and documented a bug that the user had already diagnosed and fixed. For `b58e1d2`, GPT implemented a usability issue discovered and directed by the user. | `05d011d`, `b968786`, `dab6880`, `d13236d`, `0b86ad2`, `eb02042`, `ccee720`, `a4c0510`, `771c9c7`, `f3900ab`, `3a94c00`, `663fc8f`, `444ae15`, `602d0b7`, `70498f6`, `e6a79ba`, `81f5a9d`, `1437354`, `4b1ec04`, `b58e1d2` |
 | `[Claude]` | Antigravity Claude Opus supplied the primary architecture or review input behind the change. | `ba63aa0`, `5a6630d`, `80739be`, `12948b5`, `6e4c439` |
 | `[Claude] review + [GPT] implementation` | Claude supplied the review/design direction, then Codex implemented or documented the accepted low-risk work. | `7410b35`, `b21c5fa`, `151414f`, `31200fe`, `851a81d` |
 | `[Gemini]` | Gemini was briefly used for comparison, but its mismatched architecture suggestions were not kept as primary evidence. | `6e4c439` |
@@ -60,3 +60,4 @@ The live repository history is the authoritative source for the latest commit, w
 7. The Swing desktop app received a separate Gemini/Claude-reviewed dark Metal theme pass on an isolated branch before being considered for mainline.
 8. Final documentation commits tightened AI evidence, rubric mapping, Windows compatibility notes, optional interface evidence, and Git history export evidence.
 9. The final audit commits added loadout/history consistency repairs, 20-test regression coverage, conversation-audit documentation, and corrected attribution for Gemini visual reviews and the human-discovered CSV delimiter issue.
+10. Final human-guided usability work made player/team console prompts selectable after the user found blind `P00x`/`T00x` entry confusing during manual testing.

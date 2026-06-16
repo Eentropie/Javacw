@@ -269,3 +269,22 @@ Codex audited the requirement PDF, seven JavaCW Codex threads, three Antigravity
 ### My Decision
 
 Accepted the final repairs and evidence corrections. The project keeps truthful AI/human attribution: AI implemented and verified bounded changes, while the CSV diagnosis/fix and clustered human review commits remain recorded as human work. I accepted the local Swing and web interfaces as optional extra-credit evidence, not replacements for the required console workflow. I also accepted the remaining full-mark advice: personally rerun console and GUI flows, review the reflection text for personal accuracy, and preserve screenshots or raw conversation access if a marker asks for process evidence.
+
+## Prompt 15
+
+Time: 2026-06-16 15:27 CST
+Tool/Model: Codex / GPT-5
+Agent Role: Human-Guided Usability Fix Agent
+Related Commit: `b58e1d2`
+
+### My Prompt
+
+After manually testing the console flow, I found that asking users to type `P00x` and `T00x` with no guidance is not user-friendly. Make player and team IDs selectable instead of requiring blind manual entry, add the change to Git and GitHub, and record clearly that this issue was discovered and guided by me. Then tell me what manual work remains.
+
+### AI Response Summary
+
+Codex updated the console `Main` workflow so player and team prompts display numbered lists and accept either a list number, the original ID, or a name. The change covers player lookup, team overview, match history, player recommendations, combat player selection, player/team admin operations, and match team selection while preserving the old ID/name input path. Codex verified the implementation with JDK 17 compilation, 20 automated tests, Swing smoke, and a scripted console run that selected `P001` and `T001` using list numbers.
+
+### My Decision
+
+Accepted the usability fix because it came from my manual P001/T001 testing and makes the required console workflow easier to demonstrate without memorizing IDs. The accepted scope stays low risk: only console prompts and selection mapping changed; CSV data, services, validation rules, Swing, and web behavior remain unchanged.
