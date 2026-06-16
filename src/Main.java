@@ -206,12 +206,12 @@ public class Main {
     }
 
     private void playerLookup() {
-        String query = input.readRequired("Player ID/name: ");
+        String query = readPlayerQuery("Player number/ID/name: ");
         System.out.println(searchService.playerLookup(query));
     }
 
     private void teamOverview() {
-        String query = input.readRequired("Team ID/name: ");
+        String query = readTeamQuery("Team number/ID/name: ");
         System.out.println(searchService.teamOverview(query));
     }
 
@@ -231,10 +231,10 @@ public class Main {
         int choice = input.readInt("Choice: ", 1, 2);
         int limit = input.readIntMin("How many matches? ", 1);
         if (choice == 1) {
-            String playerId = input.readRequired("Player ID: ");
+            String playerId = readPlayerId("Player number/ID/name: ");
             System.out.println(searchService.playerMatchHistory(playerId, limit));
         } else {
-            String teamId = input.readRequired("Team ID: ");
+            String teamId = readTeamId("Team number/ID/name: ");
             System.out.println(searchService.teamMatchHistory(teamId, limit));
         }
     }
@@ -252,7 +252,7 @@ public class Main {
         int choice = input.readInt("Choice: ", 1, 2);
         int limit = input.readIntMin("How many recommendations? ", 1);
         if (choice == 1) {
-            String playerQuery = input.readRequired("Player ID/name: ");
+            String playerQuery = readPlayerQuery("Player number/ID/name: ");
             System.out.println(recommendationService.heroRecommendationReport(playerQuery, limit));
         } else {
             String heroQuery = input.readRequired("Hero ID/name: ");
@@ -265,10 +265,10 @@ public class Main {
         printPlayers();
         printHeroes();
         printEquipment();
-        String playerAId = input.readRequired("Player A ID: ");
+        String playerAId = readPlayerId("Player A number/ID/name: ");
         String heroAId = input.readRequired("Hero A ID: ");
         String equipmentAId = input.readLine("Equipment A ID: ");
-        String playerBId = input.readRequired("Player B ID: ");
+        String playerBId = readPlayerId("Player B number/ID/name: ");
         String heroBId = input.readRequired("Hero B ID: ");
         String equipmentBId = input.readLine("Equipment B ID: ");
         System.out.println(combatSimulationService.simulateDuel(
@@ -331,7 +331,7 @@ public class Main {
         String name = input.readRequired("Name: ");
         String username = input.readRequired("Username: ");
         String password = input.readRequired("Password: ");
-        String teamId = input.readRequired("Team ID: ");
+        String teamId = readTeamId("Team number/ID/name: ");
         int level = input.readIntMin("Level: ", 0);
         int wins = input.readIntMin("Wins: ", 0);
         int losses = input.readIntMin("Losses: ", 0);
@@ -362,8 +362,7 @@ public class Main {
         }
         String teamId = player.getTeamId();
         if (input.confirm("Move player to another team?")) {
-            printTeams();
-            teamId = input.readRequired("New team ID: ");
+            teamId = readTeamId("New team number/ID/name: ");
         }
         int level = player.getLevel();
         int wins = player.getWins();
@@ -395,7 +394,7 @@ public class Main {
     }
 
     private void deletePlayer() {
-        String playerId = input.readRequired("Player ID to delete: ");
+        String playerId = readPlayerId("Player number/ID/name to delete: ");
         if (input.confirm("Delete player " + playerId + "?")) {
             System.out.println(dataManager.deletePlayer(playerId) ? "Player deleted." : "Player not found.");
             saveData();
@@ -514,7 +513,7 @@ public class Main {
     }
 
     private void deleteTeam() {
-        String teamId = input.readRequired("Team ID to delete: ");
+        String teamId = readTeamId("Team number/ID/name to delete: ");
         if (input.confirm("Delete team " + teamId + "?")) {
             System.out.println(dataManager.deleteTeam(teamId) ? "Team deleted." : "Team not found.");
             saveData();
@@ -528,9 +527,9 @@ public class Main {
         MatchRecord record = new MatchRecord(
                 input.readRequired("Match ID: "),
                 readDate("Date yyyy-mm-dd: "),
-                input.readRequired("Team A ID: "),
-                input.readRequired("Team B ID: "),
-                input.readRequired("Winner team ID: "),
+                readTeamId("Team A number/ID/name: "),
+                readTeamId("Team B number/ID/name: "),
+                readTeamId("Winner team number/ID/name: "),
                 readPicks());
         dataManager.addMatchRecord(record);
         saveData();
@@ -546,9 +545,9 @@ public class Main {
         Map<String, String> heroPicks = new LinkedHashMap<>(record.getHeroPicks());
         if (input.confirm("Change date/teams/winner?")) {
             date = readDate("Date yyyy-mm-dd: ");
-            teamAId = input.readRequired("Team A ID: ");
-            teamBId = input.readRequired("Team B ID: ");
-            winnerTeamId = input.readRequired("Winner team ID: ");
+            teamAId = readTeamId("Team A number/ID/name: ");
+            teamBId = readTeamId("Team B number/ID/name: ");
+            winnerTeamId = readTeamId("Winner team number/ID/name: ");
         }
         if (input.confirm("Replace hero picks?")) {
             heroPicks = readPicks();
@@ -576,7 +575,7 @@ public class Main {
     }
 
     private Player findPlayerPrompt() {
-        String query = input.readRequired("Player ID/name: ");
+        String query = readPlayerQuery("Player number/ID/name: ");
         return dataManager.findPlayer(query).orElseThrow(() -> new IllegalArgumentException("Player not found: " + query));
     }
 
@@ -591,8 +590,60 @@ public class Main {
     }
 
     private Team findTeamPrompt() {
-        String query = input.readRequired("Team ID/name: ");
+        String query = readTeamQuery("Team number/ID/name: ");
         return dataManager.findTeam(query).orElseThrow(() -> new IllegalArgumentException("Team not found: " + query));
+    }
+
+    private String readPlayerQuery(String prompt) {
+        printPlayers();
+        String value = input.readRequired(prompt);
+        return selectedPlayerId(value).orElse(value);
+    }
+
+    private String readPlayerId(String prompt) {
+        String query = readPlayerQuery(prompt);
+        return dataManager.findPlayer(query)
+                .map(Player::getId)
+                .orElseThrow(() -> new IllegalArgumentException("Player not found: " + query));
+    }
+
+    private Optional<String> selectedPlayerId(String value) {
+        try {
+            int index = Integer.parseInt(value);
+            List<Player> players = List.copyOf(dataManager.getPlayers());
+            if (index >= 1 && index <= players.size()) {
+                return Optional.of(players.get(index - 1).getId());
+            }
+        } catch (NumberFormatException ignored) {
+            // Non-numeric input is treated as the original ID/name query.
+        }
+        return Optional.empty();
+    }
+
+    private String readTeamQuery(String prompt) {
+        printTeams();
+        String value = input.readRequired(prompt);
+        return selectedTeamId(value).orElse(value);
+    }
+
+    private String readTeamId(String prompt) {
+        String query = readTeamQuery(prompt);
+        return dataManager.findTeam(query)
+                .map(Team::getId)
+                .orElseThrow(() -> new IllegalArgumentException("Team not found: " + query));
+    }
+
+    private Optional<String> selectedTeamId(String value) {
+        try {
+            int index = Integer.parseInt(value);
+            List<Team> teams = List.copyOf(dataManager.getTeams());
+            if (index >= 1 && index <= teams.size()) {
+                return Optional.of(teams.get(index - 1).getId());
+            }
+        } catch (NumberFormatException ignored) {
+            // Non-numeric input is treated as the original ID/name query.
+        }
+        return Optional.empty();
     }
 
     private List<String> readIdList(String prompt) {
@@ -676,16 +727,20 @@ public class Main {
     }
 
     private void printTeams() {
-        System.out.println("Teams:");
-        for (Team team : dataManager.getTeams()) {
-            System.out.println("- " + team.getId() + " " + team.getName());
+        System.out.println("Teams (enter number, ID, or name):");
+        List<Team> teams = List.copyOf(dataManager.getTeams());
+        for (int i = 0; i < teams.size(); i++) {
+            Team team = teams.get(i);
+            System.out.println((i + 1) + ". " + team.getId() + " " + team.getName());
         }
     }
 
     private void printPlayers() {
-        System.out.println("Players:");
-        for (Player player : dataManager.getPlayers()) {
-            System.out.println("- " + player.getId() + " " + player.getName());
+        System.out.println("Players (enter number, ID, or name):");
+        List<Player> players = List.copyOf(dataManager.getPlayers());
+        for (int i = 0; i < players.size(); i++) {
+            Player player = players.get(i);
+            System.out.println((i + 1) + ". " + player.getId() + " " + player.getName());
         }
     }
 
